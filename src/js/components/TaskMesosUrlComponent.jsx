@@ -4,7 +4,10 @@ import InfoActions from "../actions/InfoActions";
 import InfoEvents from "../events/InfoEvents";
 import InfoStore from "../stores/InfoStore";
 
-import ExecutorUtil from "../helpers/ExecutorUtil";
+/* import ExecutorUtil from "../helpers/ExecutorUtil"; */
+/* eslint-disable camelcase */
+import jwt_decode from "jwt-decode";
+/* eslint-enable camelcase */
 
 var TaskMesosUrlComponent = React.createClass({
   displayName: "TaskMesosUrlComponent",
@@ -47,6 +50,11 @@ var TaskMesosUrlComponent = React.createClass({
           return null;
         }
         masterUrl = masterUrl.replace(/\/?$/, "/");
+        var authToken = jwt_decode(localStorage.getItem("auth_token"));
+        var namespace = "";
+        if (authToken.current_account.namespace) {
+          namespace = authToken.current_account.namespace + "_";
+        }
         return [
           masterUrl,
           "#/slaves/",
@@ -54,7 +62,8 @@ var TaskMesosUrlComponent = React.createClass({
           "/frameworks/",
           frameworkId,
           "/executors/",
-          ExecutorUtil.calculateExecutorId(task)
+          /* ExecutorUtil.calculateExecutorId(task) */
+          namespace + task.id
         ].join("");
       }
     }
