@@ -15,7 +15,8 @@ var ajaxWrapper = function (opts = {}) {
     method: "GET",
     headers: {
       "Accept": "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "X-UI-Version": "new"
     }
   };
   var options = Util.extendObject(defaults, opts);
