@@ -3,6 +3,9 @@
 
 ## Changelog
 
+ * 0.18.0
+   > IN-2519: Último rebase com o projeto original. Pegando a UI `1.3.0`.
+
  * 0.17.0
    > Removendo colunas de stdout/sdterr da listagem de tasks; Isso já não funcionava pois depende de ir direto no meso (!!);
    > Implementação do novo fluxo de download de logs de uma task;
