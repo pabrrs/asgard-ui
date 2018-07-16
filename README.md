@@ -1,24 +1,34 @@
+# Asgard UI
 
-The original Marathon UI README is located in [original-README.md](original-README.md).
+Esse é o projeto que fornece uma Web UI para o projeto Asgard. Essa interfacce é um fork do projeto Marathin UI + um conjunto de plugin
+que implementa o que é necessário para termos:
 
-# Note about this Repository
+* Isolamento total, ou seja, múltiplos times podem usar a mesma UI mas cada time só pode ver/modificar suas próprias aplicações. Cada time roda suas tarefas em servidores pŕoprios, totalmente isolados dos demais times.
+* Autenticação via oauth2 (+JWT). Atualmente apenas o oauth2 do Google é suportado.
+* Autorização, ou seja, poder darmos permissões finas a cada usuário de cada time.
+* Quaisquer outras features que acharmos úteis e que não estejam incluídas no projeto original.
 
-This is the User interface for the Asgard project. The ideia is to have Mararthon UI enhanced with a set of plugins to offer:
+## Como esse projeto é desenvolvido
 
-* True multi-tenancy, that is, multiple teams are able to use the same web interface but at the same time each team only views/modifies their own set of tasks. Also each team can optionally run their tasks on completely separated servers.
-* Autentication via outh2. Currently only Google is supported.
-* Authorization: The ability to give permisions to each user.
-* Any other features that we think should be implemented and that is not included on original Marathon UI project.
+A ideia principal é implementar **todas** as novas funcionalidades com plugins para o projeto original. Se um plugin não for possível de escrever, então submetemos um PR no projeto
+original mudando o core para que seja possível escrever esse plugin.
 
-## How this project is developed
-
-The main idea is to implement **every** new feaature as a Marathon UI Plugin. If the plugin is currently not possible to implement, we change the core Marathon UI to make it possible do implement it. With every modificatio to the UI is opened a Pull Request on the original project. As soon as the PR is merged, we merge the implementation to this project and remove any intermediate commit that we may have nbeen using during the Pull Request review/merge cycle.
-
-One example of such change to the core UI is this PR:
+Dois exemplos desse tipo de mudança onde já abrimos PR foram:
 
 * https://github.com/mesosphere/marathon-ui/pull/813
+* https://github.com/mesosphere/marathon-ui/pull/819
 
-This way we can, at the same time, have new implementations on this repo and merge new features that eventually are developed in the original project.
 
-More os this on thei file [sieve/README.md](sieve/README.md).
+## Como adicionar novos plugins para a UI
 
+Apesar dos plugins pertencerem à UI o código de cada um deles é servido pela [Asgard API](https://github.com/B2W-BIT/asgard-api/). Quando a App ReacJS da UI boota,
+ele volta na API e carrega todos os plugins adicionais.
+
+
+Para adicionar novos plugins o `main.js` do plugin deve ser comitado em `/static/plugins/<plugin-id>/main.js`
+Alteramos o arquivo [asgard-api/app.py](https://github.com/B2W-BIT/asgard-api/blob/master/hollowman/app.py#L88) e adicionamos uma nova chamada a `register_plugin(<plugin-id>)`
+
+Isso é o mínimo necessário para que esse novo plugin esteja disponível para a UI.
+
+
+O README original do projeto Marathon UI está aqui: [original-README.md](original-README.md).
