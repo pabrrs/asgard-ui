@@ -5,9 +5,6 @@ import Bridge from "../../helpers/Bridge";
 import DialogActions from "../../actions/DialogActions";
 import MarathonService from "../../plugin/sdk/services/MarathonService";
 
-import MesosEvents from "../../events/MesosEvents";
-import MesosStore from "../../stores/MesosStore";
-
 var TaskFileDownloadComponent = React.createClass({
   displayName: "TaskFileDownloadComponent",
 
@@ -19,71 +16,7 @@ var TaskFileDownloadComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      file: this.getFile(),
-      fileIsRequestedByUser: false,
-      fileRequestFailed: false
     };
-  },
-
-  componentWillUnmount: function () {
-    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
-      this.onMesosRequestTaskFilesComplete);
-    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
-      this.onMesosRequestTaskFilesError);
-  },
-
-  getFile: function () {
-    var props = this.props;
-    var task = props.task;
-    var files = MesosStore.getTaskFiles(task.id);
-
-    if (files != null && files.length) {
-      return files.filter(file => file.name === props.fileName)[0];
-    }
-
-    return null;
-  },
-
-  onMesosRequestTaskFilesComplete: function (request) {
-    if (!request || request.taskId !== this.props.task.id) {
-      return;
-    }
-
-    let file = this.getFile();
-    let fileIsRequestedByUser = this.state.fileIsRequestedByUser;
-
-    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
-      this.onMesosRequestTaskFilesComplete);
-    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
-      this.onMesosRequestTaskFilesError);
-
-    if (file != null && fileIsRequestedByUser) {
-      window.open(file.downloadURI);
-      fileIsRequestedByUser = false;
-    }
-
-    this.setState({
-      file: file,
-      fileIsRequestedByUser: fileIsRequestedByUser,
-      fileRequestFailed: false
-    });
-
-  },
-
-  onMesosRequestTaskFilesError: function (request) {
-    if (!request || request.taskId !== this.props.task.id) {
-      return;
-    }
-
-    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
-      this.onMesosRequestTaskFilesComplete);
-    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
-      this.onMesosRequestTaskFilesError);
-
-    this.setState({
-      fileIsRequestedByUser: false,
-      fileRequestFailed: true
-    });
   },
 
   /* eslint-disable no-unused-vars */
