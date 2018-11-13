@@ -6,7 +6,6 @@ import Moment from "moment";
 import AppsStore from "../stores/AppsStore";
 import HealthStatus from "../constants/HealthStatus";
 import TaskStatus from "../constants/TaskStatus";
-import TaskFileDownloadComponent from "../components/TaskFileDownloadComponent";
 
 function joinNodes(nodes, separator = ", ") {
   var lastIndex = nodes.length - 1;

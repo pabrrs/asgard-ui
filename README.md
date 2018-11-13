@@ -32,3 +32,9 @@ Isso é o mínimo necessário para que esse novo plugin esteja disponível para 
 
 
 O README original do projeto Marathon UI está aqui: [original-README.md](original-README.md).
+
+## Changelog
+
+### 0.19.0
+
+ * Adicionado botoes de Download do stdout/stderr na aba Debug de uma Asgard App;
