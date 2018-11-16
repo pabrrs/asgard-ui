@@ -5,8 +5,10 @@ import AppsStore from "../stores/AppsStore";
 import AppsActions from "../actions/AppsActions";
 import AppsEvents from "../events/AppsEvents";
 import AppTaskStatsListComponent from "../components/AppTaskStatsListComponent";
-import TaskMesosUrlComponent from "../components/TaskMesosUrlComponent";
-import TaskFileDownloadComponent from "../components/TaskFileDownloadComponent";
+/* eslint-disable max-len */
+import TaskFileDownloadComponent from "../components/asgard/TaskFileDownloadComponent";
+/* eslint-enable max-len */
+
 import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
 
 function invalidateValue(value, suffix) {
@@ -90,10 +92,14 @@ var AppDebugInfoComponent = React.createClass({
         <dd>
           <span>{version}</span> ({new Moment(version).fromNow()})
         </dd>
-        <dt>Mesos details</dt>
-        <dd><TaskMesosUrlComponent task={lastTaskFailure}/>
-          <TaskFileDownloadComponent task={lastTaskFailure} fileName="stderr" />
-          <TaskFileDownloadComponent task={lastTaskFailure} fileName="stdout" />
+        <dt>Stdout/Stderr</dt>
+        <dd>
+          <TaskFileDownloadComponent
+              task={lastTaskFailure}
+              fileName="/stderr" />
+          <TaskFileDownloadComponent
+              task={lastTaskFailure}
+              fileName="/stdout" />
         </dd>
       </dl>
     );
