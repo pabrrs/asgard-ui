@@ -108,24 +108,18 @@ var HealthChecksComponent = React.createClass({
                   label="Protocol"
                   value={row.protocol}>
                 <select defaultValue={row.protocol} ref={`protocol${i}`}>
-                  <option value={HealthCheckProtocols.COMMAND}>
-                    COMMAND
-                  </option>
-                  <option value={HealthCheckProtocols.HTTP}>
-                    HTTP
-                  </option>
                   <option value={HealthCheckProtocols.MESOS_HTTP}>
-                    Mesos HTTP
-                  </option>
-                  <option value={HealthCheckProtocols.MESOS_HTTPS}>
-                    Mesos HTTPS
-                  </option>
-                  <option value={HealthCheckProtocols.TCP}>
-                    TCP
-                  </option>
+                      Mesos HTTP </option>
                   <option value={HealthCheckProtocols.MESOS_TCP}>
-                    Mesos TCP
-                  </option>
+                      Mesos TCP </option>
+                  <option value={HealthCheckProtocols.MESOS_HTTPS}>
+                      Mesos HTTPS </option>
+                  <option value={HealthCheckProtocols.COMMAND}>
+                      COMMAND (Depreciado) </option>
+                  <option value={HealthCheckProtocols.TCP}>
+                      TCP (Depreciado) </option>
+                  <option value={HealthCheckProtocols.HTTP}>
+                      HTTP (Depreciado) </option>
                 </select>
               </FormGroupComponent>
             </div>
