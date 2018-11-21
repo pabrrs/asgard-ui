@@ -4,7 +4,7 @@ import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
 import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
 
 const healthChecksRowScheme = {
-  protocol: HealthCheckProtocols.HTTP,
+  protocol: HealthCheckProtocols.MESOS_HTTP,
   command: null,
   path: null,
   port: 0,
