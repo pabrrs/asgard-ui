@@ -35,6 +35,9 @@ O README original do projeto Marathon UI está aqui: [original-README.md](origin
 
 ## Changelog
 
+### 0.20.0
+ * Depreciando as opções HTTP, TCP, COMMAND como tipo de healthcheck validos. Deixando apenas MESOS_HTTP, MESOS_TCP e MESOS_HTTPS. Default: MESOS_HTTP.
+
 ### 0.19.0
 
  * Adicionado botoes de Download do stdout/stderr na aba Debug de uma Asgard App;
