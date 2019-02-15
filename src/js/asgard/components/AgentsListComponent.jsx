@@ -12,7 +12,6 @@ import AgentsActions from "../actions/AgentsActions";
 
 var SlaveListComponent = React.createClass({
   getInitialState: function () {
-    console.log("astore -> ",AgentsStore.agents)
     var agents = AgentsStore.agents;
     var fetchState = agents.length > 0
     ? States.STATE_SUCCESS
@@ -101,7 +100,6 @@ var SlaveListComponent = React.createClass({
   getAgentsNodes: function () {
     var state = this.state;
     var sortKey = state.sortKey;
-    console.log("----", state);
     return lazy(state.agents)
       .sortBy(function (agents) {
         return agents[sortKey];

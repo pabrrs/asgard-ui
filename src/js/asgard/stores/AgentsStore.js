@@ -79,7 +79,6 @@ AppsStore.on(AppsEvents.CHANGE, function () {
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AgentsEvents.REQUEST:
-      console.log("bateu aqui ->",action.data.body);
       storeData.agents = processAgents(action.data.body);
       AgentsStore.emit(AgentsEvents.CHANGE);
       break;
