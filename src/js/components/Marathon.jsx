@@ -18,6 +18,7 @@ import PluginMountPointComponent from "../components/PluginMountPointComponent";
 
 import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
+import AgentsActions from "../asgard/actions/AgentsActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
 import PluginActions from "../actions/PluginActions";
@@ -28,6 +29,7 @@ import PluginEvents from "../events/PluginEvents";
 import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 
 import tabs from "../constants/tabs";
+// import AgentsActions from "../asgard/actions/AgentsActions";
 
 var Marathon = React.createClass({
   displayName: "Marathon",
@@ -241,6 +243,7 @@ var Marathon = React.createClass({
     // Deployments needs to be fetched on every poll,
     // because that data is also needed on the deployments tab badge.
     DeploymentActions.requestDeployments();
+    AgentsActions.requestAgents();
   },
 
   getAboutModal: function () {
