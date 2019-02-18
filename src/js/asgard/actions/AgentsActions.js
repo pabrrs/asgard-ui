@@ -22,6 +22,24 @@ var AgentsActions = {
         });
       });
   },
+  requestAttrs: function (label, value) {
+    this.request({
+      url: `${config.apiURL}agents/with-attrs?${label}=${value}`
+    })
+      .success(function (agents) {
+        AppDispatcher.dispatch({
+          actionType: SlaveEvents.REQUEST,
+          data: agents
+        });
+        console.log(agents);
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: SlaveEvents.REQUEST_ERROR,
+          data: error
+        });
+      });
+  },
   request: ajaxWrapper
 };
 

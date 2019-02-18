@@ -10,18 +10,13 @@ import AgentsScheme from "./schemes/AgentsScheme";
 import Util from "../../helpers/Util";
 
 const storeData = {
-  agents: []
+  agents: [],
+  filter: [],
 };
 
 function processAgents(agents) {
   return agents.agents.map(function (agent) {
     agent = Util.extendObject(AgentsScheme, agent);
-    // agent.affectedAppsString = agent.affectedApps.join(", ");
-
-    // deployment.id = deployment.id.join(", ");
-    // deployment.currentActionsString = deployment.currentActions.join(", ");
-    // detectIsWaitingForUserAction(deployment);
-
     return agent;
   });
 }
@@ -65,6 +60,9 @@ function detectIsWaitingForUserAction(deployment) {
 var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   get agents() {
     return Util.deepCopy(storeData.agents);
+  },
+  get filter() {
+    return Util.deepCopy(storeData.filter);
   }
 });
 

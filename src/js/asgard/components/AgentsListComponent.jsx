@@ -20,9 +20,9 @@ var SlaveListComponent = React.createClass({
       agents: agents,
       fetchState: fetchState,
       slave: 0,
-      query: "",
+      filterText: "",
       activated: false,
-      focused: false
+      focused: false,
     };
   },
   componentWillMount: function () {
@@ -106,16 +106,31 @@ var SlaveListComponent = React.createClass({
       }, state.sortDescending)
       .map(function (agents) {
         return (
-          <AgentsComponent key={agents.id} model={agents} />
+          <AgentsComponent key={agents.id}
+          model={agents}/>
         );
       })
       .value();
   },
-  blurInputGroup: function () {
-    this.setState({
-      focused: false,
-      activated: this.state.query !== ""
-    });
+
+  handleSubmit: function (event) {
+    event.preventDefault();
+    var filterText = this.state.filterText;
+    var p1 = filterText.split("=");
+    this.setState({filter: true});
+    // this.updateFilters(FilterTypes.TEXT, filterText);11
+    AgentsActions.requestAttrs(p1[0],p1[1]);
+  },
+  handleKeyDown: function (event) {
+    switch (event.key) {
+      case "Escape":
+        event.target.blur();
+        this.handleClearFilterText();
+        break;
+      case "Enter":
+        this.handleSubmit(event);
+        break;
+    }
   },
   focusInputGroup: function () {
     this.setState({
@@ -123,12 +138,18 @@ var SlaveListComponent = React.createClass({
       activated: true
     });
   },
-  handleSubmit: function (event) {
-    event.preventDefault();
+  handleFilterTextChange: function (event) {
+    var filterText = event.target.value;
+    this.setState({filterText}, () => {
+      if (filterText == null || filterText === "") {
+        this.handleClearFilterText();
+      }
+    });
   },
-  handleInputChange: function () {
-    this.setState ({
-      query: this.search.value
+  blurInputGroup: function () {
+    this.setState({
+      focused: false,
+      activated: this.state.filterText !== ""
     });
   },
   render: function () {
@@ -145,17 +166,17 @@ var SlaveListComponent = React.createClass({
         <div>
           <div style={{display: "flex", justifyContent: "flex-end"}}>
             <div className={`${filterBoxClassSet}`}
-                  style={{marginBottom: "7px"}}>
+              style={{marginBottom: "7px"}}>
               <span className="input-group-addon" />
               <input className="form-control"
                 onBlur={this.blurInputGroup}
-                // onChange={this.handleFilterTextChange}
+                onChange={this.handleFilterTextChange}
                 onFocus={this.focusInputGroup}
-                // onKeyDown={this.handleKeyDown}
+                onKeyDown={this.handleKeyDown}
                 placeholder="Filter your agents"
                 type="text"
                 ref="filterText"
-                value={this.state.query} />
+                value={this.state.filterText} />
               <span className="input-group-addon search-icon-container">
                 <i className={searchIconClassSet} onClick={this.handleSubmit} />
               </span>
@@ -178,7 +199,7 @@ var SlaveListComponent = React.createClass({
                 </span>
               </th>
               <th>
-                <span >
+                <span>
                   Qtds de Apps
                 </span>
               </th>
@@ -215,4 +236,3 @@ var SlaveListComponent = React.createClass({
 });
 
 export default SlaveListComponent;
-
