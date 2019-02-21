@@ -27,7 +27,6 @@ import "../plugin/PluginInterface";
 import PluginStore from "../stores/PluginStore";
 import PluginEvents from "../events/PluginEvents";
 import PluginMountPoints from "../plugin/shared/PluginMountPoints";
-
 import tabs from "../constants/tabs";
 // import AgentsActions from "../asgard/actions/AgentsActions";
 

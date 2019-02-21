@@ -3,11 +3,12 @@ import ajaxWrapper from "../../helpers/ajaxWrapper";
 import AppDispatcher from "../../AppDispatcher";
 import SlaveEvents from "../events/AgentsEvents";
 import config from "../../config/config";
+import AgentsStore from "../stores/AgentsStore";
 
 var AgentsActions = {
   requestAgents: function () {
     this.request({
-      url: `${config.apiURL}agents`
+      url: `${config.apiURL}agents/with-attrs?${AgentsStore.filter}`
     })
       .success(function (agents) {
         AppDispatcher.dispatch({
@@ -22,16 +23,21 @@ var AgentsActions = {
         });
       });
   },
-  requestAttrs: function (label, value) {
+  setFilter: function (value) {
+    AppDispatcher.dispatch({
+      actionType: SlaveEvents.FILTER,
+      data: value
+    });
+  },
+  requestAgentsApps: function (id) {
     this.request({
-      url: `${config.apiURL}agents/with-attrs?${label}=${value}`
+      url: `${config.apiURL}agents/${id}/apps`
     })
       .success(function (agents) {
         AppDispatcher.dispatch({
           actionType: SlaveEvents.REQUEST,
           data: agents
         });
-        console.log(agents);
       })
       .error(function (error) {
         AppDispatcher.dispatch({

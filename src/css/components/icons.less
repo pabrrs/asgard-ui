@@ -2,6 +2,38 @@
  * Icons - Styles borrowed from mesosphere/canvas
  * ==============
  */
+
+ .down {
+  background-image: url("img/down.png")
+ }
+
+ .button-not-collapse:before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  width: 0; 
+  height: 0; 
+
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid gray;
+}
+
+ .button-collapse:before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  width: 0; 
+  height: 0px; 
+ 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid gray;
+ }
+
+
 .icon {
   display: inline-block;
   vertical-align: middle;

@@ -7,12 +7,15 @@ import AgentsEvents from "../events/AgentsEvents";
 import States from "../../constants/States";
 import lazy from "lazy.js";
 import AgentsActions from "../actions/AgentsActions";
-
+import ConcatFilter from "../helpers/concatFilters";
 // import { runInThisContext } from "vm";
 
 var SlaveListComponent = React.createClass({
+  displayName: "AgentsListComponent",
+
   getInitialState: function () {
     var agents = AgentsStore.agents;
+    var total = AgentsStore.total;
     var fetchState = agents.length > 0
     ? States.STATE_SUCCESS
     : States.STATE_LOADING;
@@ -23,6 +26,7 @@ var SlaveListComponent = React.createClass({
       filterText: "",
       activated: false,
       focused: false,
+      total : total,
     };
   },
   componentWillMount: function () {
@@ -30,15 +34,17 @@ var SlaveListComponent = React.createClass({
     AgentsStore.on(AgentsEvents.CHANGE, this.onAgentsChange);
     AgentsStore.on(AgentsEvents.REQUEST_ERROR, this.onRequestError);
     AgentsStore.on(AgentsEvents.REVERT_ERROR, this.onRevertError);
+    AgentsStore.on(AgentsEvents.FILTER, this.requestAgents);
   },
 
   componentWillUnmount: function () {
     AgentsStore.removeListener(AgentsEvents.CHANGE,
-      this.onDeploymentsChange);
+      this.onAgentsChange);
     AgentsStore.removeListener(AgentsEvents.REQUEST_ERROR,
       this.onRequestError);
     AgentsStore.removeListener(AgentsEvents.REVERT_ERROR,
       this.onRevertError);
+    AgentsStore.removeListener(AgentsEvents.FILTER, this.requestAgents);
   },
   onRequestError: function (message, statusCode) {
     var fetchState = States.STATE_ERROR;
@@ -64,6 +70,7 @@ var SlaveListComponent = React.createClass({
   onAgentsChange: function () {
     this.setState({
       agents: AgentsStore.agents,
+      total: AgentsStore.total,
       fetchState: States.STATE_SUCCESS
     });
   },
@@ -92,7 +99,7 @@ var SlaveListComponent = React.createClass({
     if (pageHasNoAgetns) {
       return (
         <Centered title="No Agents"
-        message="Active deployments will be shown here." />
+        message="Active agents will be shown here." />
       );
     }
     return null;
@@ -116,10 +123,11 @@ var SlaveListComponent = React.createClass({
   handleSubmit: function (event) {
     event.preventDefault();
     var filterText = this.state.filterText;
-    var p1 = filterText.split("=");
-    this.setState({filter: true});
-    // this.updateFilters(FilterTypes.TEXT, filterText);11
-    AgentsActions.requestAttrs(p1[0],p1[1]);
+    ConcatFilter.format(filterText);
+    AgentsActions.setFilter(filterText);
+  },
+  requestAgents: function () {
+    AgentsActions.requestAgents();
   },
   handleKeyDown: function (event) {
     switch (event.key) {
@@ -146,6 +154,12 @@ var SlaveListComponent = React.createClass({
       }
     });
   },
+
+  handleClick: function () {
+    this.setState({filterText: ""});
+    AgentsActions.setFilter("");
+  },
+
   blurInputGroup: function () {
     this.setState({
       focused: false,
@@ -153,6 +167,8 @@ var SlaveListComponent = React.createClass({
     });
   },
   render: function () {
+    var totalUsedCpu = this.state.total.stats && this.state.total.stats.cpu_pct;
+    var totalUsedRam = this.state.total.stats && this.state.total.stats.ram_pct;
     var searchIconClassSet = classNames("icon ion-search", {
       "clickable": this.state.query !== ""
     });
@@ -163,8 +179,12 @@ var SlaveListComponent = React.createClass({
       "space-margin" : true,
     });
     return (
-        <div>
+        <div >
           <div style={{display: "flex", justifyContent: "flex-end"}}>
+            <span style={{flexGrow: 1, fontSize: "25px", marginTop: "15px",
+                  marginBottom: "7px", color:"white", marginLeft: "5px"}}>
+              CPU: {totalUsedCpu} % -RAM: {totalUsedRam} %
+            </span>
             <div className={`${filterBoxClassSet}`}
               style={{marginBottom: "7px"}}>
               <span className="input-group-addon" />
@@ -181,15 +201,19 @@ var SlaveListComponent = React.createClass({
                 <i className={searchIconClassSet} onClick={this.handleSubmit} />
               </span>
             </div>
+            <button className="btn btn-xs btn-danger btn-settings"
+                  style={{marginLeft: "20px"}} onClick={this.handleClick}>
+              Limpar filtro
+            </button>
           </div>
         <table className="table table-fixed deployments">
           <colgroup>
-            <col style={{width: "18%"}} />
-            <col style={{width: "18%"}} />
-            <col style={{width: "18%"}} />
-            <col style={{width: "18%"}} />
-            <col style={{width: "18%"}} />
-            <col style={{width: "10%"}} />
+            <col style={{width: "28%"}}/>
+            <col style={{width: "18%"}}/>
+            <col style={{width: "18%"}}/>
+            <col style={{width: "18%"}}/>
+            <col style={{width: "8%"}}/>
+            <col style={{width: "10%"}}/>
           </colgroup>
           <thead>
             <tr>
@@ -215,7 +239,7 @@ var SlaveListComponent = React.createClass({
               </th>
               <th className="">
                 <span>
-                  Tags
+                  Type
                 </span>
               </th>
               <th className="">

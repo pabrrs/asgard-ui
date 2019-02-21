@@ -10,6 +10,7 @@ const agentsScheme = {
   attributes: [],
   active: null,
   type: null,
+  totalApps: null,
 };
 
 export default Util.deepFreeze(agentsScheme);

@@ -6,12 +6,12 @@ import AppsEvents from "../events/AgentsEvents";
 import AgentsEvents from "../events/AgentsEvents";
 // import AgentsEvents from "./schemes/AgentsScheme";
 import AgentsScheme from "./schemes/AgentsScheme";
-
 import Util from "../../helpers/Util";
 
 const storeData = {
   agents: [],
-  filter: [],
+  filter: "",
+  total: "",
 };
 
 function processAgents(agents) {
@@ -63,6 +63,9 @@ var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   },
   get filter() {
     return Util.deepCopy(storeData.filter);
+  },
+  get total() {
+    return Util.deepCopy(storeData.total);
   }
 });
 
@@ -78,7 +81,12 @@ AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AgentsEvents.REQUEST:
       storeData.agents = processAgents(action.data.body);
+      storeData.total = action.data.body;
       AgentsStore.emit(AgentsEvents.CHANGE);
+      break;
+    case AgentsEvents.FILTER:
+      storeData.filter = action.data;
+      AgentsStore.emit(AgentsEvents.FILTER, action.data);
       break;
     case AgentsEvents.REQUEST_ERROR:
       AgentsStore.emit(
@@ -97,19 +105,6 @@ AppDispatcher.register(function (action) {
         AgentsEvents.REVERT_ERROR,
         action.data.body,
         action.data.status
-      );
-      break;
-    case AgentsEvents.CONTINUE_MIGRATION_SUCCESS:
-      AgentsStore.emit(AgentsEvents.CONTINUE_MIGRATION_SUCCESS,
-        action.data.body,
-        action.appId
-      );
-      break;
-    case AgentsEvents.CONTINUE_MIGRATION_ERROR:
-      AgentsStore.emit(AgentsEvents.CONTINUE_MIGRATION_ERROR,
-        action.data.body,
-        action.data.status,
-        action.appId
       );
       break;
   }
