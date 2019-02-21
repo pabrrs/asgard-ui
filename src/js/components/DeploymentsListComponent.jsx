@@ -50,29 +50,6 @@ var DeploymentListComponent = React.createClass({
     });
   },
 
-  onRequestError: function (message, statusCode) {
-    var fetchState = States.STATE_ERROR;
-
-    switch (statusCode) {
-      case 401:
-        fetchState = States.STATE_UNAUTHORIZED;
-        break;
-      case 403:
-        fetchState = States.STATE_FORBIDDEN;
-        break;
-    }
-
-    this.setState({
-      fetchState: fetchState
-    });
-  },
-
-  onRevertError: function (error) {
-    this.setState({
-      errorMessage: "Can't revert deployment: " + error.message
-    });
-  },
-
   sortBy: function (sortKey) {
     var state = this.state;
 

@@ -32,40 +32,13 @@ var SlaveListComponent = React.createClass({
   componentWillMount: function () {
     AgentsActions.requestAgents();
     AgentsStore.on(AgentsEvents.CHANGE, this.onAgentsChange);
-    AgentsStore.on(AgentsEvents.REQUEST_ERROR, this.onRequestError);
-    AgentsStore.on(AgentsEvents.REVERT_ERROR, this.onRevertError);
     AgentsStore.on(AgentsEvents.FILTER, this.requestAgents);
   },
 
   componentWillUnmount: function () {
     AgentsStore.removeListener(AgentsEvents.CHANGE,
       this.onAgentsChange);
-    AgentsStore.removeListener(AgentsEvents.REQUEST_ERROR,
-      this.onRequestError);
-    AgentsStore.removeListener(AgentsEvents.REVERT_ERROR,
-      this.onRevertError);
     AgentsStore.removeListener(AgentsEvents.FILTER, this.requestAgents);
-  },
-  onRequestError: function (message, statusCode) {
-    var fetchState = States.STATE_ERROR;
-
-    switch (statusCode) {
-      case 401:
-        fetchState = States.STATE_UNAUTHORIZED;
-        break;
-      case 403:
-        fetchState = States.STATE_FORBIDDEN;
-        break;
-    }
-
-    this.setState({
-      fetchState: fetchState
-    });
-  },
-  onRevertError: function (error) {
-    this.setState({
-      errorMessage: "Can't revert deployment: " + error.message
-    });
   },
   onAgentsChange: function () {
     this.setState({
@@ -77,7 +50,7 @@ var SlaveListComponent = React.createClass({
   getInlineDialog: function () {
     var state = this.state;
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
-    var pageHasNoAgetns = !pageIsLoading &&
+    var pageHasNoAgents = !pageIsLoading &&
         state.agents.length === 0 &&
         state.fetchState !== States.STATE_UNAUTHORIZED &&
         state.fetchState !== States.STATE_FORBIDDEN;
@@ -96,10 +69,10 @@ var SlaveListComponent = React.createClass({
         </Centered>
       );
     }
-    if (pageHasNoAgetns) {
+    if (pageHasNoAgents) {
       return (
         <Centered title="No Agents"
-        message="Active agents will be shown here." />
+        message="Cluster Agents will be shown here" />
       );
     }
     return null;
@@ -244,7 +217,7 @@ var SlaveListComponent = React.createClass({
               </th>
               <th className="">
                 <span>
-                  Version
+                  Agent Version
                 </span>
               </th>
             </tr>
