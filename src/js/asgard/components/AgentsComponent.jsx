@@ -16,17 +16,8 @@ var AgentsComponent = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-  },
-
-  componentWillUnmount: function () {
-  },
-
   handleClick: function () {
-    if (this.state.collapse)
-      this.setState({collapse: false});
-    else
-      this.setState({collapse: true});
+    this.setState({collapse: !this.state.collapse});
   },
 
   render: function () {

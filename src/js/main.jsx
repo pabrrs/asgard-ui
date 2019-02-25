@@ -18,7 +18,7 @@ var routes = (
     <Route name="taskView" path="apps/:appId/:view/:tab"
       handler={AppPageComponent} />
     <Route name="deployments" path="deployments" handler={TabPanesComponent} />
-    <Route name="slave" path="slave" handler={TabPanesComponent} />
+    <Route name="agents" path="agents" handler={TabPanesComponent} />
     <Redirect from="/" to="apps" />
     <NotFoundRoute name="404" handler={PageNotFoundComponent} />
   </Route>

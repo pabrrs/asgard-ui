@@ -21,42 +21,6 @@ function processAgents(agents) {
   });
 }
 
-function removeDeployment(agents, deploymentId) {
-  return agents.filter(deployment => deployment.id !== deploymentId);
-}
-
-function detectIsWaitingForUserAction(deployment) {
-  deployment.currentActions.forEach(action => {
-    const results = action.readinessCheckResults;
-    action.isWaitingForUserAction = false;
-
-    // Detect if the migration API is supported by the app and at least
-    // one migration phase is waiting for user decision
-    if (results != null && results.length > 0) {
-      action.isWaitingForUserAction = results.some(result => {
-        if (result.lastResponse == null || result.lastResponse.body == null) {
-          return false;
-        }
-
-        let status;
-
-        try {
-          status = JSON.parse(result.lastResponse.body).status;
-        } catch (e) {
-          return false;
-        }
-
-        if (status != null && status === "Waiting") {
-          const app = AppsStore.getCurrentApp(action.app);
-          return !!app.hasMigrationApiSupport;
-        }
-
-        return false;
-      });
-    }
-  });
-}
-
 var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   get agents() {
     return Util.deepCopy(storeData.agents);
