@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import React from "react/addons";
+import classNames from "classnames";
+import AppListItem from "../../components/AppListItemLabelsComponent";
 
 var AgentsComponent = React.createClass({
   displayName: "AgentsComponent",
@@ -11,7 +12,6 @@ var AgentsComponent = React.createClass({
   getInitialState: function () {
     return {
       loading: false,
-      continueButtonsLoadingState: {},
       collapse: false,
     };
   },
@@ -22,23 +22,6 @@ var AgentsComponent = React.createClass({
   componentWillUnmount: function () {
   },
 
-  getContinueButton: function (action) {
-    if (!action.isWaitingForUserAction) {
-      return null;
-    }
-
-    let continueButtonClasses = classNames("btn btn-xs btn-success", {
-      disabled: !!this.state.continueButtonsLoadingState[action.app]
-    });
-
-    return (
-      <button onClick={this.handleContinueMigration.bind(this, action.app)}
-          className={continueButtonClasses}>
-        Continue
-      </button>
-    );
-  },
-
   handleClick: function () {
     if (this.state.collapse)
       this.setState({collapse: false});
@@ -46,49 +29,52 @@ var AgentsComponent = React.createClass({
       this.setState({collapse: true});
   },
 
-  getButtons: function () {
-    if (this.state.loading) {
-      return (<div className="loading-bar" />);
-    } else {
-      return (
-        <ul className="list-inline">
-          <li>
-            <button
-                onClick={this.handleRevertDeployment}
-                className="btn btn-xs btn-default">
-              Rollback
-            </button>
-          </li>
-        </ul>
-      );
-    }
-  },
-
   render: function () {
     var model = this.props.model;
+    var labels = this.props.model.attributes;
+    if (labels == null || Object.keys(labels).length === 0) {
+      return null;
+    }
+    var moreLabelClassName = classNames("badge more", {
+      "visible": Object.keys(model.attributes).length > 3
+    });
     return (
-        <tr data-toggle="collapse" data-target="#demo1"
+        <tr data-toggle="collapse"
         className="accordion-toggle">
-          <td className="overflow-ellipsis" onClick={this.handleClick}
-          title={model.hostname} style={{color: "white"}}>
-            <span className={`${this.state.collapse ?
-                  "button-not-collapse" : "button-collapse"}`}
-                  style={{height: "15px", marginRight: "10px"}}>
+          <td className="overflow-ellipsis color-base"
+          onClick={this.handleClick}
+          title={model.hostname}>
+            <span className={`triangle-length ${this.state.collapse ?
+                  "button-not-collapse" : "button-collapse"}`}>
             </span>
-            {model.hostname}
+            <span className="col-hostname">{model.hostname}</span>
+            <AppListItem numberOfVisibleLabels={3} labels={labels} ref="label">
+              <span className={moreLabelClassName} ref="moreLabel">
+                &hellip;
+              </span>
+            </AppListItem>
             {this.state.collapse &&
-            <td className="overflow-ellipsis"
-                style={{paddingTop: "20px", paddingLeft: "30px"}}>
-              <span style={{color: "#898d98"}}>
-                Total de Apps: {model.total_apps}
+            <td className="overflow-ellipsis accordion-app">
+              <span>
+                {model.applications.map(app => {
+                  return (
+                    <a href={`#/apps/${encodeURIComponent(app.id)}`}
+                      style={{fontSize: "16px"}}>
+                      {app.id}
+                      <br></br>
+                    </a>
+                  );
+                })}
               </span>
             </td>
             }
           </td>
-          <td className="overflow-ellipsis" title="">
+          <td className="overflow-ellipsis col-totalapps"
+            title={model.total_apps}>
             {model.total_apps}
           </td>
-          <td className="overflow-ellipsis" title="">
+          <td className="overflow-ellipsis col-totalapps"
+            title="">
             {model.used_resources.cpus}/{model.resources.cpus} -
             ({model.stats.cpu_pct} % )
           </td>
@@ -96,10 +82,12 @@ var AgentsComponent = React.createClass({
             {model.used_resources.mem}/{model.resources.mem} -
             ({model.stats.ram_pct} % )
           </td>
-          <td className="overflow-ellipsis" title={model.type}>
+          <td className="overflow-ellipsis col-type"
+              title={model.type}>
             {model.type}
           </td>
-          <td className="overflow-ellipsis" title={model.version}>
+          <td className="overflow-ellipsis col-version"
+              title={model.version}>
             {model.version}
           </td>
         </tr>

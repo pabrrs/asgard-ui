@@ -1,6 +1,7 @@
 import Util from "../../../helpers/Util";
 
 const agentsScheme = {
+  application: [],
   hostname: null,
   id: null,
   tags: null,

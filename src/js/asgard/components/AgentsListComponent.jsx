@@ -96,8 +96,8 @@ var SlaveListComponent = React.createClass({
   handleSubmit: function (event) {
     event.preventDefault();
     var filterText = this.state.filterText;
-    ConcatFilter.format(filterText);
-    AgentsActions.setFilter(filterText);
+    var changeFilter = ConcatFilter.format(filterText);
+    AgentsActions.setFilter(changeFilter);
   },
   requestAgents: function () {
     AgentsActions.requestAgents();
@@ -131,6 +131,7 @@ var SlaveListComponent = React.createClass({
   handleClick: function () {
     this.setState({filterText: ""});
     AgentsActions.setFilter("");
+    this.getInlineDialog();
   },
 
   blurInputGroup: function () {
@@ -153,13 +154,11 @@ var SlaveListComponent = React.createClass({
     });
     return (
         <div >
-          <div style={{display: "flex", justifyContent: "flex-end"}}>
-            <span style={{flexGrow: 1, fontSize: "25px", marginTop: "15px",
-                  marginBottom: "7px", color:"white", marginLeft: "5px"}}>
+          <div className="sub-header-total">
+            <span className="used-total">
               CPU: {totalUsedCpu} % -RAM: {totalUsedRam} %
             </span>
-            <div className={`${filterBoxClassSet}`}
-              style={{marginBottom: "7px"}}>
+            <div className={`${filterBoxClassSet} search-input`}>
               <span className="input-group-addon" />
               <input className="form-control"
                 onBlur={this.blurInputGroup}
@@ -174,18 +173,18 @@ var SlaveListComponent = React.createClass({
                 <i className={searchIconClassSet} onClick={this.handleSubmit} />
               </span>
             </div>
-            <button className="btn btn-xs btn-danger btn-settings"
-                  style={{marginLeft: "20px"}} onClick={this.handleClick}>
+            <button className="btn btn-xs btn-danger btn-settings button-filter"
+                onClick={this.handleClick}>
               Limpar filtro
             </button>
           </div>
-        <table className="table table-fixed deployments">
+        <table className="table deployments">
           <colgroup>
-            <col style={{width: "28%"}}/>
-            <col style={{width: "18%"}}/>
-            <col style={{width: "18%"}}/>
-            <col style={{width: "18%"}}/>
+            <col style={{width: "46%"}}/>
             <col style={{width: "8%"}}/>
+            <col style={{width: "10%"}}/>
+            <col style={{width: "20%"}}/>
+            <col style={{width: "6%"}}/>
             <col style={{width: "10%"}}/>
           </colgroup>
           <thead>
@@ -197,7 +196,7 @@ var SlaveListComponent = React.createClass({
               </th>
               <th>
                 <span>
-                  Qtds de Apps
+                  Apps
                 </span>
               </th>
               <th>

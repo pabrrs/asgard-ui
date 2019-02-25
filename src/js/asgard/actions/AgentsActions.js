@@ -1,5 +1,4 @@
 import ajaxWrapper from "../../helpers/ajaxWrapper";
-// import config from "../config/config";
 import AppDispatcher from "../../AppDispatcher";
 import SlaveEvents from "../events/AgentsEvents";
 import config from "../../config/config";
