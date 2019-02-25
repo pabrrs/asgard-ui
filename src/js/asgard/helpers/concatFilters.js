@@ -1,10 +1,10 @@
 
 const ConcatFilter = {
   format: function (params) {
-    let queryParams = "";
-    let count=0;
+    var queryParams = "";
+    var count=0;
     Object.keys(params).forEach(key => {
-      let value = params[key];
+      var value = params[key];
       if (count !== 0 && value === " ") {
         queryParams += "&";
       }
