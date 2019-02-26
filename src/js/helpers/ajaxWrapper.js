@@ -16,11 +16,10 @@ var ajaxWrapper = function (opts = {}) {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "X-UI-Version": "new"
+      "X-UI-Version": "new",
     }
   };
   var options = Util.extendObject(defaults, opts);
-
   if (!options.concurrent) {
     if (uniqueCalls.indexOf(options.url) > -1) {
       return {

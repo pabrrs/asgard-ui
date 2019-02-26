@@ -49,7 +49,6 @@ var DeploymentListComponent = React.createClass({
       fetchState: States.STATE_SUCCESS
     });
   },
-
   onRequestError: function (message, statusCode) {
     var fetchState = States.STATE_ERROR;
 

@@ -6,7 +6,7 @@ import AppsActions from "../actions/AppsActions";
 import AppsEvents from "../events/AppsEvents";
 import AppTaskStatsListComponent from "../components/AppTaskStatsListComponent";
 /* eslint-disable max-len */
-import TaskFileDownloadComponent from "../components/asgard/TaskFileDownloadComponent";
+import TaskFileDownloadComponent from "../asgard/TaskFileDownloadComponent";
 /* eslint-enable max-len */
 
 import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
