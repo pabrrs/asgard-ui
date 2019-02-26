@@ -39,6 +39,7 @@ var SlaveListComponent = React.createClass({
     AgentsStore.removeListener(AgentsEvents.CHANGE,
       this.onAgentsChange);
     AgentsStore.removeListener(AgentsEvents.FILTER, this.requestAgents);
+    AgentsActions.setFilter("");
   },
   onAgentsChange: function () {
     this.setState({
