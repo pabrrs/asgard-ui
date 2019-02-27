@@ -49,7 +49,7 @@ var AgentsComponent = React.createClass({
               <span>
                 {model.applications.map(app => {
                   return (
-                    <a href={`#/apps/${encodeURIComponent(app.id)}`}
+                    <a href={`#/apps/${encodeURIComponent("/"+app.id)}`}
                       style={{fontSize: "16px"}}>
                       {app.id}
                       <br></br>
