@@ -35,6 +35,12 @@ O README original do projeto Marathon UI está aqui: [original-README.md](origin
 
 ## Changelog
 
+### 0.22.0
+ * Fix no css na tela de criação/edição de app
+
+### 0.21.0
+ * Adicionada nova tela qu mostra a lista de agents no cluster, com suas tags e com campo de busca por tags
+
 ### 0.20.0
  * Depreciando as opções HTTP, TCP, COMMAND como tipo de healthcheck validos. Deixando apenas MESOS_HTTP, MESOS_TCP e MESOS_HTTPS. Default: MESOS_HTTP.
 
