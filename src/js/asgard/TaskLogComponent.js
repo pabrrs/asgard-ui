@@ -5,7 +5,7 @@ import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";
 
 const APPEND = 1;
-const BLOCK_SIZE = 512;
+const BLOCK_SIZE = 1024;
 
 class LogReader {
   constructor(task, logfile, onNewlogDataCallback, direction = APPEND) {
@@ -35,9 +35,11 @@ class LogReader {
     MarathonService.request({
       resource: url}
     ).success((response) => {
-      this.offset = response.body.offset;
-      this.offset -= Math.min(this.offset, 512);
-      this.firstOffset -= Math.min(this.offset, 512);
+      const totalOffset = response.body.offset;
+      this.offset = totalOffset;
+      this.offset -= Math.min(totalOffset, 512);
+      this.firstOffset = totalOffset;
+      this.firstOffset -= Math.min(totalOffset, 512);
       this.intervalId = setInterval(this.poll, 1000);
     }).error((data) => {
       console.log(`ERROR ${this.task.id}, ${this.logfile}. ${data}`);
@@ -61,7 +63,6 @@ class LogReader {
     let newLength = BLOCK_SIZE;
     if (this.firstOffset < 0) {
       newLength = newLength + this.firstOffset;
-      console.log("menor q 0");
     }
     if (this.firstOffset !== 0) {
       MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.firstOffset < 0 ? this.firstOffset = 0 : this.firstOffset }&length=${newLength}`})
@@ -88,10 +89,8 @@ class LogReader {
   handleReadTopOK(response) {
     const {data} = response.body;
     if (data) {
-      this.firstOffset= this.firstOffset - BLOCK_SIZE;
-      // this.firstOffset += data.length;
-      this.logData.unshift(data);
-      // this.onNewlogDataCallback(this.logData);
+      this.firstOffset -= BLOCK_SIZE;
+      this.logData.unshift("\n"+data);
     }
   }
 
@@ -126,13 +125,11 @@ export default React.createClass({
       }
       // scroll to top
       if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
-        console.log("scrool top aqui");
         m.reader.stopPoll();
       }
       // vendo se bateu no topo
       const isBottom = m.checkIsBottom(el);
       if (isBottom) {
-        console.log("polling voltou");
         el.scrollTop = el.scrollHeight;
         m.reader.reestartPool();
       }
@@ -140,7 +137,6 @@ export default React.createClass({
   },
 
   onNewlogData(logdata) {
-    console.log("chamou");
     const m = this;
     this.setState({
       logdata: logdata
@@ -155,12 +151,10 @@ export default React.createClass({
 
   checkIsBottom(el) {
     let isBottom = false;
-    console.log("--->",el.scrollHeight,"<",Math.round(el.scrollTop + el.clientHeight));
     if (Math.round(el.scrollTop + el.clientHeight)  >= el.scrollHeight ) {
       isBottom = true;
       //el.scrollTop = el.scrollHeight;
     }
-    console.log(isBottom,"voltando");
     return isBottom;
   },
   handleDownload() {
