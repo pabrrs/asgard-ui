@@ -5,7 +5,7 @@ import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";
 
 const APPEND = 1;
-const BLOCK_SIZE = 1024;
+const BLOCK_SIZE = 512;
 
 class LogReader {
   constructor(task, logfile, onNewlogDataCallback, direction = APPEND) {
@@ -58,11 +58,21 @@ class LogReader {
   }
 
   pollTop() {
-    MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.firstOffset - 512}&length=${BLOCK_SIZE}`})
-    .success(this.handleReadTopOK)
-    .error((data) => {
-      console.log(`ERROR task ${this.task.id}, ${this.logfile}. ${data}`);
-    });
+    let newLength = BLOCK_SIZE;
+    if (this.firstOffset < 0) {
+      newLength = newLength + this.firstOffset;
+      console.log("menor q 0");
+    }
+    if (this.firstOffset !== 0) {
+      MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.firstOffset < 0 ? this.firstOffset = 0 : this.firstOffset }&length=${newLength}`})
+      .success(this.handleReadTopOK)
+      .error((data) => {
+        console.log(`ERROR task ${this.task.id}, ${this.logfile}. ${data}`);
+      });
+    }
+    else {
+      console.log("nao bateu a requisicao");
+    }
   }
   /* eslint-enable */
 
@@ -70,7 +80,6 @@ class LogReader {
     const {data} = response.body;
     if (data) {
       this.offset += data.length;
-      this.lastOffset += data.length;
       this.logData.push(data);
       this.onNewlogDataCallback(this.logData);
     }
@@ -79,8 +88,8 @@ class LogReader {
   handleReadTopOK(response) {
     const {data} = response.body;
     if (data) {
-      this.offset += data.length;
-      this.lastOffset += data.length;
+      this.firstOffset= this.firstOffset - BLOCK_SIZE;
+      // this.firstOffset += data.length;
       this.logData.unshift(data);
       // this.onNewlogDataCallback(this.logData);
     }
@@ -124,7 +133,6 @@ export default React.createClass({
       const isBottom = m.checkIsBottom(el);
       if (isBottom) {
         console.log("polling voltou");
-        
         el.scrollTop = el.scrollHeight;
         m.reader.reestartPool();
       }
