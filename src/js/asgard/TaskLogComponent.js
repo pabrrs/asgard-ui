@@ -5,17 +5,21 @@ import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";
 
 const APPEND = 1;
-const BLOCK_SIZE = 1024;
+const BLOCK_SIZE = 105;
+let loading = 2;
+let topo = 0;
 
 class LogReader {
-  constructor(task, logfile, onNewlogDataCallback, direction = APPEND) {
+  constructor(task, logfile, onNewlogDataCallback, onNewTopCallback, direction = APPEND) {
     this.offset = 0;
     this.firstOffset = 0;
     this.lastOffset = 0;
     this.logData = [];
+    this.loading = 0;
     this.task = task;
     this.logfile = logfile;
     this.onNewlogDataCallback = onNewlogDataCallback;
+    this.onNewTopCallback = onNewTopCallback;
     this.direction = direction;
     this.poll = this.poll.bind(this);
     this.handleReadOK = this.handleReadOK.bind(this);
@@ -46,12 +50,14 @@ class LogReader {
     });
   }
 
-  reestartPool() {
+  restartPool() {
     clearInterval(this.intervalId);
     this.intervalId = setInterval(this.poll, 1000);
   }
 
   poll() {
+    loading = 0;
+    console.log(loading);
     MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.offset}&length=${BLOCK_SIZE}`})
       .success(this.handleReadOK)
       .error((data) => {
@@ -63,8 +69,11 @@ class LogReader {
     let newLength = BLOCK_SIZE;
     if (this.firstOffset < 0) {
       newLength = newLength + this.firstOffset;
+      topo = 1;
     }
     if (this.firstOffset !== 0) {
+      loading = 0;
+      console.log(loading);
       MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.firstOffset < 0 ? this.firstOffset = 0 : this.firstOffset }&length=${newLength}`})
       .success(this.handleReadTopOK)
       .error((data) => {
@@ -82,6 +91,8 @@ class LogReader {
     if (data) {
       this.offset += data.length;
       this.logData.push(data);
+      loading = 1;
+      console.log(loading);
       this.onNewlogDataCallback(this.logData);
     }
   }
@@ -90,7 +101,10 @@ class LogReader {
     const {data} = response.body;
     if (data) {
       this.firstOffset -= BLOCK_SIZE;
-      this.logData.unshift("\n"+data);
+      this.logData.unshift("\n",data);
+      loading = 1;
+      console.log(loading);
+      this.onNewTopCallback(this.logData);
     }
   }
 
@@ -114,28 +128,37 @@ export default React.createClass({
   },
   componentDidMount() {
     const {task, logfile} = this.props;
-    this.reader = new LogReader(task, logfile, this.onNewlogData);
-
+    this.reader = new LogReader(task, logfile, this.onNewlogData, this.onNewTop);
     const el = this.refs && this.refs.teste && this.refs.teste.getDOMNode();
     const m = this;
     el.addEventListener("scroll", function () {
       //is top
       if (el.scrollTop === 0) {
+        el.scrollTop = el.scrollHeight;
         m.reader.pollTop();
+        el.scrollTop = this.firstOffset;
+        return ;
       }
       // scroll to top
       if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
         m.reader.stopPoll();
       }
-      // vendo se bateu no topo
+      // check is scroll bottom
       const isBottom = m.checkIsBottom(el);
       if (isBottom) {
         el.scrollTop = el.scrollHeight;
-        m.reader.reestartPool();
+        m.reader.restartPool();
       }
     });
   },
-
+  onNewTop(logdata) {
+    const el = this.refs && this.refs.teste && this.refs.teste.getDOMNode();
+    if (el.scrollTop === 0) {
+      console.log("bati no topo");
+      console.log(el.scrollTop, "oi", el.scrollHeight,  "-",el.scrollHeight - el.clientHeight);
+      //check is scroll top
+    }
+  },
   onNewlogData(logdata) {
     const m = this;
     this.setState({
@@ -153,7 +176,6 @@ export default React.createClass({
     let isBottom = false;
     if (Math.round(el.scrollTop + el.clientHeight)  >= el.scrollHeight ) {
       isBottom = true;
-      //el.scrollTop = el.scrollHeight;
     }
     return isBottom;
   },
@@ -184,6 +206,8 @@ export default React.createClass({
             onClick={this.handleDownload}>
             Download
           </button>
+          {loading === 0 ? <span style={{color: "white"}}>Carregando</span>: "" }
+          {topo === 1 ? <span style={{color: "white"}}>Topo do log</span>: "" }
         </div>
         <div className="log-view" ref="teste">
           {this.state.logdata}
