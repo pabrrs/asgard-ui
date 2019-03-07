@@ -133,9 +133,6 @@ export default React.createClass({
         m.reader.pollTop();
         return ;
       }
-      else {
-        m.setState ({loadingTop : false});
-      }
       // scroll to top
       if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
         m.reader.stopPoll();
@@ -167,7 +164,6 @@ export default React.createClass({
     
   },
   onNewlogData(logdata) {
-    const m = this;
     this.setState({
       logdata: logdata,
     }, () => {
