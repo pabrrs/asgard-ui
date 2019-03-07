@@ -5,8 +5,8 @@ import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";
 
 const APPEND = 1;
-const BLOCK_SIZE = 105;
-let loading = 2;
+const BLOCK_SIZE = 512;
+let loading = 0;
 let topo = 0;
 
 class LogReader {
@@ -21,6 +21,7 @@ class LogReader {
     this.onNewlogDataCallback = onNewlogDataCallback;
     this.onNewTopCallback = onNewTopCallback;
     this.direction = direction;
+    this.topo = 0;
     this.poll = this.poll.bind(this);
     this.handleReadOK = this.handleReadOK.bind(this);
     this.handleReadTopOK = this.handleReadTopOK.bind(this);
@@ -56,8 +57,6 @@ class LogReader {
   }
 
   poll() {
-    loading = 0;
-    console.log(loading);
     MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.offset}&length=${BLOCK_SIZE}`})
       .success(this.handleReadOK)
       .error((data) => {
@@ -69,11 +68,9 @@ class LogReader {
     let newLength = BLOCK_SIZE;
     if (this.firstOffset < 0) {
       newLength = newLength + this.firstOffset;
-      topo = 1;
     }
     if (this.firstOffset !== 0) {
-      loading = 0;
-      console.log(loading);
+      this.firstOffset -= BLOCK_SIZE;
       MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.firstOffset < 0 ? this.firstOffset = 0 : this.firstOffset }&length=${newLength}`})
       .success(this.handleReadTopOK)
       .error((data) => {
@@ -81,7 +78,8 @@ class LogReader {
       });
     }
     else {
-      console.log("nao bateu a requisicao");
+      topo = 1;
+      loading = 1;
     }
   }
   /* eslint-enable */
@@ -91,8 +89,6 @@ class LogReader {
     if (data) {
       this.offset += data.length;
       this.logData.push(data);
-      loading = 1;
-      console.log(loading);
       this.onNewlogDataCallback(this.logData);
     }
   }
@@ -100,10 +96,7 @@ class LogReader {
   handleReadTopOK(response) {
     const {data} = response.body;
     if (data) {
-      this.firstOffset -= BLOCK_SIZE;
       this.logData.unshift("\n",data);
-      loading = 1;
-      console.log(loading);
       this.onNewTopCallback(this.logData);
     }
   }
@@ -124,6 +117,8 @@ export default React.createClass({
       logdata: [],
       teste: true,
       control: false,
+      loadingBottom : false,
+      loadingTop : false,
     };
   },
   componentDidMount() {
@@ -134,35 +129,47 @@ export default React.createClass({
     el.addEventListener("scroll", function () {
       //is top
       if (el.scrollTop === 0) {
-        el.scrollTop = el.scrollHeight;
+        m.setState ({loadingTop : true});
         m.reader.pollTop();
-        el.scrollTop = this.firstOffset;
         return ;
+      }
+      else {
+        m.setState ({loadingTop : false});
       }
       // scroll to top
       if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
         m.reader.stopPoll();
+        m.setState({loadingBottom: false, loadingTop: false});
       }
       // check is scroll bottom
       const isBottom = m.checkIsBottom(el);
       if (isBottom) {
         el.scrollTop = el.scrollHeight;
+        m.setState ({loadingBottom: true});
         m.reader.restartPool();
+      }
+      else {
+        m.setState ({loadingBottom: false});
       }
     });
   },
   onNewTop(logdata) {
     const el = this.refs && this.refs.teste && this.refs.teste.getDOMNode();
-    if (el.scrollTop === 0) {
-      console.log("bati no topo");
-      console.log(el.scrollTop, "oi", el.scrollHeight,  "-",el.scrollHeight - el.clientHeight);
-      //check is scroll top
-    }
+    let prevHeightScroll = el.scrollHeight;
+    this.setState({
+      logdata: logdata,
+    }, () => {
+      el.scrollTop = el.scrollHeight - prevHeightScroll;
+      if (el.scrollTop === 0) {
+        this.setState ({loadingTop: true});
+      }
+    });
+    
   },
   onNewlogData(logdata) {
     const m = this;
     this.setState({
-      logdata: logdata
+      logdata: logdata,
     }, () => {
       const el = this.refs && this.refs.teste && this.refs.teste.getDOMNode();
       el.scrollTop = el.scrollHeight;
@@ -200,18 +207,19 @@ export default React.createClass({
   render() {
     return(
       <div className="tab-pane">
-        <div className="row col-sm-6">
+        <div className="row col-sm-12">
           <button
             className="btn btn-sm btn-default"
             onClick={this.handleDownload}>
             Download
           </button>
-          {loading === 0 ? <span style={{color: "white"}}>Carregando</span>: "" }
-          {topo === 1 ? <span style={{color: "white"}}>Topo do log</span>: "" }
         </div>
         <div className="log-view" ref="teste">
+          {this.state.loadingTop && loading === 0 ? <i className="icon icon-medium loading"></i> : "" }
+          {topo === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
           {this.state.logdata}
         </div>
+        {this.state.loadingBottom ? <i className="icon icon-medium loading" style={{marginLeft: "-5px", marginTop: "5px"}}></i> : "" }
       </div>
     );
   }
