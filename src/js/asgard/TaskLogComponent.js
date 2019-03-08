@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Bridge from "../helpers/Bridge";
 import React from "react/addons";
 import config from "../../../config/config";
@@ -5,23 +6,22 @@ import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";
 
 const APPEND = 1;
-const BLOCK_SIZE = 512;
+const BLOCK_SIZE = 100124;
 let loading = 0;
 let topo = 0;
 
 class LogReader {
-  constructor(task, logfile, onNewlogDataCallback, onNewTopCallback, direction = APPEND) {
+  constructor(task, logfile, onNewlogDataCallback,
+  onNewTopCallback, direction = APPEND) {
     this.offset = 0;
     this.firstOffset = 0;
     this.lastOffset = 0;
     this.logData = [];
-    this.loading = 0;
     this.task = task;
     this.logfile = logfile;
     this.onNewlogDataCallback = onNewlogDataCallback;
     this.onNewTopCallback = onNewTopCallback;
     this.direction = direction;
-    this.topo = 0;
     this.poll = this.poll.bind(this);
     this.handleReadOK = this.handleReadOK.bind(this);
     this.handleReadTopOK = this.handleReadTopOK.bind(this);
@@ -33,7 +33,6 @@ class LogReader {
   stopPoll() {
     clearInterval(this.intervalId);
   }
-
   /* eslint-disable max-len */
   startPoll() {
     const url = `tasks/${this.task.id}/files/read?path=${this.logfile}&offset=-1`;
@@ -104,7 +103,6 @@ class LogReader {
 };
 
 export default React.createClass({
-
   displayName: "TaskLogComponent",
 
   propTypes: {
@@ -115,43 +113,45 @@ export default React.createClass({
   getInitialState() {
     return {
       logdata: [],
-      teste: true,
-      control: false,
       loadingBottom : false,
       loadingTop : false,
     };
   },
   componentDidMount() {
     const {task, logfile} = this.props;
-    this.reader = new LogReader(task, logfile, this.onNewlogData, this.onNewTop);
-    const el = this.refs && this.refs.teste && this.refs.teste.getDOMNode();
-    const m = this;
+    this.reader = new LogReader(task, logfile,
+    this.onNewlogData, this.onNewTop);
+    const el = this.refs && this.refs.logView && this.refs.logView.getDOMNode();
+    const ref = this;
     el.addEventListener("scroll", function () {
-      //is top
+      // check is scroll top
       if (el.scrollTop === 0) {
-        m.setState ({loadingTop : true});
-        m.reader.pollTop();
-        return ;
+        ref.setState ({loadingTop : true});
+        ref.reader.pollTop();
+        return;
       }
-      // scroll to top
+      // scroll not top and bottom
       if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
-        m.reader.stopPoll();
-        m.setState({loadingBottom: false, loadingTop: false});
+        ref.reader.stopPoll();
+        ref.setState({loadingBottom: false, loadingTop: false});
       }
       // check is scroll bottom
-      const isBottom = m.checkIsBottom(el);
+      const isBottom = ref.checkIsBottom(el);
       if (isBottom) {
         el.scrollTop = el.scrollHeight;
-        m.setState ({loadingBottom: true});
-        m.reader.restartPool();
+        ref.setState ({loadingBottom: true});
+        ref.reader.restartPool();
       }
       else {
-        m.setState ({loadingBottom: false});
+        ref.setState ({loadingBottom: false});
       }
     });
   },
+  componentWillUnmount() {
+    this.reader.stopPoll();
+  },
   onNewTop(logdata) {
-    const el = this.refs && this.refs.teste && this.refs.teste.getDOMNode();
+    const el = this.refs && this.refs.logView && this.refs.logView.getDOMNode();
     let prevHeightScroll = el.scrollHeight;
     this.setState({
       logdata: logdata,
@@ -161,20 +161,16 @@ export default React.createClass({
         this.setState ({loadingTop: true});
       }
     });
-    
   },
   onNewlogData(logdata) {
+    const ref = this.refs;
     this.setState({
       logdata: logdata,
     }, () => {
-      const el = this.refs && this.refs.teste && this.refs.teste.getDOMNode();
+      const el = ref && ref.logView && ref.logView.getDOMNode();
       el.scrollTop = el.scrollHeight;
     });
   },
-  componentWillUnmount() {
-    this.reader.stopPoll();
-  },
-
   checkIsBottom(el) {
     let isBottom = false;
     if (Math.round(el.scrollTop + el.clientHeight)  >= el.scrollHeight ) {
@@ -199,7 +195,7 @@ export default React.createClass({
     }
     return [];
   },
-
+  /* eslint-disable max-len */
   render() {
     return(
       <div className="tab-pane">
@@ -210,12 +206,12 @@ export default React.createClass({
             Download
           </button>
         </div>
-        <div className="log-view" ref="teste">
-          {this.state.loadingTop && loading === 0 ? <i className="icon icon-medium loading"></i> : "" }
+        <div className="log-view" ref="logView">
+          {this.state.loadingTop && loading === 0 ? <i className="icon icon-medium loading"></i> : ""}
           {topo === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
           {this.state.logdata}
         </div>
-        {this.state.loadingBottom ? <i className="icon icon-medium loading" style={{marginLeft: "-5px", marginTop: "5px"}}></i> : "" }
+        {this.state.loadingBottom ? <i className="icon icon-medium loading loading-bottom"></i> : "" }
       </div>
     );
   }

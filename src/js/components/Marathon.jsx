@@ -176,6 +176,12 @@ var Marathon = React.createClass({
       }
     }.bind(this));
 
+    Mousetrap.bind("g s", function () {
+      if (this.state.modal == null) {
+        router.transitionTo("agents");
+      }
+    }.bind(this));
+
     Mousetrap.bind("g v", function () {
       if (this.state.modal != null) {
         return null;
