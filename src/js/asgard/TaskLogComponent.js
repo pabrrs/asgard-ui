@@ -6,7 +6,7 @@ import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";
 
 const APPEND = 1;
-const BLOCK_SIZE = 100124;
+const BLOCK_SIZE = 1024;
 let loading = 0;
 let topo = 0;
 
