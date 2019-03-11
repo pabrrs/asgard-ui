@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import Bridge from "../helpers/Bridge";
 import React from "react/addons";
-import config from "../../../config/config";
+import config from "../config/config";
 import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";
 
@@ -13,9 +13,8 @@ let topo = 0;
 class LogReader {
   constructor(task, logfile, onNewlogDataCallback,
   onNewTopCallback, direction = APPEND) {
-    this.offset = 0;
-    this.firstOffset = 0;
-    this.lastOffset = 0;
+    this.bottomOffset = 0;
+    this.topOffset = 0;
     this.logData = [];
     this.task = task;
     this.logfile = logfile;
@@ -40,10 +39,10 @@ class LogReader {
       resource: url}
     ).success((response) => {
       const totalOffset = response.body.offset;
-      this.offset = totalOffset;
-      this.offset -= Math.min(totalOffset, 512);
-      this.firstOffset = totalOffset;
-      this.firstOffset -= Math.min(totalOffset, 512);
+      this.bottomOffset = totalOffset;
+      this.bottomOffset -= Math.min(totalOffset, BLOCK_SIZE);
+      this.topOffset = totalOffset;
+      this.topOffset -= Math.min(totalOffset, BLOCK_SIZE);
       this.intervalId = setInterval(this.poll, 1000);
     }).error((data) => {
       console.log(`ERROR ${this.task.id}, ${this.logfile}. ${data}`);
@@ -56,7 +55,7 @@ class LogReader {
   }
 
   poll() {
-    MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.offset}&length=${BLOCK_SIZE}`})
+    MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.bottomOffset}&length=${BLOCK_SIZE}`})
       .success(this.handleReadOK)
       .error((data) => {
         console.log(`ERROR task ${this.task.id}, ${this.logfile}. ${data}`);
@@ -65,12 +64,12 @@ class LogReader {
 
   pollTop() {
     let newLength = BLOCK_SIZE;
-    if (this.firstOffset < 0) {
-      newLength = newLength + this.firstOffset;
+    if (this.topOffset < 0) {
+      newLength = newLength + this.topOffset;
     }
-    if (this.firstOffset !== 0) {
-      this.firstOffset -= BLOCK_SIZE;
-      MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.firstOffset < 0 ? this.firstOffset = 0 : this.firstOffset }&length=${newLength}`})
+    if (this.topOffset !== 0) {
+      this.topOffset -= BLOCK_SIZE;
+      MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.topOffset < 0 ? this.topOffset = 0 : this.topOffset }&length=${newLength}`})
       .success(this.handleReadTopOK)
       .error((data) => {
         console.log(`ERROR task ${this.task.id}, ${this.logfile}. ${data}`);
@@ -86,7 +85,7 @@ class LogReader {
   handleReadOK(response) {
     const {data} = response.body;
     if (data) {
-      this.offset += data.length;
+      this.bottomOffset += data.length;
       this.logData.push(data);
       this.onNewlogDataCallback(this.logData);
     }
@@ -171,12 +170,9 @@ export default React.createClass({
       el.scrollTop = el.scrollHeight;
     });
   },
+
   checkIsBottom(el) {
-    let isBottom = false;
-    if (Math.round(el.scrollTop + el.clientHeight)  >= el.scrollHeight ) {
-      isBottom = true;
-    }
-    return isBottom;
+    return Math.round(el.scrollTop + el.clientHeight) >= el.scrollHeight;
   },
   handleDownload() {
     const {task, logfile} = this.props;
