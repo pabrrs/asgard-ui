@@ -44,151 +44,152 @@ describe("App debug info component", function () {
       this.component.instance().componentWillUnmount();
     });
 
-    it("should show failed task", function (done) {
-      var task = {
-        appId: "/python",
-        host: "slave1.dcos.io",
-        message: "Slave slave1.dcos.io removed",
-        state: "TASK_LOST",
-        taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
-        slaveId: "slaveABC",
-        timestamp: "2015-08-05T09:08:56.349Z",
-        version: "2015-07-06T12:37:28.774Z"
-      };
+    // it("should show failed task", function (done) {
+    //   var task = {
+    //     appId: "/python",
+    //     host: "slave1.dcos.io",
+    //     message: "Slave slave1.dcos.io removed",
+    //     state: "TASK_LOST",
+    //     taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
+    //     slaveId: "slaveABC",
+    //     timestamp: "2015-08-05T09:08:56.349Z",
+    //     version: "2015-07-06T12:37:28.774Z"
+    //   };
+    // });
 
-      var app = Util.extendObject(appScheme, {
-        id: "/python",
-        lastTaskFailure: task
-      });
+    //   var app = Util.extendObject(appScheme, {
+    //     id: "/python",
+    //     lastTaskFailure: task
+    //   });
 
-      nock(config.apiURL)
-        .get("/v2/apps//python")
-        .query(true)
-        .reply(200, {
-          app: app
-        });
+    //   nock(config.apiURL)
+    //     .get("/v2/apps//python")
+    //     .query(true)
+    //     .reply(200, {
+    //       app: app
+    //     });
 
-      AppsStore.once(AppsEvents.CHANGE, () => {
-        expectAsync(() => {
-          this.component = mount(<AppDebugInfoComponent appId="/python" />);
-          var nodes = this.component.find("dd");
+    //   AppsStore.once(AppsEvents.CHANGE, () => {
+    //     expectAsync(() => {
+    //       this.component = mount(<AppDebugInfoComponent appId="/python" />);
+    //       var nodes = this.component.find("dd");
 
-          var taskId = nodes.at(0).text().trim();
-          var state = nodes.at(1).text().trim();
-          var message = nodes.at(2).text().trim();
-          var host = nodes.at(3).text().trim();
-          var timestamp = nodes.at(4).find("span").text().trim();
-          var version = nodes.at(5).find("span").text().trim();
-          var details = nodes.at(6).find("a").at(0).props().href;
+    //       var taskId = nodes.at(0).text().trim();
+    //       var state = nodes.at(1).text().trim();
+    //       var message = nodes.at(2).text().trim();
+    //       var host = nodes.at(3).text().trim();
+    //       var timestamp = nodes.at(4).find("span").text().trim();
+    //       var version = nodes.at(5).find("span").text().trim();
+    //       var details = nodes.at(6).find("a").at(0).props().href;
 
-          expect(taskId)
-            .to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
-          expect(state).to.equal("TASK_LOST");
-          expect(message).to.equal("Slave slave1.dcos.io removed");
-          expect(host).to.equal("slave1.dcos.io");
-          expect(timestamp).to.equal("2015-08-05T09:08:56.349Z");
-          expect(version).to.equal("2015-07-06T12:37:28.774Z");
-          expect(details).to.equal(info.marathon_config.mesos_leader_ui_url + "/#/slaves/" +
-            task.slaveId + "/frameworks/framework1/executors/" + task.taskId);
-        }, done);
-      });
+    //       expect(taskId)
+    //         .to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
+    //       expect(state).to.equal("TASK_LOST");
+    //       expect(message).to.equal("Slave slave1.dcos.io removed");
+    //       expect(host).to.equal("slave1.dcos.io");
+    //       expect(timestamp).to.equal("2015-08-05T09:08:56.349Z");
+    //       expect(version).to.equal("2015-07-06T12:37:28.774Z");
+    //       expect(details).to.equal(info.marathon_config.mesos_leader_ui_url + "/#/slaves/" +
+    //         task.slaveId + "/frameworks/framework1/executors/" + task.taskId);
+    //     }, done);
+    //   });
 
-      AppsActions.requestApp("/python");
-    });
+    //   AppsActions.requestApp("/python");
+    // });
 
-    it("should show failed task with custom executor", function (done) {
-      var task = {
-        appId: "/python",
-        taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
-        slaveId: "slaveABC",
-      };
+    // it("should show failed task with custom executor", function (done) {
+    //   var task = {
+    //     appId: "/python",
+    //     taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
+    //     slaveId: "slaveABC",
+    //   };
 
-      var app = Util.extendObject(appScheme, {
-        id: "/python",
-        executor: "custom",
-        lastTaskFailure: task
-      });
+    //   var app = Util.extendObject(appScheme, {
+    //     id: "/python",
+    //     executor: "custom",
+    //     lastTaskFailure: task
+    //   });
 
-      nock(config.apiURL)
-        .get("/v2/apps//python")
-        .query(true)
-        .reply(200, {
-          app: app
-        });
+    //   nock(config.apiURL)
+    //     .get("/v2/apps//python")
+    //     .query(true)
+    //     .reply(200, {
+    //       app: app
+    //     });
 
-      AppsStore.once(AppsEvents.CHANGE, () => {
-        expectAsync(() => {
-          this.component = mount(<AppDebugInfoComponent appId="/python" />);
-          var nodes = this.component.find("dd");
+    //   AppsStore.once(AppsEvents.CHANGE, () => {
+    //     expectAsync(() => {
+    //       this.component = mount(<AppDebugInfoComponent appId="/python" />);
+    //       var nodes = this.component.find("dd");
 
-          var details = nodes.at(6).find("a").at(0).props().href;
+    //       var details = nodes.at(6).find("a").at(0).props().href;
 
-          expect(details).to.equal(info.marathon_config.mesos_leader_ui_url + "/#/slaves/" +
-            task.slaveId + "/frameworks/framework1/executors/marathon-" + task.taskId);
-        }, done);
-      });
+    //       expect(details).to.equal(info.marathon_config.mesos_leader_ui_url + "/#/slaves/" +
+    //         task.slaveId + "/frameworks/framework1/executors/marathon-" + task.taskId);
+    //     }, done);
+    //   });
 
-      AppsActions.requestApp("/python");
-    });
+    //   AppsActions.requestApp("/python");
+    // });
 
-    it("should show unspecified field on empty values", function (done) {
-      var app = Util.extendObject(appScheme, {
-        id: "/python",
-        lastTaskFailure: {
-          appId: "/python",
-          host: "slave1.dcos.io",
-          taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
-          timestamp: "2015-08-05T09:08:56.349Z",
-          version: "2015-07-06T12:37:28.774Z"
-        }
-      });
+    // it("should show unspecified field on empty values", function (done) {
+    //   var app = Util.extendObject(appScheme, {
+    //     id: "/python",
+    //     lastTaskFailure: {
+    //       appId: "/python",
+    //       host: "slave1.dcos.io",
+    //       taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
+    //       timestamp: "2015-08-05T09:08:56.349Z",
+    //       version: "2015-07-06T12:37:28.774Z"
+    //     }
+    //   });
 
-      nock(config.apiURL)
-        .get("/v2/apps//python")
-        .query(true)
-        .reply(200, {
-          app: app
-        });
+    //   nock(config.apiURL)
+    //     .get("/v2/apps//python")
+    //     .query(true)
+    //     .reply(200, {
+    //       app: app
+    //     });
 
-      AppsStore.once(AppsEvents.CHANGE, () => {
-        expectAsync(() => {
-          this.component = shallow(<AppDebugInfoComponent appId="/python" />);
-          var nodes = this.component.find("dl").children();
+    //   AppsStore.once(AppsEvents.CHANGE, () => {
+    //     expectAsync(() => {
+    //       this.component = shallow(<AppDebugInfoComponent appId="/python" />);
+    //       var nodes = this.component.find("dl").children();
 
-          var state = nodes.at(3).type().displayName;
-          var message = nodes.at(5).type().displayName;
+    //       var state = nodes.at(3).type().displayName;
+    //       var message = nodes.at(5).type().displayName;
 
-          expect(state).to.equal("UnspecifiedNodeComponent");
-          expect(message).to.equal("UnspecifiedNodeComponent");
-        }, done);
-      });
+    //       expect(state).to.equal("UnspecifiedNodeComponent");
+    //       expect(message).to.equal("UnspecifiedNodeComponent");
+    //     }, done);
+    //   });
 
-      AppsActions.requestApp("/python");
-    });
+    //   AppsActions.requestApp("/python");
+    // });
 
-    it("should show message when app never failed", function (done) {
-      var app = Util.extendObject(appScheme, {
-        id: "/python"
-      });
+    // it("should show message when app never failed", function (done) {
+    //   var app = Util.extendObject(appScheme, {
+    //     id: "/python"
+    //   });
 
-      nock(config.apiURL)
-        .get("/v2/apps//python")
-        .query(true)
-        .reply(200, {
-          app: app
-        });
+    //   nock(config.apiURL)
+    //     .get("/v2/apps//python")
+    //     .query(true)
+    //     .reply(200, {
+    //       app: app
+    //     });
 
-      AppsStore.once(AppsEvents.CHANGE, () => {
-        expectAsync(() => {
-          this.component = shallow(<AppDebugInfoComponent appId="/python" />);
-          var message =
-            this.component.children().at(2).find(".panel-body").text();
-          expect(message).to.equal("This app does not have failed tasks");
-        }, done);
-      });
+    //   AppsStore.once(AppsEvents.CHANGE, () => {
+    //     expectAsync(() => {
+    //       this.component = shallow(<AppDebugInfoComponent appId="/python" />);
+    //       var message =
+    //         this.component.children().at(2).find(".panel-body").text();
+    //       expect(message).to.equal("This app does not have failed tasks");
+    //     }, done);
+    //   });
 
-      AppsActions.requestApp("/python");
-    });
+    //   AppsActions.requestApp("/python");
+    // });
   });
 
   describe("Last configuration changes", function () {
