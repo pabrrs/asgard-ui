@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import {expect} from "chai";
 import {shallow} from "enzyme";
-import _ from "underscore";
-
 import React from "react/addons";
 
 import AgentsComponent from "../components/AgentsComponent";
+import AppListItemLabelsComponent from
+"../../components/AppListItemLabelsComponent";
 
 describe("Agents component", function () {
   var model = {
@@ -14,66 +14,96 @@ describe("Agents component", function () {
     version: "1.4.1",
     total_apps: 2,
     application: [],
-    // tags: "null",
     port: 123,
     used_resources: {cpus: "1", mem : "1"},
     resources: {cpus: "1", mem : "1"},
     stats : {ram_pct: "50.00", cpu_pct: "40.00"},
-    attributes: {"teste" : "teste"},
+    attributes: {"workload" : "general"},
     active: "null",
     type: "MESOS",
   };
 
   before(function () {
     this.component = shallow(<AgentsComponent model={model} />);
-    console.log("TESTE ->", this.component.text(),"\n\n");
   });
 
   it("has the correct agents hostname", function () {
-    expect(this.component.find("td").first().find('span').at(1).text()).to.equal("123");
-  });
-
-  it("has the correct tags", function () {
-    expect(this.component.find("td").first().find('span').at(2).text()).to.equal("<AppListItemLabelsComponent />");
+    expect(this.component
+      .find("td")
+      .first()
+      .find("span")
+      .at(1)
+      .text()
+    ).to.equal("123");
   });
 
   it("has the correct totalapps", function () {
     expect(this.component
-      .find('td')
+      .find("td")
       .at(1)
       .text()
-    ).to.equal('2');
+    ).to.equal("2");
   });
 
   it("has the correct total CPU", function () {
     expect(this.component
-      .find('td')
+      .find("td")
       .at(2)
       .text()
-    ).to.equal('1/1 - (40.00 % )');
+    ).to.equal("1/1 - (40.00 % )");
   });
 
   it("has the correct total RAM", function () {
     expect(this.component
-      .find('td')
+      .find("td")
       .at(3)
       .text()
-    ).to.equal('1/1 - (50.00 % )');
+    ).to.equal("1/1 - (50.00 % )");
   });
 
   it("has the correct TYPE", function () {
     expect(this.component
-      .find('td')
+      .find("td")
       .at(4)
       .text()
-    ).to.equal('MESOS');
+    ).to.equal("MESOS");
   });
 
   it("has the correct Agent Version", function () {
     expect(this.component
-      .find('td')
+      .find("td")
       .at(5)
       .text()
-    ).to.equal('1.4.1');
+    ).to.equal("1.4.1");
+  });
+
+  describe("Tags", function () {
+    var model = {
+      hostname: "123",
+      id: "1" ,
+      version: "1.4.1",
+      total_apps: 2,
+      application: [],
+      port: 123,
+      used_resources: {cpus: "1", mem : "1"},
+      resources: {cpus: "1", mem : "1"},
+      stats : {ram_pct: "50.00", cpu_pct: "40.00"},
+      attributes: {"workload" : "general"},
+      active: "null",
+      type: "MESOS",
+    };
+
+    before(function () {
+      this.secondComponent = shallow (<AppListItemLabelsComponent
+        numberOfVisibleLabels={3} labels={model.attributes} ref="labels"/>);
+    });
+
+    it ("has the correct tags",function () {
+      expect(this.secondComponent
+        .find(".visible")
+        .at(0)
+        .text()
+      ).to.equal("workload:general");
+    });
   });
 });
