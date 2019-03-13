@@ -9,7 +9,7 @@ const APPEND = 1;
 const BLOCK_SIZE = 1024;
 let loading = 0;
 let topo = 0;
-
+let chamou = true;
 class LogReader {
   constructor(task, logfile, onNewlogDataCallback,
   onNewTopCallback, direction = APPEND) {
@@ -55,6 +55,7 @@ class LogReader {
   }
 
   poll() {
+    chamou = true;
     MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.bottomOffset}&length=${BLOCK_SIZE}`})
       .success(this.handleReadOK)
       .error((data) => {
@@ -84,9 +85,14 @@ class LogReader {
 
   handleReadOK(response) {
     const {data} = response.body;
+    const truncate = response.body.truncate;
     if (data) {
+      if (truncate) {
+        this.bottomOffset = data.offset;
+      }
       this.bottomOffset += data.length;
       this.logData.push(data);
+      chamou = false;
       this.onNewlogDataCallback(this.logData);
     }
   }
@@ -132,6 +138,7 @@ export default React.createClass({
       // scroll not top and bottom
       if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
         ref.reader.stopPoll();
+        chamou = true;
         ref.setState({loadingBottom: false, loadingTop: false});
       }
       // check is scroll bottom
@@ -203,11 +210,11 @@ export default React.createClass({
           </button>
         </div>
         <div className="log-view" ref="logView">
-          {this.state.loadingTop && loading === 0 ? <i className="icon icon-medium loading"></i> : ""}
+          {this.state.loadingTop && loading === 0 ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div>: ""}
           {topo === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
           {this.state.logdata}
         </div>
-        {this.state.loadingBottom ? <i className="icon icon-medium loading loading-bottom"></i> : "" }
+        { chamou === false? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div> : <div className="header-loading"><br><br></br></br></div>  }
       </div>
     );
   }
