@@ -4,12 +4,12 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: b2wasgard/nodejs541:0.1.0
+      - image: node:5.4.1
     steps:
       - checkout
       - run:
           name: Install package.json
-          command: npm install
+          command: npm install --dev
       - run:
           name: Run All
           command: npm run test
