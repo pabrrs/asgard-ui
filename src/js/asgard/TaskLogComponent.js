@@ -8,104 +8,7 @@ import DialogActions from "../actions/DialogActions";
 const APPEND = 1;
 const BLOCK_SIZE = 1024;
 let loading = 0;
-let topo = 0;
-let chamou = true;
-class LogReader {
-  constructor(task, logfile, onNewlogDataCallback,
-  onNewTopCallback, direction = APPEND) {
-    this.bottomOffset = 0;
-    this.topOffset = 0;
-    this.logData = [];
-    this.task = task;
-    this.logfile = logfile;
-    this.onNewlogDataCallback = onNewlogDataCallback;
-    this.onNewTopCallback = onNewTopCallback;
-    this.direction = direction;
-    this.poll = this.poll.bind(this);
-    this.handleReadOK = this.handleReadOK.bind(this);
-    this.handleReadTopOK = this.handleReadTopOK.bind(this);
-    this.stopPoll = this.stopPoll.bind(this);
-    this.startPoll = this.startPoll.bind(this);
-    this.startPoll();
-  }
-
-  stopPoll() {
-    clearInterval(this.intervalId);
-  }
-  /* eslint-disable max-len */
-  startPoll() {
-    const url = `tasks/${this.task.id}/files/read?path=${this.logfile}&offset=-1`;
-    MarathonService.request({
-      resource: url}
-    ).success((response) => {
-      const totalOffset = response.body.offset;
-      this.bottomOffset = totalOffset;
-      this.bottomOffset -= Math.min(totalOffset, BLOCK_SIZE);
-      this.topOffset = totalOffset;
-      this.topOffset -= Math.min(totalOffset, BLOCK_SIZE);
-      this.intervalId = setInterval(this.poll, 1000);
-    }).error((data) => {
-      console.log(`ERROR ${this.task.id}, ${this.logfile}. ${data}`);
-    });
-  }
-
-  restartPool() {
-    clearInterval(this.intervalId);
-    this.intervalId = setInterval(this.poll, 1000);
-  }
-
-  poll() {
-    chamou = true;
-    MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.bottomOffset}&length=${BLOCK_SIZE}`})
-      .success(this.handleReadOK)
-      .error((data) => {
-        console.log(`ERROR task ${this.task.id}, ${this.logfile}. ${data}`);
-      });
-  }
-
-  pollTop() {
-    let newLength = BLOCK_SIZE;
-    if (this.topOffset < 0) {
-      newLength = newLength + this.topOffset;
-    }
-    if (this.topOffset !== 0) {
-      this.topOffset -= BLOCK_SIZE;
-      MarathonService.request({resource:`tasks/${this.task.id}/files/read?path=${this.logfile}&offset=${this.topOffset < 0 ? this.topOffset = 0 : this.topOffset }&length=${newLength}`})
-      .success(this.handleReadTopOK)
-      .error((data) => {
-        console.log(`ERROR task ${this.task.id}, ${this.logfile}. ${data}`);
-      });
-    }
-    else {
-      topo = 1;
-      loading = 1;
-    }
-  }
-  /* eslint-enable */
-
-  handleReadOK(response) {
-    const {data} = response.body;
-    const truncate = response.body.truncate;
-    if (data) {
-      if (truncate) {
-        this.bottomOffset = data.offset;
-      }
-      this.bottomOffset += data.length;
-      this.logData.push(data);
-      chamou = false;
-      this.onNewlogDataCallback(this.logData);
-    }
-  }
-
-  handleReadTopOK(response) {
-    const {data} = response.body;
-    if (data) {
-      this.logData.unshift("\n",data);
-      this.onNewTopCallback(this.logData);
-    }
-  }
-
-};
+let topLog = 0;
 
 export default React.createClass({
   displayName: "TaskLogComponent",
@@ -123,39 +26,129 @@ export default React.createClass({
     };
   },
   componentDidMount() {
-    const {task, logfile} = this.props;
-    this.reader = new LogReader(task, logfile,
-    this.onNewlogData, this.onNewTop);
+
+    this.bottomOffset = 0;
+    this.topOffset = 0;
+    this.logData = [];
+    this.meuTeste = 0;
+    this.pollBottom = this.pollBottom;
+    this.handleReadOK = this.handleReadOK;
+    this.handleReadTopOK = this.handleReadTopOK;
+    this.stopPollBottom = this.stopPollBottom;
+    this.startPollBottom = this.startPollBottom;
+    this.startPollBottom();
+
     const el = this.refs && this.refs.logView && this.refs.logView.getDOMNode();
     const ref = this;
     el.addEventListener("scroll", function () {
       // check is scroll top
       if (el.scrollTop === 0) {
-        ref.setState ({loadingTop : true});
-        ref.reader.pollTop();
+        ref.setState ({loadingTop : true}, () => {
+          ref.pollTop();
+        });
         return;
       }
       // scroll not top and bottom
       if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
-        ref.reader.stopPoll();
-        chamou = true;
-        ref.setState({loadingBottom: false, loadingTop: false});
+        ref.setState({loadingTop: false}, () => {
+          ref.stopPollBottom();
+        });
       }
+
       // check is scroll bottom
       const isBottom = ref.checkIsBottom(el);
       if (isBottom) {
         el.scrollTop = el.scrollHeight;
-        ref.setState ({loadingBottom: true});
-        ref.reader.restartPool();
-      }
-      else {
-        ref.setState ({loadingBottom: false});
+        ref.restartPoolBottom();
       }
     });
   },
   componentWillUnmount() {
-    this.reader.stopPoll();
+    this.stopPollBottom();
   },
+
+
+
+  stopPollBottom() {
+    clearInterval(this.intervalId);
+  },
+  /* eslint-disable max-len */
+  startPollBottom() {
+    const url = `tasks/${this.props.task.id}/files/read?path=${this.props.logfile}&offset=-1`;
+    MarathonService.request({
+      resource: url}
+    ).success((response) => {
+      const totalOffset = response.body.offset;
+      this.bottomOffset = totalOffset;
+      this.bottomOffset -= Math.min(totalOffset, BLOCK_SIZE);
+      this.topOffset = totalOffset;
+      this.topOffset -= Math.min(totalOffset, BLOCK_SIZE);
+      this.intervalId = setInterval(this.pollBottom, 2000);
+    }).error((data) => {
+      console.log(`ERROR ${this.props.task.id}, ${this.props.logfile}. ${data}`);
+    });
+  },
+
+  restartPoolBottom() {
+    clearInterval(this.intervalId);
+    this.intervalId = setInterval(this.pollBottom, 2000);
+  },
+
+  pollBottom() {
+    this.setState({loadingBottom: true}, () => {
+      MarathonService.request({resource:`tasks/${this.props.task.id}/files/read?path=${this.props.logfile}&offset=${this.bottomOffset}&length=${BLOCK_SIZE}`})
+      .success(this.handleReadOK)
+      .error((data) => {
+        console.log(`ERROR task ${this.props.task.id}, ${this.props.logfile}. ${data}`);
+      });
+    });
+  },
+
+  pollTop() {
+    let newLength = BLOCK_SIZE;
+    if (this.topOffset < 0) {
+      newLength = newLength + this.topOffset;
+    }
+    if (this.topOffset !== 0) {
+      this.topOffset -= BLOCK_SIZE;
+      MarathonService.request({resource:`tasks/${this.props.task.id}/files/read?path=${this.props.logfile}&offset=${this.topOffset < 0 ? this.topOffset = 0 : this.topOffset }&length=${newLength}`})
+      .success(this.handleReadTopOK)
+      .error((data) => {
+        console.log(`ERROR task ${this.props.task.id}, ${this.props.logfile}. ${data}`);
+      });
+    }
+    else {
+      topLog = 1;
+      loading = 1;
+    }
+  },
+  /* eslint-enable */
+
+  handleReadOK(response) {
+    const {data} = response.body;
+    const truncate = response.body.truncate;
+    this.setState({loadingBottom: false});
+    if (data) {
+      this.bottomOffset += data.length;
+      this.logData.push(data);
+      if (truncate) {
+        this.bottomOffset = data.offset;
+        this.logData.push("-----------------------------------------------------------------");
+      }
+      this.onNewlogData(this.logData);
+    }
+  },
+
+  handleReadTopOK(response) {
+    const {data} = response.body;
+    if (data) {
+      this.logData.unshift("\n",data);
+      this.onNewTop(this.logData);
+    }
+  },
+
+
+
   onNewTop(logdata) {
     const el = this.refs && this.refs.logView && this.refs.logView.getDOMNode();
     let prevHeightScroll = el.scrollHeight;
@@ -194,7 +187,7 @@ export default React.createClass({
   },
   getLogLines() {
     if (this.reader) {
-      return this.reader.logData;
+      return this.logData;
     }
     return [];
   },
@@ -211,10 +204,10 @@ export default React.createClass({
         </div>
         <div className="log-view" ref="logView">
           {this.state.loadingTop && loading === 0 ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div>: ""}
-          {topo === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
+          {topLog === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
           {this.state.logdata}
         </div>
-        { chamou === false? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div> : <div className="header-loading"><br><br></br></br></div>  }
+        { this.state.loadingBottom ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div> : <div className="header-loading"></div>  }
       </div>
     );
   }
