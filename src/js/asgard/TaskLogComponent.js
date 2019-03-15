@@ -204,7 +204,9 @@ export default React.createClass({
         <div className="log-view" ref="logView">
           {this.state.loadingTop && loading === 0 ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div>: ""}
           {this.state.topLog === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
-          {this.state.logdata}
+          <div className="div-filho">
+            {this.state.logdata}
+          </div>
         </div>
         { this.state.loadingBottom ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div> : <div className="header-loading"></div>  }
       </div>
