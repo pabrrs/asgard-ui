@@ -5,10 +5,8 @@ import config from "../config/config";
 import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";
 
-const APPEND = 1;
 const BLOCK_SIZE = 1024;
 let loading = 0;
-let topLog = 0;
 
 export default React.createClass({
   displayName: "TaskLogComponent",
@@ -23,6 +21,7 @@ export default React.createClass({
       logdata: [],
       loadingBottom : false,
       loadingTop : false,
+      topLog : 0
     };
   },
   componentDidMount() {
@@ -37,7 +36,6 @@ export default React.createClass({
     this.stopPollBottom = this.stopPollBottom;
     this.startPollBottom = this.startPollBottom;
     this.startPollBottom();
-
     const el = this.refs && this.refs.logView && this.refs.logView.getDOMNode();
     const ref = this;
     el.addEventListener("scroll", function () {
@@ -66,9 +64,6 @@ export default React.createClass({
   componentWillUnmount() {
     this.stopPollBottom();
   },
-
-
-
   stopPollBottom() {
     clearInterval(this.intervalId);
   },
@@ -83,7 +78,7 @@ export default React.createClass({
       this.bottomOffset -= Math.min(totalOffset, BLOCK_SIZE);
       this.topOffset = totalOffset;
       this.topOffset -= Math.min(totalOffset, BLOCK_SIZE);
-      this.intervalId = setInterval(this.pollBottom, 2000);
+      this.intervalId = setInterval(this.pollBottom, 1000);
     }).error((data) => {
       console.log(`ERROR ${this.props.task.id}, ${this.props.logfile}. ${data}`);
     });
@@ -91,7 +86,7 @@ export default React.createClass({
 
   restartPoolBottom() {
     clearInterval(this.intervalId);
-    this.intervalId = setInterval(this.pollBottom, 2000);
+    this.intervalId = setInterval(this.pollBottom, 1000);
   },
 
   pollBottom() {
@@ -118,7 +113,8 @@ export default React.createClass({
       });
     }
     else {
-      topLog = 1;
+      console.log("Topo do meu offset",this.topOffset);
+      this.setState ({topLog: 1});
       loading = 1;
     }
   },
@@ -132,8 +128,14 @@ export default React.createClass({
       this.bottomOffset += data.length;
       this.logData.push(data);
       if (truncate) {
-        this.bottomOffset = data.offset;
+        // this.bottomOffset = data.offset;
+        const totalOffset = data.offset;
         this.logData.push("-----------------------------------------------------------------");
+        this.bottomOffset = totalOffset;
+        this.bottomOffset -= Math.min(totalOffset, BLOCK_SIZE);
+        this.topOffset = totalOffset;
+        this.topOffset -= Math.min(totalOffset, BLOCK_SIZE);
+        this.intervalId = setInterval(this.pollBottom, 1000);
       }
       this.onNewlogData(this.logData);
     }
@@ -146,9 +148,6 @@ export default React.createClass({
       this.onNewTop(this.logData);
     }
   },
-
-
-
   onNewTop(logdata) {
     const el = this.refs && this.refs.logView && this.refs.logView.getDOMNode();
     let prevHeightScroll = el.scrollHeight;
@@ -204,7 +203,7 @@ export default React.createClass({
         </div>
         <div className="log-view" ref="logView">
           {this.state.loadingTop && loading === 0 ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div>: ""}
-          {topLog === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
+          {this.state.topLog === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
           {this.state.logdata}
         </div>
         { this.state.loadingBottom ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div> : <div className="header-loading"></div>  }
