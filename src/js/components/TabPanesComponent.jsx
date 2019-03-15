@@ -115,14 +115,6 @@ var TabPanesComponent = React.createClass({
                 <ul className="list-unstyled list-inline">
                   <li>
                     <Link to={path}
-                        query={newGroupModalQuery}
-                        className="btn btn-default create-group"
-                        activeClassName="create-group-active">
-                      Create Group
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={path}
                         query={newAppModalQuery}
                         className="btn btn-success create-app"
                         activeClassName="create-app-active">
