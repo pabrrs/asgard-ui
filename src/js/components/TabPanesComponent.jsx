@@ -105,7 +105,7 @@ var TabPanesComponent = React.createClass({
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
-          className="container-fluid content">
+          className="container-fluid content bottom-final">
         <TabPaneComponent id={tabs[0].id}>
           <div className="app-list-wrapper">
             <SidebarComponent groupId={state.currentGroup} />

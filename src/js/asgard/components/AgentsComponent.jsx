@@ -38,7 +38,9 @@ var AgentsComponent = React.createClass({
             <span className={`triangle-length ${this.state.collapse ?
                   "button-not-collapse" : "button-collapse"}`}>
             </span>
-            <span className="col-hostname">{model.hostname}</span>
+            <span className="col-hostname">
+            {model.hostname}
+            </span>
             <AppListItem numberOfVisibleLabels={3} labels={labels} ref="label">
               <span className={moreLabelClassName} ref="moreLabel">
                 &hellip;
@@ -60,11 +62,11 @@ var AgentsComponent = React.createClass({
             </td>
             }
           </td>
-          <td className="overflow-ellipsis col-totalapps"
+          <td className="overflow-ellipsis col-totalapps1"
             title={model.total_apps}>
             {model.total_apps}
           </td>
-          <td className="overflow-ellipsis col-totalapps"
+          <td className="overflow-ellipsis col-totalapps2"
             title="">
             {model.used_resources.cpus}/{model.resources.cpus} -
             ({model.stats.cpu_pct} % )

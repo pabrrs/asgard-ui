@@ -48,7 +48,7 @@ describe("Task List Item component", function () {
   it("has the correct version", function () {
     expect(this.component
       .find("td")
-      .at(6)
+      .at(4)
       .children()
       .first()
       .props()
@@ -59,7 +59,7 @@ describe("Task List Item component", function () {
   it("has the correct update timestamp", function () {
     var cellProps = this.component
       .find("td")
-      .at(7)
+      .at(5)
       .children()
       .first()
       .props();
