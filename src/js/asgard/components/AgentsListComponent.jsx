@@ -8,6 +8,7 @@ import States from "../../constants/States";
 import lazy from "lazy.js";
 import AgentsActions from "../actions/AgentsActions";
 import ConcatFilter from "../helpers/concatFilters";
+import UserActions from "../actions/UserActions";
 // import { runInThisContext } from "vm";
 
 var SlaveListComponent = React.createClass({

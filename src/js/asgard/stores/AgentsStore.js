@@ -2,7 +2,7 @@ import {EventEmitter} from "events";
 
 import AppDispatcher from "../../AppDispatcher";
 import AppsStore from "../../stores/AppsStore";
-import AppsEvents from "../events/AgentsEvents";
+// import AppsEvents from "../events/AgentsEvents";
 import AgentsEvents from "../events/AgentsEvents";
 // import AgentsEvents from "./schemes/AgentsScheme";
 import AgentsScheme from "./schemes/AgentsScheme";
@@ -33,7 +33,7 @@ var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   }
 });
 
-AppsStore.on(AppsEvents.CHANGE, function () {
+AppsStore.on(AgentsEvents.CHANGE, function () {
   storeData.agents.forEach(deployment => {
     detectIsWaitingForUserAction(deployment);
   });
