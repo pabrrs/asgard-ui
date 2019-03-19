@@ -35,6 +35,9 @@ O README original do projeto Marathon UI está aqui: [original-README.md](origin
 
 ## Changelog
 
+### 0.23.0
+ * Fix no componente de exibição de log (https://github.com/lucasdomi/asgard-ui/pull/2)
+
 ### 0.22.0
  * Fix no css na tela de criação/edição de app
 
