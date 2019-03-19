@@ -6,7 +6,7 @@ import OnClickOutsideMixin from "react-onclickoutside";
 import UserStore from "../stores/UsersStore";
 import PluginStore from "../../stores/PluginStore";
 import UserEvents from "../events/UserEvents";
-import PluginEvents from "../../events/PluginEvents";
+
 var AccountComponent = React.createClass({
   displayName: "AccountComponent",
 
@@ -28,9 +28,8 @@ var AccountComponent = React.createClass({
   },
 
   componentWillMount: function () {
-    // UserActions.requestUser();
+    UserActions.requestUser();
     UserStore.on(UserEvents.CHANGE, this.onRequestUser);
-    PluginStore.on(PluginEvents.CHANGE, this.getUserRequest);
   },
 
   componentWillUnmount: function () {
@@ -69,13 +68,8 @@ var AccountComponent = React.createClass({
   },
   render: function () {
     var name = this.state.users && this.state.users.name;
-    var current;
-    var accounts = [];
-    if (PluginStore.isPluginsLoadingFinished) {
-      accounts = this.state.users.accounts;
-      current = this.state.users.current_account.name;
-    }
-    var router = this.context.router;
+    const accounts = this.state.users && this.state.users.accounts;
+    const current = this.state.users.current_account;
     var helpMenuClassName = classNames("help-menu", {
       "active": this.state.helpMenuVisible
     });
@@ -85,17 +79,18 @@ var AccountComponent = React.createClass({
           onClick={this.toggleHelpMenu}>
         <span>{name}
         @
-        {current}
+        {current ? current.name : ""}
         </span>
         <span className="caret"></span>
         <PopoverComponent visible={this.state.helpMenuVisible}
             className="help-menu-dropdown">
           <ul className="dropdown-menu">
-            {accounts.map(account => {
+            {accounts ? accounts.map(account => {
               return (
                 <li key={account.id}><a>{account.name}</a></li>
               );
-            })}
+            }): ""
+            }
           </ul>
         </PopoverComponent>
       </div>

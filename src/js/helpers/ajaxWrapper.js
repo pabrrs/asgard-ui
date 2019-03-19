@@ -49,6 +49,10 @@ var ajaxWrapper = function (opts = {}) {
           : null
       });
     }
+    const currentHeaders = options.headers;
+    var token = localStorage.getItem("auth_token");
+    currentHeaders["Authorization"] = "JWT " + token;
+    Object.assign({headers: currentHeaders});
 
     options = pipeline.applyPipeline(
                   PipelineNames.PRE_AJAX_REQUEST,
