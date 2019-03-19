@@ -6,6 +6,7 @@ import OnClickOutsideMixin from "react-onclickoutside";
 import UserStore from "../stores/UsersStore";
 import PluginStore from "../../stores/PluginStore";
 import UserEvents from "../events/UserEvents";
+import MarathonService from "../../plugin/sdk/services/MarathonService";
 
 var AccountComponent = React.createClass({
   displayName: "AccountComponent",
@@ -24,6 +25,7 @@ var AccountComponent = React.createClass({
       total: total,
       helpMenuVisible: false,
       collapse: false,
+      currentAccount: "",
     };
   },
 
@@ -66,6 +68,25 @@ var AccountComponent = React.createClass({
     this.setState({collapse: !this.state.collapse});
     event.stopPropagation();
   },
+
+  handleClickToken : function () {
+    MarathonService.request({
+      resource: "users/me",
+      method: "POST"
+    })
+    .error (error => {
+      console.log(error);
+    })
+    .success(response => {
+      // this.setState({
+      //   users: response.body.users,
+      // });
+      console.log("PRIMEIRO ->"+"\n",response.body.users+"\n");
+      // console.log("SEGUNDO ->"+"\n",response.body.current_account+"\n");
+      localStorage.setItem("auth_token", response.body.jwt_token);
+    });
+  },
+
   render: function () {
     var name = this.state.users && this.state.users.name;
     const accounts = this.state.users && this.state.users.accounts;
@@ -87,7 +108,7 @@ var AccountComponent = React.createClass({
           <ul className="dropdown-menu">
             {accounts ? accounts.map(account => {
               return (
-                <li key={account.id}><a>{account.name}</a></li>
+                <li key={account.id}><a onClick={this.handleClickToken}>{account.name}</a></li>
               );
             }): ""
             }
