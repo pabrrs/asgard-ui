@@ -3,6 +3,9 @@ import {Link} from "react-router";
 import classNames from "classnames";
 import PopoverComponent from "./PopoverComponent";
 import OnClickOutsideMixin from "react-onclickoutside";
+import UserStore from "../stores/UsersStore";
+import UserActions from "../actions/UserActions";
+import UserEvents from "../events/UserEvents";
 
 var ConfigsComponent = React.createClass({
   displayName: "HelpMenuComponent",
@@ -14,10 +17,27 @@ var ConfigsComponent = React.createClass({
   mixins: [OnClickOutsideMixin],
 
   getInitialState: function () {
+    var users = UserStore.users;
     return {
+      users: users,
       helpMenuVisible: false,
       collapse: false,
     };
+  },
+  componentWillMount: function () {
+    UserActions.requestUser();
+    UserStore.on(UserEvents.CHANGE, this.onRequestUser);
+  },
+
+  componentWillUnmount: function () {
+    UserStore.removeListener(UserEvents.CHANGE,
+      this.onRequestUser);
+  },
+
+  onRequestUser: function () {
+    this.setState( {
+      users : UserStore.users,
+    });
   },
 
   handleClickOutside: function () {
@@ -37,6 +57,7 @@ var ConfigsComponent = React.createClass({
     event.stopPropagation();
   },
   render: function () {
+    const user = this.state.users && this.state.users.user;
     var router = this.context.router;
     var helpMenuClassName = classNames("help-menu", {
       "active": this.state.helpMenuVisible
@@ -51,24 +72,15 @@ var ConfigsComponent = React.createClass({
             className="help-menu-dropdown">
           <ul className="dropdown-menu">
             <li>
+              <span>
+                Usuário: {user ? user.name : ""}
+              </span>
+            </li>
+            <li>
               <a>
                 Configurações
               </a>
             </li>
-            {/* <li>
-              <a style={{display: "flex", justifyContent: "space-between"}}
-              onClick={this.handleClick}>
-                Accounts
-                <span className={`triangle-length ${this.state.collapse ?
-                  "button-not-collapse" : "button-collapse"}`}>
-                </span>
-              </a>
-              {this.state.collapse ? <ul>
-                <li className="testeHover" style={{paddingBottom: '5px'}}><a style={{color: '#333'}}>Lucas Domingues @B2W/Dev</a></li>
-                <li className="testeHover" style={{paddingBottom: '5px'}}><a style={{color: '#333'}}>Lucas Domingues @ASGARD/Dev</a></li>
-                <li className="testeHover" style={{paddingBottom: '5px'}}><a style={{color: '#333'}}>Lucas Domingues @ADS/Dev</a></li>
-              </ul> : ""}
-            </li> */}
             <li>
               <a href="https://mesosphere.github.io/marathon/docs/"
                   target="_blank">

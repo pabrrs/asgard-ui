@@ -8,6 +8,7 @@ import PluginStore from "../../stores/PluginStore";
 import UserEvents from "../events/UserEvents";
 import Bridge from "../../helpers/Bridge";
 import MarathonService from "../../plugin/sdk/services/MarathonService";
+import config from "../../config/config";
 
 var AccountComponent = React.createClass({
   displayName: "AccountComponent",
@@ -20,10 +21,8 @@ var AccountComponent = React.createClass({
 
   getInitialState: function () {
     var users = UserStore.users;
-    var total = UserStore.total;
     return {
       users: users,
-      total: total,
       helpMenuVisible: false,
       collapse: false,
       currentAccount: "",
@@ -40,16 +39,9 @@ var AccountComponent = React.createClass({
       this.onRequestUser);
   },
 
-  getUserRequest: function () {
-    if (PluginStore.isPluginsLoadingFinished) {
-      UserActions.requestUser();
-    }
-  },
-
   onRequestUser: function () {
     this.setState( {
       users : UserStore.users,
-      total: UserStore.total,
     });
   },
 
@@ -72,27 +64,51 @@ var AccountComponent = React.createClass({
 
   handleClickToken : function (id) {
     console.log(id);
-    const url = `accounts/${id}/auth`;
-    MarathonService.request({
-      resource: url,
-      method: "POST"
+    var opts = {
+      "Authorization" : "Token 1899c4f092ba4ad997603fb52a460ed8",
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "X-UI-Version": "new",
+    };
+    const url = `${config.apiURL}accounts/${id}/auth`;
+    fetch(url, {
+      method: 'get',
+      headers: opts,
     })
-    .error (error => {
-      console.log(error);
+    .then(function(response) { 
+      console.log(response.headers);
     })
-    .success(response => {
-      // this.setState({
-      //   users: response.body.users,
-      // });
-      console.log("PRIMEIRO ->"+"\n",response.body.users+"\n");
-      // console.log("SEGUNDO ->"+"\n",response.body.current_account+"\n");
-      localStorage.setItem("auth_token", response.body.jwt_token);
+    .catch(function(err) { 
+      console.error(err); 
     });
+
+    // fetch(url, opts).then(function (response) {
+    //   return response();
+    // })
+    // .then(function (body) {
+    //   console.log(body);
+    // });
+    // MarathonService.request({
+    //   resource: url,
+    //   method: "GET"
+    // })
+    // .error (error => {
+    //   console.log(error);
+    // })
+    // .success( (response, um, dois) => {
+    //   // this.setState({
+    //   //   users: response.body.users,.
+    //   // });
+    //   // console.log(response);
+    //   console.log(response);
+    //   // console.log("PRIMEIRO ->"+"\n",response.body.users+"\n");
+    //   // console.log("SEGUNDO ->"+"\n",response.body.current_account+"\n");
+    //   // localStorage.setItem("auth_token", response.body.jwt_token);
+    // });
     // Bridge.navigateTo("/#/apps");
   },
 
   render: function () {
-    const user = this.state.users && this.state.users.user;
     const accounts = this.state.users && this.state.users.accounts;
     const current = this.state.users.current_account;
     var helpMenuClassName = classNames("help-menu", {
@@ -102,8 +118,7 @@ var AccountComponent = React.createClass({
     return (
       <div className={helpMenuClassName} style={{opacity: "1", padding: "17px"}}
           onClick={this.toggleHelpMenu}>
-        <span>{user ? user.name : ""}
-        @
+        <span>
         {current ? current.name : ""}
         </span>
         <span className="caret"></span>
