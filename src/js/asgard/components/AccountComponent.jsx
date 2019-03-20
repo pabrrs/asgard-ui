@@ -64,48 +64,17 @@ var AccountComponent = React.createClass({
 
   handleClickToken : function (id) {
     console.log(id);
-    var opts = {
-      "Authorization" : "Token 1899c4f092ba4ad997603fb52a460ed8",
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "X-UI-Version": "new",
-    };
-    const url = `${config.apiURL}accounts/${id}/auth`;
-    fetch(url, {
-      method: 'get',
-      headers: opts,
+    MarathonService.request({
+      resource: url,
+      method: "GET"
     })
-    .then(function(response) { 
-      console.log(response.headers);
+    .error (error => {
+      console.log(error);
     })
-    .catch(function(err) { 
-      console.error(err); 
+    .success( response => {
+      console.log(response);
     });
-
-    // fetch(url, opts).then(function (response) {
-    //   return response();
-    // })
-    // .then(function (body) {
-    //   console.log(body);
-    // });
-    // MarathonService.request({
-    //   resource: url,
-    //   method: "GET"
-    // })
-    // .error (error => {
-    //   console.log(error);
-    // })
-    // .success( (response, um, dois) => {
-    //   // this.setState({
-    //   //   users: response.body.users,.
-    //   // });
-    //   // console.log(response);
-    //   console.log(response);
-    //   // console.log("PRIMEIRO ->"+"\n",response.body.users+"\n");
-    //   // console.log("SEGUNDO ->"+"\n",response.body.current_account+"\n");
-    //   // localStorage.setItem("auth_token", response.body.jwt_token);
-    // });
-    // Bridge.navigateTo("/#/apps");
+    Bridge.navigateTo("/#/apps");
   },
 
   render: function () {
