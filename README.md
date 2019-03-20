@@ -1,6 +1,6 @@
 # Asgard UI
 
-Esse é o projeto que fornece uma Web UI para o projeto Asgard. Essa interfacce é um fork do projeto [Marathin UI](https://github.com/mesosphere/marathon-ui) + um conjunto de plugin
+Esse é o projeto que fornece uma Web UI para o projeto Asgard. Essa interfacce é um fork do projeto [Marathon UI](https://github.com/mesosphere/marathon-ui) + um conjunto de plugin
 que implementa o que é necessário para termos:
 
 * Isolamento total, ou seja, múltiplos times podem usar a mesma UI mas cada time só pode ver/modificar suas próprias aplicações. Cada time roda suas tarefas em servidores pŕoprios, totalmente isolados dos demais times.
