@@ -310,8 +310,8 @@ var Marathon = React.createClass({
               tabs={tabs} />
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent />
-              <AccountComponent/>
               <HelpMenuComponent />
+              <AccountComponent/>
               <ConfigsComponent/>
               <PluginMountPointComponent
                 placeId={PluginMountPoints.NAVBAR_TOP_RIGHT} />

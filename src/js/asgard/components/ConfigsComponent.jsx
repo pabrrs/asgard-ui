@@ -1,10 +1,7 @@
 import React from "react/addons";
 import {Link} from "react-router";
-
 import classNames from "classnames";
-
 import PopoverComponent from "./PopoverComponent";
-
 import OnClickOutsideMixin from "react-onclickoutside";
 
 var ConfigsComponent = React.createClass({

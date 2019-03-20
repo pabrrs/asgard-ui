@@ -6,6 +6,7 @@ import OnClickOutsideMixin from "react-onclickoutside";
 import UserStore from "../stores/UsersStore";
 import PluginStore from "../../stores/PluginStore";
 import UserEvents from "../events/UserEvents";
+import Bridge from "../../helpers/Bridge";
 import MarathonService from "../../plugin/sdk/services/MarathonService";
 
 var AccountComponent = React.createClass({
@@ -69,9 +70,11 @@ var AccountComponent = React.createClass({
     event.stopPropagation();
   },
 
-  handleClickToken : function () {
+  handleClickToken : function (id) {
+    console.log(id);
+    const url = `accounts/${id}/auth`;
     MarathonService.request({
-      resource: "users/me",
+      resource: url,
       method: "POST"
     })
     .error (error => {
@@ -85,10 +88,11 @@ var AccountComponent = React.createClass({
       // console.log("SEGUNDO ->"+"\n",response.body.current_account+"\n");
       localStorage.setItem("auth_token", response.body.jwt_token);
     });
+    // Bridge.navigateTo("/#/apps");
   },
 
   render: function () {
-    var name = this.state.users && this.state.users.name;
+    const user = this.state.users && this.state.users.user;
     const accounts = this.state.users && this.state.users.accounts;
     const current = this.state.users.current_account;
     var helpMenuClassName = classNames("help-menu", {
@@ -98,7 +102,7 @@ var AccountComponent = React.createClass({
     return (
       <div className={helpMenuClassName} style={{opacity: "1", padding: "17px"}}
           onClick={this.toggleHelpMenu}>
-        <span>{name}
+        <span>{user ? user.name : ""}
         @
         {current ? current.name : ""}
         </span>
@@ -108,7 +112,9 @@ var AccountComponent = React.createClass({
           <ul className="dropdown-menu">
             {accounts ? accounts.map(account => {
               return (
-                <li key={account.id}><a onClick={this.handleClickToken}>{account.name}</a></li>
+                <li key={account.id}><a
+                onClick={() => this.handleClickToken(account.id)}>
+                {account.name}</a></li>
               );
             }): ""
             }
