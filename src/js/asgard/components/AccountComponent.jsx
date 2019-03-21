@@ -21,11 +21,14 @@ var AccountComponent = React.createClass({
 
   getInitialState: function () {
     var users = UserStore.users;
+    var currents = UserStore.users.current_account;
+    var accountList = UserStore.users.accounts;
     return {
       users: users,
       helpMenuVisible: false,
       collapse: false,
-      currentAccount: "",
+      currentAccount: currents,
+      listAccounts : accountList,
     };
   },
 
@@ -42,6 +45,8 @@ var AccountComponent = React.createClass({
   onRequestUser: function () {
     this.setState( {
       users : UserStore.users,
+      currentAccount : UserStore.users.current_account,
+      listAccounts: UserStore.users.accounts,
     });
   },
 
@@ -53,7 +58,7 @@ var AccountComponent = React.createClass({
 
   toggleHelpMenu: function () {
     this.setState({
-      helpMenuVisible: !this.state.helpMenuVisible
+      helpMenuVisible: !this.state.helpMenuVisible,
     });
   },
 
@@ -62,31 +67,44 @@ var AccountComponent = React.createClass({
     event.stopPropagation();
   },
 
-  handleClickToken : function (id) {
-    console.log(id);
+  handleClickToken : function (accountClick, accounts, current) {
     MarathonService.request({
-      resource: url,
+      resource: `accounts/${accountClick.id}/auth`,
       method: "GET"
     })
     .error (error => {
       console.log(error);
     })
     .success( response => {
-      console.log(response);
+      const accountsList = accounts;
+      accountsList.push(current);
+      const accountsAppend = accountsList.filter(list => {
+        return list.id !== accountClick.id;
+      });
+
+      this.setState({
+        listAccounts: accountsAppend,
+      });
+      this.setState ({
+        currentAccount: accountClick,
+      });
+      localStorage.setItem("auth_token", response.body.jwt);
     });
     Bridge.navigateTo("/#/apps");
   },
 
   render: function () {
-    const accounts = this.state.users && this.state.users.accounts;
-    const current = this.state.users.current_account;
+    const accounts = this.state.listAccounts;
+    const myAccounts = this.state.users && this.state.users.accounts;
+    const current = this.state.currentAccount;
     var helpMenuClassName = classNames("help-menu", {
       "active": this.state.helpMenuVisible
     });
 
     return (
       <div className={helpMenuClassName} style={{opacity: "1", padding: "17px"}}
-          onClick={this.toggleHelpMenu}>
+          onClick={() => this.toggleHelpMenu(myAccounts)}
+          >
         <span>
         {current ? current.name : ""}
         </span>
@@ -96,9 +114,11 @@ var AccountComponent = React.createClass({
           <ul className="dropdown-menu">
             {accounts ? accounts.map(account => {
               return (
-                <li key={account.id}><a
-                onClick={() => this.handleClickToken(account.id)}>
-                {account.name}</a></li>
+                <li key={account.id}>
+                  <a onClick={() => this.handleClickToken(account, accounts, current)}>
+                    {account.name}
+                  </a>
+                </li>
               );
             }): ""
             }
