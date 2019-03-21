@@ -81,11 +81,8 @@ var AccountComponent = React.createClass({
       const accountsAppend = accountsList.filter(list => {
         return list.id !== accountClick.id;
       });
-
       this.setState({
         listAccounts: accountsAppend,
-      });
-      this.setState ({
         currentAccount: accountClick,
       });
       localStorage.setItem("auth_token", response.body.jwt);
