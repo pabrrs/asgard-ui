@@ -112,7 +112,9 @@ var AccountComponent = React.createClass({
             {accounts ? accounts.map(account => {
               return (
                 <li key={account.id}>
-                  <a onClick={() => this.handleClickToken(account, accounts, current)}>
+                  <a
+                  // onClick={() => this.handleClickToken(account, accounts, current)}
+                  >
                     {account.name}
                   </a>
                 </li>

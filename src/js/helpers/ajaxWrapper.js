@@ -50,14 +50,17 @@ var ajaxWrapper = function (opts = {}) {
       });
     }
     const currentHeaders = options.headers;
-    var token = localStorage.getItem("auth_token");
+    try {
+      var token = localStorage.getItem("auth_token");
+    } catch (exception) {
+      console.log(exception);
+    }
     currentHeaders["Authorization"] = "JWT " + token;
     Object.assign({headers: currentHeaders});
-
     options = pipeline.applyPipeline(
-                  PipelineNames.PRE_AJAX_REQUEST,
-                  options
-              );
+      PipelineNames.PRE_AJAX_REQUEST,
+      options
+    );
     return fetch(options.url, fetchOptions);
   };
 
