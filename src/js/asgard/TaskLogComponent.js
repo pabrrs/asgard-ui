@@ -21,7 +21,8 @@ export default React.createClass({
       logdata: [],
       loadingBottom : false,
       loadingTop : false,
-      topLog : 0
+      topLog : 0,
+      control: 0,
     };
   },
   componentDidMount() {
@@ -38,21 +39,26 @@ export default React.createClass({
     this.startPollBottom();
     const el = this.refs && this.refs.logView && this.refs.logView.getDOMNode();
     const ref = this;
+    let currentScrollLeft = el.scrollLeft;
+
     el.addEventListener("scroll", function () {
+      if (currentScrollLeft !== el.scrollLeft) {
+        currentScrollLeft = el.scrollLeft;
+        return;
+      }
       // check is scroll top
       if (el.scrollTop === 0) {
         ref.setState ({loadingTop : true}, () => {
           ref.pollTop();
-        });
-        return;
-      }
-      // scroll not top and bottom
-      if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
-        ref.setState({loadingTop: false}, () => {
           ref.stopPollBottom();
         });
       }
-
+      // scroll not top and bottom
+      if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
+        ref.setState({loadingTop: false, loadingBottom: false}, () => {
+          ref.stopPollBottom();
+        });
+      }
       // check is scroll bottom
       const isBottom = ref.checkIsBottom(el);
       if (isBottom) {
@@ -106,14 +112,15 @@ export default React.createClass({
     }
     if (this.topOffset !== 0) {
       this.topOffset -= BLOCK_SIZE;
-      MarathonService.request({resource:`tasks/${this.props.task.id}/files/read?path=${this.props.logfile}&offset=${this.topOffset < 0 ? this.topOffset = 0 : this.topOffset }&length=${newLength}`})
-      .success(this.handleReadTopOK)
-      .error((data) => {
-        console.log(`ERROR task ${this.props.task.id}, ${this.props.logfile}. ${data}`);
+      this.setState({loadingTop: true} , () => {
+        MarathonService.request({resource:`tasks/${this.props.task.id}/files/read?path=${this.props.logfile}&offset=${this.topOffset < 0 ? this.topOffset = 0 : this.topOffset }&length=${newLength}`})
+        .success(this.handleReadTopOK)
+        .error((data) => {
+          console.log(`ERROR task ${this.props.task.id}, ${this.props.logfile}. ${data}`);
+        });
       });
     }
     else {
-      console.log("Topo do meu offset",this.topOffset);
       this.setState ({topLog: 1});
       loading = 1;
     }
@@ -144,7 +151,7 @@ export default React.createClass({
   handleReadTopOK(response) {
     const {data} = response.body;
     if (data) {
-      this.logData.unshift("\n",data);
+      this.logData.unshift(data);
       this.onNewTop(this.logData);
     }
   },
@@ -154,9 +161,10 @@ export default React.createClass({
     this.setState({
       logdata: logdata,
     }, () => {
-      el.scrollTop = el.scrollHeight - prevHeightScroll;
-      if (el.scrollTop === 0) {
-        this.setState ({loadingTop: true});
+      if (prevHeightScroll === el.scrollHeight) {
+        el.scrollTop = el.scrollHeight;
+      } else {
+        el.scrollTop = el.scrollHeight - prevHeightScroll;
       }
     });
   },
@@ -204,7 +212,7 @@ export default React.createClass({
         <div className="log-view" ref="logView">
           {this.state.loadingTop && loading === 0 ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div>: ""}
           {this.state.topLog === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
-          <div className="div-filho">
+          <div className="scroll-infinity">
             {this.state.logdata}
           </div>
         </div>
