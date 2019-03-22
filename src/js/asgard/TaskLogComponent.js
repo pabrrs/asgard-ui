@@ -52,7 +52,6 @@ export default React.createClass({
           ref.pollTop();
           ref.stopPollBottom();
         });
-        // return;
       }
       // scroll not top and bottom
       if (el.scrollTop + el.clientHeight + 2 < el.scrollHeight) {
