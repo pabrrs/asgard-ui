@@ -2,13 +2,19 @@ import React from "react/addons";
 import classNames from "classnames";
 import PopoverComponent from "./PopoverComponent";
 import UserActions from "../actions/UserActions";
+import AccountActions from "../actions/AccountActions";
 import OnClickOutsideMixin from "react-onclickoutside";
 import UserStore from "../stores/UsersStore";
-import PluginStore from "../../stores/PluginStore";
 import UserEvents from "../events/UserEvents";
+import AccountsStore from "../stores/AccountsStore";
 import Bridge from "../../helpers/Bridge";
 import MarathonService from "../../plugin/sdk/services/MarathonService";
-import config from "../../config/config";
+import AppsActions from "../../actions/AppsActions";
+import QueueActions from "../../actions/QueueActions";
+import AccountsEvents from "../events/AccountsEvents";
+import AppsStore from "../../stores/AppsStore";
+import AppsEvents from "../../events/AppsEvents";
+
 
 var AccountComponent = React.createClass({
   displayName: "AccountComponent",
@@ -35,17 +41,26 @@ var AccountComponent = React.createClass({
   componentWillMount: function () {
     UserActions.requestUser();
     UserStore.on(UserEvents.CHANGE, this.onRequestUser);
+    // AccountsStore.on(AccountsEvents.CHANGE, this.onRequestAccounts);
   },
 
   componentWillUnmount: function () {
     UserStore.removeListener(UserEvents.CHANGE,
       this.onRequestUser);
+    // AccountsStore.removeListener(AccountsEvents.CHANGE,
+    //   this.onRequestAccounts);
   },
 
   onRequestUser: function () {
     this.setState( {
       users : UserStore.users,
       currentAccount : UserStore.users.current_account,
+      listAccounts: UserStore.users.accounts,
+    });
+  },
+
+  onRequestAccounts: function () {
+    this.setState( {
       listAccounts: UserStore.users.accounts,
     });
   },
@@ -68,26 +83,21 @@ var AccountComponent = React.createClass({
   },
 
   handleClickToken : function (accountClick, accounts, current) {
-    MarathonService.request({
-      resource: `accounts/${accountClick.id}/auth`,
-      method: "GET"
-    })
-    .error (error => {
-      console.log(error);
-    })
-    .success( response => {
-      const accountsList = accounts;
-      accountsList.push(current);
-      const accountsAppend = accountsList.filter(list => {
-        return list.id !== accountClick.id;
-      });
-      this.setState({
-        listAccounts: accountsAppend,
-        currentAccount: accountClick,
-      });
-      localStorage.setItem("auth_token", response.body.jwt);
+    AccountActions.requestToken(accountClick.id);
+    // AccountsStore.emit(AccountsEvents.CHANGE);
+    const accountsList = accounts;
+    accountsList.push(current);
+    const accountsAppend = accountsList.filter(list => {
+      return list.id !== accountClick.id;
+    });
+    accountsAppend.sort();
+    this.setState({
+      listAccounts: accountsAppend,
+      currentAccount: accountClick,
     });
     Bridge.navigateTo("/#/apps");
+    AccountsStore.emit(AccountsEvents.CHANGE);
+    // AppsStore.emit(AppsEvents.CHANGE);
   },
 
   render: function () {

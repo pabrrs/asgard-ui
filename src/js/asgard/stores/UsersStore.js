@@ -10,14 +10,9 @@ import Util from "../../helpers/Util";
 
 const storeData = {
   users: [],
-  total : "",
 };
 
 function processUsers(users) {
-  // return users.map(function (user) {
-  //   user = Util.extendObject(UserScheme, user);
-  //   return user;
-  // });
   var user = Util.extendObject(UserScheme, users);
   return user;
 }
@@ -26,9 +21,6 @@ var UserStore = Util.extendObject(EventEmitter.prototype, {
   get users() {
     return Util.deepCopy(storeData.users);
   },
-  get total() {
-    return Util.deepCopy(storeData.total);
-  }
 });
 
 AppsStore.on(UserEvents.CHANGE, function () {
