@@ -49,7 +49,6 @@ export default React.createClass({
       // check is scroll top
       if (el.scrollTop === 0) {
         ref.setState ({loadingTop : true}, () => {
-          console.log("pq bateu aqui", ref.state.loadingTop);
           ref.pollTop();
           ref.stopPollBottom();
         });
@@ -212,7 +211,6 @@ export default React.createClass({
           </button>
         </div>
         <div className="log-view" ref="logView">
-          {console.log("verificador",this.state.loadingTop)}
           {this.state.loadingTop && loading === 0 ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div>: ""}
           {this.state.topLog === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
           <div className="scroll-infinity">
