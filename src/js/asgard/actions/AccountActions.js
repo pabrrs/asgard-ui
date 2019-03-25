@@ -10,13 +10,8 @@ var AccountActions = {
       url: `${config.apiURL}accounts/${account}/auth`
     })
       .success(function (account) {
-      
         localStorage.setItem("auth_token", account.body.jwt);
         AccountsStore.emit(AccountsEvents.CHANGE);
-        // AppDispatcher.dispatch({
-        //   actionType: AccountsEvents.REQUEST,
-        //   data: account
-        // });
       })
       .error(function (error) {
         AppDispatcher.dispatch({

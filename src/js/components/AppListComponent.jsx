@@ -70,7 +70,6 @@ var AppListComponent = React.createClass({
     AppsStore.on(AppsEvents.REQUEST_APPS_ERROR, this.onAppsRequestError);
     AccountsStore.on(AccountsEvents.CHANGE, this.accountChange);
     AccountsStore.on(AccountsEvents.NEW_ACCOUNT, this.newAccount);
-    
     this.accountChange();
     AppsActions.requestApps();
   },
@@ -82,6 +81,8 @@ var AppListComponent = React.createClass({
       this.onAppsRequestError);
     AccountsStore.removeListener(AccountsEvents.CHANGE,
       this.accountChange);
+    AccountsStore.removeListener(AccountsEvents.NEW_ACCOUNT,
+      this.newAccount);
   },
 
   onAppsChange: function () {
@@ -91,7 +92,9 @@ var AppListComponent = React.createClass({
     });
   },
   accountChange: function () {
-    this.setState({fetchState: States.STATE_LOADING});
+    this.setState({
+      fetchState: States.STATE_LOADING
+    });
   },
 
   newAccount: function () {
