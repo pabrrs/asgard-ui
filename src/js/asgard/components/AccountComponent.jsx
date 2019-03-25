@@ -14,7 +14,7 @@ import QueueActions from "../../actions/QueueActions";
 import AccountsEvents from "../events/AccountsEvents";
 import AppsStore from "../../stores/AppsStore";
 import AppsEvents from "../../events/AppsEvents";
-
+import _ from "underscore";
 
 var AccountComponent = React.createClass({
   displayName: "AccountComponent",
@@ -62,11 +62,6 @@ var AccountComponent = React.createClass({
   onRequestAccounts: function () {
     Bridge.navigateTo("/#/apps");
     AccountsStore.emit(AccountsEvents.NEW_ACCOUNT);
-
-
-    // this.setState( {
-    //   listAccounts: UserStore.users.accounts,
-    // });
   },
 
   handleClickOutside: function () {
@@ -88,16 +83,15 @@ var AccountComponent = React.createClass({
 
   handleClickToken : function (accountClick, accounts, current) {
     AccountActions.requestToken(accountClick.id);
-    //AccountsStore.emit(AccountsEvents.CHANGE);
 
     const accountsList = accounts;
     accountsList.push(current);
     const accountsAppend = accountsList.filter(list => {
       return list.id !== accountClick.id;
     });
-    accountsAppend.sort();
+    var sortedObjs = _.sortBy( accountsAppend, 'name');
     this.setState({
-      listAccounts: accountsAppend,
+      listAccounts: sortedObjs,
       currentAccount: accountClick,
     });
   },
