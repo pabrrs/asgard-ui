@@ -14,7 +14,6 @@ const storeData = {
 
 function processToken(accs) {
   var acc = Util.extendObject(AccountsScheme, accs);
-  console.log(acc);
   return acc;
 }
 

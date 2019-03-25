@@ -69,6 +69,10 @@ var AppListComponent = React.createClass({
     AppsStore.on(AppsEvents.CHANGE, this.onAppsChange);
     AppsStore.on(AppsEvents.REQUEST_APPS_ERROR, this.onAppsRequestError);
     AccountsStore.on(AccountsEvents.CHANGE, this.accountChange);
+    AccountsStore.on(AccountsEvents.NEW_ACCOUNT, this.newAccount);
+    
+    this.accountChange();
+    AppsActions.requestApps();
   },
 
   componentWillUnmount: function () {
@@ -88,7 +92,10 @@ var AppListComponent = React.createClass({
   },
   accountChange: function () {
     this.setState({fetchState: States.STATE_LOADING});
-    console.log("entrou aqui");
+  },
+
+  newAccount: function () {
+    AppsActions.requestApps();
   },
 
   onAppsRequestError: function (message, statusCode) {
@@ -338,7 +345,7 @@ var AppListComponent = React.createClass({
     }).value();
 
     AppsActions.emitFilterCounts(filterCounts);
-
+    
     return appListItems;
   },
 

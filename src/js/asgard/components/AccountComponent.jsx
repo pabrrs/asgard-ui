@@ -41,14 +41,14 @@ var AccountComponent = React.createClass({
   componentWillMount: function () {
     UserActions.requestUser();
     UserStore.on(UserEvents.CHANGE, this.onRequestUser);
-    // AccountsStore.on(AccountsEvents.CHANGE, this.onRequestAccounts);
+    AccountsStore.on(AccountsEvents.CHANGE, this.onRequestAccounts);
   },
 
   componentWillUnmount: function () {
     UserStore.removeListener(UserEvents.CHANGE,
       this.onRequestUser);
-    // AccountsStore.removeListener(AccountsEvents.CHANGE,
-    //   this.onRequestAccounts);
+    AccountsStore.removeListener(AccountsEvents.CHANGE,
+      this.onRequestAccounts);
   },
 
   onRequestUser: function () {
@@ -60,9 +60,13 @@ var AccountComponent = React.createClass({
   },
 
   onRequestAccounts: function () {
-    this.setState( {
-      listAccounts: UserStore.users.accounts,
-    });
+    Bridge.navigateTo("/#/apps");
+    AccountsStore.emit(AccountsEvents.NEW_ACCOUNT);
+
+
+    // this.setState( {
+    //   listAccounts: UserStore.users.accounts,
+    // });
   },
 
   handleClickOutside: function () {
@@ -84,7 +88,8 @@ var AccountComponent = React.createClass({
 
   handleClickToken : function (accountClick, accounts, current) {
     AccountActions.requestToken(accountClick.id);
-    // AccountsStore.emit(AccountsEvents.CHANGE);
+    //AccountsStore.emit(AccountsEvents.CHANGE);
+
     const accountsList = accounts;
     accountsList.push(current);
     const accountsAppend = accountsList.filter(list => {
@@ -95,9 +100,6 @@ var AccountComponent = React.createClass({
       listAccounts: accountsAppend,
       currentAccount: accountClick,
     });
-    Bridge.navigateTo("/#/apps");
-    AccountsStore.emit(AccountsEvents.CHANGE);
-    // AppsStore.emit(AppsEvents.CHANGE);
   },
 
   render: function () {
