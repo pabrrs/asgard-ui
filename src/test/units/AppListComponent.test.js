@@ -146,7 +146,6 @@ describe("AppListComponent", function () {
 
   it("displays the right entries", function () {
     this.component = mount(<AppListComponent currentGroup="/" />);
-    console.log("TESTE DE COMPONENT ADASDAU", this.component.text);
     if (this.component) {
       var appNames = this.component
         .find(AppListItemComponent)
