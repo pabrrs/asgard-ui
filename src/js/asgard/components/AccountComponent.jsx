@@ -110,17 +110,16 @@ var AccountComponent = React.createClass({
         <span>
           {current ? current.name : ""}
         </span>
-        {accounts ?
-          accounts.length > 0 ?
+        {(accounts) &&
+          (accounts.length > 0) &&
           <span className="caret"></span>
-          : ""
-        : ""}
-        {accounts ?
-          accounts.length > 0 ?
+        }
+        {accounts &&
+          accounts.length > 0 &&
           <PopoverComponent visible={this.state.helpMenuVisible}
               className="help-menu-dropdown">
             <ul className="dropdown-menu">
-              {accounts ? accounts.map(account => {
+              {accounts && accounts.map(account => {
                 return (
                   <li key={account.id}>
                     <a
@@ -130,11 +129,10 @@ var AccountComponent = React.createClass({
                     </a>
                   </li>
                 );
-              }): ""
+              })
               }
             </ul>
-          </PopoverComponent> : ""
-          : ""
+          </PopoverComponent>
         }
       </div>
     );
