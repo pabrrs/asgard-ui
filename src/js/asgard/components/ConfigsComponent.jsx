@@ -7,7 +7,7 @@ import UserActions from "../actions/UserActions";
 import UserEvents from "../events/UserEvents";
 
 var ConfigsComponent = React.createClass({
-  displayName: "HelpMenuComponent",
+  displayName: "ConfigsComponent",
 
   contextTypes: {
     router: React.PropTypes.func
@@ -51,6 +51,10 @@ var ConfigsComponent = React.createClass({
     });
   },
 
+  disconnectUser: function () {
+    localStorage.setItem("auth_token", "");
+  },
+
   handleClick: function (event) {
     this.setState({collapse: !this.state.collapse});
     event.stopPropagation();
@@ -71,16 +75,17 @@ var ConfigsComponent = React.createClass({
           <ul className="dropdown-menu">
             <li>
               <span>
-                Usuário: {(user) && user.name}
+                Usuário: {user && user.name}
               </span>
             </li>
-            <li>
+            {/* <li>
               <a>
                 Configurações
               </a>
-            </li>
+            </li> */}
             <li>
-              <a href="https://mesosphere.github.io/marathon/docs/"
+              <a
+                onClick={() => this.disconnectUser()}
                   target="_blank">
                 Logout
               </a>

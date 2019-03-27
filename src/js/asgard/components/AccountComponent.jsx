@@ -8,12 +8,7 @@ import UserStore from "../stores/UsersStore";
 import UserEvents from "../events/UserEvents";
 import AccountsStore from "../stores/AccountsStore";
 import Bridge from "../../helpers/Bridge";
-import MarathonService from "../../plugin/sdk/services/MarathonService";
-import AppsActions from "../../actions/AppsActions";
-import QueueActions from "../../actions/QueueActions";
 import AccountsEvents from "../events/AccountsEvents";
-import AppsStore from "../../stores/AppsStore";
-import AppsEvents from "../../events/AppsEvents";
 import _ from "underscore";
 
 var AccountComponent = React.createClass({
@@ -105,17 +100,15 @@ var AccountComponent = React.createClass({
     });
 
     return (
-      <div className={helpMenuClassName} style={{opacity: "1", padding: "17px"}}
+      <div className={helpMenuClassName} className = "accountPopover"
         onClick={() => this.toggleHelpMenu(myAccounts)}>
         <span>
-          {current ? current.name : ""}
+          {current && current.name}
         </span>
-        {(accounts) &&
-          (accounts.length > 0) &&
+        {accounts && accounts.length > 0 &&
           <span className="caret"></span>
         }
-        {accounts &&
-          accounts.length > 0 &&
+        {accounts && accounts.length > 0 &&
           <PopoverComponent visible={this.state.helpMenuVisible}
               className="help-menu-dropdown">
             <ul className="dropdown-menu">
