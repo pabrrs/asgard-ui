@@ -75,7 +75,7 @@ var ConfigsComponent = React.createClass({
           <ul className="dropdown-menu">
             <li>
               <span>
-                Usuário: {user && user.name}
+                User: {user && user.name}
               </span>
             </li>
             {/* <li>

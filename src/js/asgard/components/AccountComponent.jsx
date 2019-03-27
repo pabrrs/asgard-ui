@@ -116,7 +116,7 @@ var AccountComponent = React.createClass({
                 return (
                   <li key={account.id}>
                     <a
-                    onClick={() => this.handleClickToken(account, accounts, current)}
+                      onClick={() => this.handleClickToken(account, accounts, current)}
                     >
                       {account.name}
                     </a>
