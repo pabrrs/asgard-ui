@@ -1,6 +1,7 @@
 import React from "react/addons";
 import classNames from "classnames";
 import Mousetrap from "mousetrap";
+import PopoverComponent from "./PopoverComponent";
 
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
@@ -29,6 +30,7 @@ import Util from "../helpers/Util";
 import PathUtil from "../helpers/PathUtil";
 import TasksActions from "../actions/TasksActions";
 import TasksEvents from "../events/TasksEvents";
+import ComponentStatsApp from "../../js/asgard/components/ComponentStatsApp";
 
 var tabsTemplate = [
   {id: "apps/:appId", text: "Instances"},
@@ -102,8 +104,13 @@ var AppPageComponent = React.createClass({
       volumeId: volumeId,
       appId: appId,
       view: decodeURIComponent(params.view),
-      tabs: tabs
+      tabs: tabs,
+      helpMenuVisible: false,
     };
+  },
+
+  componentDidMount: function () {
+    Mousetrap.bind(["g e"], this.openEditModal);
   },
 
   componentWillMount: function () {
@@ -123,10 +130,7 @@ var AppPageComponent = React.createClass({
     AppsStore.removeListener(TasksEvents.DELETE_ERROR,
       this.onDeleteTaskError);
     Mousetrap.unbind(["g e"]);
-  },
 
-  componentDidMount: function () {
-    Mousetrap.bind(["g e"], this.openEditModal);
   },
 
   openEditModal: function () {
@@ -168,6 +172,12 @@ var AppPageComponent = React.createClass({
       AppVersionsActions.requestAppVersions(state.appId);
       AppVersionsActions.requestAppVersion(state.appId, app.version);
     }
+  },
+
+  toggleHelpMenu: function () {
+    this.setState({
+      helpMenuVisible: !this.state.helpMenuVisible
+    });
   },
 
   onAppRequestError: function (message, statusCode) {
@@ -373,6 +383,7 @@ var AppPageComponent = React.createClass({
   render: function () {
     var content;
     var state = this.state;
+    console.log(state);
     var model = state.app;
     var volumeId = this.getRouteSettings().volumeId;
 
@@ -408,6 +419,9 @@ var AppPageComponent = React.createClass({
           </div>
       );
     }
+    var helpMenuClassName = classNames("help-menu", {
+      "active": this.state.helpMenuVisible
+    });
 
     return (
       <div>
@@ -416,12 +430,17 @@ var AppPageComponent = React.createClass({
           taskId={state.activeTaskId}
           volumeId={state.volumeId} />
         <div className="container-fluid">
-          <div className="page-header">
-            <h1>{name}</h1>
-            {this.getVolumeStatus()}
-            {appHealthStatus}
-            {appHealthBar}
-            {this.getControls()}
+          <div className="page-header" style={{display: "flex", justifyContent: "space-between"}}>
+            <div>
+              <h1>{name}</h1>
+                {this.getVolumeStatus()}
+                {appHealthStatus}
+                {appHealthBar}
+                {this.getControls()}
+            </div>
+            <div style={{padding: "10px"}}>
+              <ComponentStatsApp />
+            </div>
           </div>
           {content}
         </div>
