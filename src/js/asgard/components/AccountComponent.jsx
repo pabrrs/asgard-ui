@@ -84,7 +84,8 @@ var AccountComponent = React.createClass({
     const accountsAppend = accountsList.filter(list => {
       return list.id !== accountClick.id;
     });
-    var sortedObjs = _.sortBy( accountsAppend, 'name');
+    const orderField = "name";
+    const sortedObjs = _.sortBy( accountsAppend, orderField);
     this.setState({
       listAccounts: sortedObjs,
       currentAccount: accountClick,

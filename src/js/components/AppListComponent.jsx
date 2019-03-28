@@ -348,7 +348,6 @@ var AppListComponent = React.createClass({
     }).value();
 
     AppsActions.emitFilterCounts(filterCounts);
-    
     return appListItems;
   },
 
@@ -379,6 +378,8 @@ var AppListComponent = React.createClass({
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
     var pageHasFilters = this.pageHasFilters();
+    const pageLogout = localStorage.getItem("auth_token");
+
     var pageHasNoRunningApps = !pageIsLoading &&
       !pageHasApps &&
       state.fetchState !== States.STATE_UNAUTHORIZED &&
@@ -398,7 +399,14 @@ var AppListComponent = React.createClass({
     if (currentGroup != null && currentGroup !== "/") {
       newAppModalQuery.groupId = currentGroup;
     }
-
+    if (pageLogout === "") {
+      return (
+        <CenteredInlineDialogComponent
+          additionalClasses="muted"
+          title="Sign in"
+        />
+      );
+    }
     if (pageIsLoading) {
       let message = "Please wait while applications are being retrieved";
       let title = "Loading Applications...";
@@ -531,7 +539,7 @@ var AppListComponent = React.createClass({
 
     return (
       <div>
-        {this.state.fetchState === States.STATE_SUCCESS ?
+        {this.state.fetchState === States.STATE_SUCCESS &&
         <table className={tableClassSet}>
           <colgroup>
             <col className="icon-col" />
@@ -610,7 +618,7 @@ var AppListComponent = React.createClass({
             {appNodes}
           </tbody>
         </table>
-        : "" }
+        }
         {this.getInlineDialog(appNodes)}
       </div>
     );

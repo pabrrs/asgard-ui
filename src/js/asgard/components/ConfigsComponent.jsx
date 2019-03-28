@@ -5,6 +5,7 @@ import OnClickOutsideMixin from "react-onclickoutside";
 import UserStore from "../stores/UsersStore";
 import UserActions from "../actions/UserActions";
 import UserEvents from "../events/UserEvents";
+import Bridge from "../../helpers/Bridge";
 
 var ConfigsComponent = React.createClass({
   displayName: "ConfigsComponent",
@@ -53,6 +54,7 @@ var ConfigsComponent = React.createClass({
 
   disconnectUser: function () {
     localStorage.setItem("auth_token", "");
+    Bridge.navigateTo("/#/apps");
   },
 
   handleClick: function (event) {
