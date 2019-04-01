@@ -61,7 +61,7 @@ var PluginMountPointComponent = React.createClass({
 
   render: function () {
     return (
-      <div className={`${this.props.className} hidden-accountOld`} style={this.props.style}>
+      <div className={`${this.props.className}`} style={this.props.style}>
         {this.state.mountPoint}
       </div>
     );
