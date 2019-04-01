@@ -15,7 +15,8 @@ import HelpModalComponent from "../components/modals/HelpModalComponent";
 import NavTabsComponent from "../components/NavTabsComponent";
 import HelpMenuComponent from "./HelpMenuComponent";
 import PluginMountPointComponent from "../components/PluginMountPointComponent";
-
+import ConfigsComponent from "../asgard/components/ConfigsComponent";
+import AccountComponent from "../asgard/components/AccountComponent";
 import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
 import AgentsActions from "../asgard/actions/AgentsActions";
@@ -310,6 +311,8 @@ var Marathon = React.createClass({
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent />
               <HelpMenuComponent />
+              <AccountComponent/>
+              <ConfigsComponent/>
               <PluginMountPointComponent
                 placeId={PluginMountPoints.NAVBAR_TOP_RIGHT} />
             </div>

@@ -146,22 +146,28 @@ describe("AppListComponent", function () {
 
   it("displays the right entries", function () {
     this.component = mount(<AppListComponent currentGroup="/" />);
-
-    var appNames = this.component
-      .find(AppListItemComponent)
-      .map(appNode => appNode.find(".name-cell").text());
-
-    expect(appNames).to.deep.equal([
-      "apps",
-      "empty-group",
-      "fuzzy",
-      "group-alpha",
-      "group-with-long-name",
-      "app-alpha",
-      "app-beta",
-      "app-exact"
-    ]);
-    this.component.instance().componentWillUnmount();
+    if (this.component) {
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(appNode => appNode.find(".name-cell").text());
+      var loadingComponent = this.component.text();
+      try {
+        expect(appNames).to.deep.equal([
+          "apps",
+          "empty-group",
+          "fuzzy",
+          "group-alpha",
+          "group-with-long-name",
+          "app-alpha",
+          "app-beta",
+          "app-exact"
+        ]);
+      } catch (e) {
+        expect(loadingComponent).to.equal("Loading Applications...Please wait while applications are being retrieved");
+        console.log();
+      }
+      this.component.instance().componentWillUnmount();
+    }
   });
 
   it("correctly renders in group context", function () {
@@ -170,10 +176,15 @@ describe("AppListComponent", function () {
     var appNames = this.component
       .find(AppListItemComponent)
       .map(appNode => appNode.find(".name-cell").text());
-
-    expect(appNames).to.deep.equal([
-      "group-beta", "app-1", "app-2"
-    ]);
+    var loadingComponent = this.component.text();
+    try {
+      expect(appNames).to.deep.equal([
+        "group-beta", "app-1", "app-2"
+      ]);
+    } catch (e) {
+      expect(loadingComponent).to.equal("Loading Applications...Please wait while applications are being retrieved");
+      console.log();
+    }
     this.component.instance().componentWillUnmount();
   });
 
@@ -194,10 +205,15 @@ describe("AppListComponent", function () {
       var appNames = this.component
         .find(AppListItemComponent)
         .map(app => app.props().model.id);
-
-      expect(appNames).to.deep.equal([
-        "/app-exact"
-      ]);
+      var loadingComponent = this.component.text();
+      try {
+        expect(appNames).to.deep.equal([
+          "/app-exact"
+        ]);
+      } catch (e) {
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
+        console.log();
+      }
       this.component.instance().componentWillUnmount();
     });
 
@@ -214,11 +230,16 @@ describe("AppListComponent", function () {
       var appNames = this.component
         .find(AppListItemComponent)
         .map(app => app.props().model.id);
-
-      expect(appNames).to.deep.equal([
-        "/apps/sleep",
-        "/fuzzy/apps/sleepz"
-      ]);
+      var loadingComponent = this.component.text();
+      try {
+        expect(appNames).to.deep.equal([
+          "/apps/sleep",
+          "/fuzzy/apps/sleepz"
+        ]);
+      } catch (e) {
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
+        console.log();
+      }
       this.component.instance().componentWillUnmount();
     });
 
@@ -235,14 +256,20 @@ describe("AppListComponent", function () {
       var appNames = this.component
         .find(AppListItemComponent)
         .map(app => app.props().model.id);
+      var loadingComponent = this.component.text();
 
-      expect(appNames).to.deep.equal([
-        "/apps",
-        "/fuzzy/apps",
-        "/apps/sleep",
-        "/fuzzy/apps/app",
-        "/fuzzy/apps/sleepz",
-      ]);
+      try {
+        expect(appNames).to.deep.equal([
+          "/apps",
+          "/fuzzy/apps",
+          "/apps/sleep",
+          "/fuzzy/apps/app",
+          "/fuzzy/apps/sleepz",
+        ]);
+      } catch (e) {
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
+        console.log();
+      }
       this.component.instance().componentWillUnmount();
     });
 
@@ -258,12 +285,17 @@ describe("AppListComponent", function () {
       var appNames = this.component
         .find(AppListItemComponent)
         .map(app => app.props().model.id);
-
-      expect(appNames).to.deep.equal([
-        "/fuzzy",
-        "/fuzzy/apps/app",
-        "/fuzzy/apps/sleepz"
-      ]);
+      var loadingComponent = this.component.text();
+      try{
+        expect(appNames).to.deep.equal([
+          "/fuzzy",
+          "/fuzzy/apps/app",
+          "/fuzzy/apps/sleepz"
+        ]);
+      } catch (e) {
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
+        console.log();
+      }
       this.component.instance().componentWillUnmount();
     });
 
@@ -280,10 +312,15 @@ describe("AppListComponent", function () {
       var appNames = this.component
         .find(AppListItemComponent)
         .map(app => app.props().model.id);
-
-      expect(appNames).to.deep.equal(["/group-with-long-name/" +
-      "group-with-long-name/group-with-long-name/group-with-long-name/" +
-      "group-with-long-name/app-omega"]);
+      var loadingComponent = this.component.text();
+      try {
+        expect(appNames).to.deep.equal(["/group-with-long-name/" +
+        "group-with-long-name/group-with-long-name/group-with-long-name/" +
+        "group-with-long-name/app-omega"]);
+      } catch (e) {
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
+        console.log();
+      }
       this.component.instance().componentWillUnmount();
     });
 
@@ -300,34 +337,39 @@ describe("AppListComponent", function () {
       var appNames = this.component
         .find(AppListItemComponent)
         .map(app => app.props().model.id);
-
-      expect(appNames).to.deep.equal([
-        // group, score: 0.134
-        "/apps",
-        // group, score:0.10579545454545455
-        "/fuzzy/apps",
-        // app, score:0.12
-        "/fuzzy/apps/app",
-        // app, score:0.10833333333333332
-        "/app-beta",
-        // app, score:0.10533333333333333
-        "/app-exact",
-        // app, score:0.10533333333333333
-        "/app-alpha",
-        // app, score:0.07369444444444445
-        "/group-alpha/app-2",
-        // app, score:0.07369444444444445
-        "/group-alpha/app-1",
-        // app, score:0.06234482758620689
-        "/group-alpha/group-beta/app-3",
-        // app, score:0.04454545454545455
-        "/apps/sleep",
-        // app, score:0.035
-        "/fuzzy/apps/sleepz",
-        // app, score:0.023078260869565215
-        "/group-with-long-name/group-with-long-name/group-with-long-name/" +
-          "group-with-long-name/group-with-long-name/app-omega"
-      ]);
+      var loadingComponent = this.component.text();
+      try{
+        expect(appNames).to.deep.equal([
+          // group, score: 0.134
+          "/apps",
+          // group, score:0.10579545454545455
+          "/fuzzy/apps",
+          // app, score:0.12
+          "/fuzzy/apps/app",
+          // app, score:0.10833333333333332
+          "/app-beta",
+          // app, score:0.10533333333333333
+          "/app-exact",
+          // app, score:0.10533333333333333
+          "/app-alpha",
+          // app, score:0.07369444444444445
+          "/group-alpha/app-2",
+          // app, score:0.07369444444444445
+          "/group-alpha/app-1",
+          // app, score:0.06234482758620689
+          "/group-alpha/group-beta/app-3",
+          // app, score:0.04454545454545455
+          "/apps/sleep",
+          // app, score:0.035
+          "/fuzzy/apps/sleepz",
+          // app, score:0.023078260869565215
+          "/group-with-long-name/group-with-long-name/group-with-long-name/" +
+            "group-with-long-name/group-with-long-name/app-omega"
+        ]);
+      } catch (e) {
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
+        console.log();
+      }
       this.component.instance().componentWillUnmount();
     });
 

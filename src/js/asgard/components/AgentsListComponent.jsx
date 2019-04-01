@@ -8,7 +8,6 @@ import States from "../../constants/States";
 import lazy from "lazy.js";
 import AgentsActions from "../actions/AgentsActions";
 import ConcatFilter from "../helpers/concatFilters";
-// import { runInThisContext } from "vm";
 
 var SlaveListComponent = React.createClass({
   displayName: "AgentsListComponent",
@@ -176,7 +175,7 @@ var SlaveListComponent = React.createClass({
             </div>
             <button className="btn btn-xs btn-danger btn-settings button-filter"
                 onClick={this.handleClick}>
-              Limpar filtro
+              Clear filter
             </button>
           </div>
         <table className="table deployments">
@@ -205,17 +204,17 @@ var SlaveListComponent = React.createClass({
                   CPU(ocupado/total)
                 </span>
               </th>
-              <th className="">
+              <th>
                 <span>
                   RAM(ocupado/total)
                 </span>
               </th>
-              <th className="">
+              <th>
                 <span>
                   Type
                 </span>
               </th>
-              <th className="">
+              <th>
                 <span>
                   Agent Version
                 </span>
