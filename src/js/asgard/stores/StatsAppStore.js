@@ -12,7 +12,6 @@ const storeData = {
 };
 
 function processStats(stats) {
-  // console.log("o que recebo", stats);
   var stat = Util.extendObject(StatsAppScheme, stats);
   return stat;
 }

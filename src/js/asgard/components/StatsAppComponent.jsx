@@ -4,9 +4,10 @@ import OnClickOutsideMixin from "react-onclickoutside";
 import StatsAppStore from "../stores/StatsAppStore";
 import StatsAppAction from "../actions/StatsAppActions";
 import StatsAppEvents from "../events/StatsAppEvents";
+import States from "../../constants/States";
 
 var StatsAppComponent = React.createClass({
-  displayName: "ComponentStatsApp",
+  displayName: "StatsAppComponent",
 
   contextTypes: {
     app: React.PropTypes.string,
@@ -16,10 +17,14 @@ var StatsAppComponent = React.createClass({
   mixins: [OnClickOutsideMixin],
 
   getInitialState: function () {
-    var stat = StatsAppStore.stats;
+    var stats = StatsAppStore.stats;
+    var fetchState = stats.length > 0
+    ? States.STATE_SUCCESS
+    : States.STATE_LOADING;
     return {
-      stats: stat,
+      stats: stats,
       helpMenuVisible: false,
+      fetchState: fetchState,
     };
   },
 
@@ -37,6 +42,7 @@ var StatsAppComponent = React.createClass({
   onStatsChange: function () {
     this.setState({
       stats: StatsAppStore.stats,
+      fetchState: States.STATE_SUCCESS
     });
   },
 
@@ -52,24 +58,26 @@ var StatsAppComponent = React.createClass({
     this.setState({
       helpMenuVisible: !this.state.helpMenuVisible,
       stats: StatsAppStore.stats,
+      fetchState: States.STATE_LOADING
     });
   },
 
   render: function () {
     var refreshMenuClassName = classNames("btn btn-lg btn-success");
-    console.log("meu render",this.state.stats && this.state.stats.ram_pct);
     return (
-      <div style={{display: "flex",
-        flexDirection: "column", alignItems: "center"}}>
+      <div className="stats-app">
       <h1>Resources application</h1>
-      <div style={{display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "10px"}}>
-          <span style={{fontSize: "17px"}}>CPU Usage : {this.state.stats && this.state.stats.cpu_pct}%</span>
-          <span style={{fontSize: "17px"}}>RAM Usage : {this.state.stats && this.state.stats.ram_pct}%</span>
-      </div>
+      {this.state.fetchState === States.STATE_SUCCESS && this.state.stats.ram_pct && this.state.stats.cpu_pct ?
+        <div className="stats-resources">
+          <span className="resources-cpu"> CPU Usage : {this.state.stats && this.state.stats.cpu_pct}%</span>
+          <span className="resources-ram"> RAM Usage : {this.state.stats && this.state.stats.ram_pct}%</span>
+        </div>:
+        <i className="icon icon-large loading loading-bottom"></i>
+      }
       <div>
-        <div className={`${refreshMenuClassName}`} style={{textAlign: "center", padding: "8px 16px", marginTop: "20px"}}
+        <div className={`${refreshMenuClassName} refresh-stats`}
             onClick={this.toggleHelpMenu}>
-          <span style={{color: "white", backgroundColor: "transparent"}}>Refresh</span>
+          <span className="refresh-stats-span"> Refresh</span>
         </div>
       </div>
     </div>

@@ -437,7 +437,7 @@ var AppPageComponent = React.createClass({
                 {appHealthBar}
                 {this.getControls()}
             </div>
-            <div style={{padding: "10px"}}>
+            <div className="space-stats-app">
               <StatsAppComponent app={state.appId}/>
             </div>
           </div>
