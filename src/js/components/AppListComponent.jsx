@@ -378,8 +378,7 @@ var AppListComponent = React.createClass({
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
     var pageHasFilters = this.pageHasFilters();
-    const pageLogout = localStorage.getItem("auth_token");
-
+    
     var pageHasNoRunningApps = !pageIsLoading &&
       !pageHasApps &&
       state.fetchState !== States.STATE_UNAUTHORIZED &&
@@ -399,14 +398,22 @@ var AppListComponent = React.createClass({
     if (currentGroup != null && currentGroup !== "/") {
       newAppModalQuery.groupId = currentGroup;
     }
-    if (pageLogout === "") {
-      return (
-        <CenteredInlineDialogComponent
-          additionalClasses="muted"
-          title="Sign in"
-        />
-      );
+
+    try {
+      const pageLogout = localStorage.getItem("auth_token");
+      if (pageLogout === "") {
+        return (
+          <CenteredInlineDialogComponent
+            additionalClasses="muted"
+            title="Sign in"
+          />
+        );
+      }
+    } catch (e) {
+      console.log();
+      // return
     }
+
     if (pageIsLoading) {
       let message = "Please wait while applications are being retrieved";
       let title = "Loading Applications...";
@@ -421,6 +428,8 @@ var AppListComponent = React.createClass({
         </CenteredInlineDialogComponent>
       );
     }
+
+
 
     if (pageHasNoRunningApps) {
       let message = "Do more with Marathon by creating and organizing " +
