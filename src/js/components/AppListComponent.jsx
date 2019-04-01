@@ -399,21 +399,6 @@ var AppListComponent = React.createClass({
       newAppModalQuery.groupId = currentGroup;
     }
 
-    try {
-      const pageLogout = localStorage.getItem("auth_token");
-      if (pageLogout === "") {
-        return (
-          <CenteredInlineDialogComponent
-            additionalClasses="muted"
-            title="Sign in"
-          />
-        );
-      }
-    } catch (e) {
-      console.log();
-      // return
-    }
-
     if (pageIsLoading) {
       let message = "Please wait while applications are being retrieved";
       let title = "Loading Applications...";
@@ -428,9 +413,7 @@ var AppListComponent = React.createClass({
         </CenteredInlineDialogComponent>
       );
     }
-
-
-
+    
     if (pageHasNoRunningApps) {
       let message = "Do more with Marathon by creating and organizing " +
         "your applications.";
