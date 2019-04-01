@@ -30,7 +30,7 @@ import Util from "../helpers/Util";
 import PathUtil from "../helpers/PathUtil";
 import TasksActions from "../actions/TasksActions";
 import TasksEvents from "../events/TasksEvents";
-import ComponentStatsApp from "../../js/asgard/components/ComponentStatsApp";
+import StatsAppComponent from "../../js/asgard/components/StatsAppComponent";
 
 var tabsTemplate = [
   {id: "apps/:appId", text: "Instances"},
@@ -383,7 +383,6 @@ var AppPageComponent = React.createClass({
   render: function () {
     var content;
     var state = this.state;
-    console.log(state);
     var model = state.app;
     var volumeId = this.getRouteSettings().volumeId;
 
@@ -439,7 +438,7 @@ var AppPageComponent = React.createClass({
                 {this.getControls()}
             </div>
             <div style={{padding: "10px"}}>
-              <ComponentStatsApp />
+              <StatsAppComponent app={state.appId}/>
             </div>
           </div>
           {content}
