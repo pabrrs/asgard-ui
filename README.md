@@ -10,6 +10,9 @@ que implementa o que é necessário para termos:
 
 ## Changelog
 
+### 0.24.0
+ * Implementação da lógica de troca de conta, com dropdown listando as contas alternativas (https://github.com/B2W-BIT/asgard-ui/pull/4)
+
 ### 0.23.0
  * Fix no componente de exibição de log (https://github.com/lucasdomi/asgard-ui/pull/2)
 
