@@ -14,11 +14,13 @@ import States from "../constants/States";
 import AppListItemComponent from "./AppListItemComponent";
 import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
 import TooltipComponent from "../components/TooltipComponent";
-
 import AppsActions from "../actions/AppsActions";
 import AppsStore from "../stores/AppsStore";
 import AppsEvents from "../events/AppsEvents";
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
+
+import AccountsStore from "../asgard/stores/AccountsStore";
+import AccountsEvents from "../asgard/events/AccountsEvents";
 
 import Util from "../helpers/Util";
 import SortUtil from "../helpers/SortUtil";
@@ -59,13 +61,17 @@ var AppListComponent = React.createClass({
       apps: apps,
       fetchState: fetchState,
       sortKey: "id",
-      sortDescending: false
+      sortDescending: false,
     };
   },
 
   componentWillMount: function () {
     AppsStore.on(AppsEvents.CHANGE, this.onAppsChange);
     AppsStore.on(AppsEvents.REQUEST_APPS_ERROR, this.onAppsRequestError);
+    AccountsStore.on(AccountsEvents.CHANGE, this.accountChange);
+    AccountsStore.on(AccountsEvents.NEW_ACCOUNT, this.newAccount);
+    this.accountChange();
+    AppsActions.requestApps();
   },
 
   componentWillUnmount: function () {
@@ -73,13 +79,26 @@ var AppListComponent = React.createClass({
       this.onAppsChange);
     AppsStore.removeListener(AppsEvents.REQUEST_APPS_ERROR,
       this.onAppsRequestError);
+    AccountsStore.removeListener(AccountsEvents.CHANGE,
+      this.accountChange);
+    AccountsStore.removeListener(AccountsEvents.NEW_ACCOUNT,
+      this.newAccount);
   },
 
   onAppsChange: function () {
     this.setState({
       apps: AppsStore.apps,
-      fetchState: States.STATE_SUCCESS
+      fetchState: States.STATE_SUCCESS,
     });
+  },
+  accountChange: function () {
+    this.setState({
+      fetchState: States.STATE_LOADING
+    });
+  },
+
+  newAccount: function () {
+    AppsActions.requestApps();
   },
 
   onAppsRequestError: function (message, statusCode) {
@@ -329,7 +348,6 @@ var AppListComponent = React.createClass({
     }).value();
 
     AppsActions.emitFilterCounts(filterCounts);
-
     return appListItems;
   },
 
@@ -360,6 +378,7 @@ var AppListComponent = React.createClass({
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
     var pageHasFilters = this.pageHasFilters();
+    
     var pageHasNoRunningApps = !pageIsLoading &&
       !pageHasApps &&
       state.fetchState !== States.STATE_UNAUTHORIZED &&
@@ -394,7 +413,7 @@ var AppListComponent = React.createClass({
         </CenteredInlineDialogComponent>
       );
     }
-
+    
     if (pageHasNoRunningApps) {
       let message = "Do more with Marathon by creating and organizing " +
         "your applications.";
@@ -512,6 +531,7 @@ var AppListComponent = React.createClass({
 
     return (
       <div>
+        {this.state.fetchState === States.STATE_SUCCESS &&
         <table className={tableClassSet}>
           <colgroup>
             <col className="icon-col" />
@@ -528,7 +548,7 @@ var AppListComponent = React.createClass({
               <th className={idClassSet} colSpan="2">
                 <span onClick={this.sortBy.bind(null, "id")}
                     className={headerClassSet}>
-                  Name {this.getCaret("id")}
+                  Name{this.getCaret("id")}
                 </span>
               </th>
               <th className={cpuClassSet}>
@@ -590,6 +610,7 @@ var AppListComponent = React.createClass({
             {appNodes}
           </tbody>
         </table>
+        }
         {this.getInlineDialog(appNodes)}
       </div>
     );

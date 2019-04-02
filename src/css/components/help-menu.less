@@ -2,6 +2,34 @@
  * Help Menu
  * =============
  */
+
+ .testeHover {
+  &:hover {
+    background: #428bca;
+  }
+ }
+ .dropdown-menu>li>ul {
+  display: block;
+  padding: 3px 27px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.428571429;
+  color: #333;
+  white-space: nowrap;
+  list-style: none;
+  background-color: gainsboro;
+}
+
+.dropdown-menu>li>span {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.428571429;
+  color: #333;
+  white-space: nowrap;
+}
+
 .help-menu {
   margin: 0;
   padding: @base-spacing-unit*2 @base-spacing-unit*2;
@@ -31,6 +59,52 @@
       padding: 0;
       left: 100%;
       transform: translate(-90%, 10%);
+
+      &:before, &:after {
+        display: none;
+      }
+    }
+
+    .dropdown-menu {
+      right: @base-spacing-unit*2;
+      transform: none;
+      position: relative;
+      border: none;
+      display: block;
+    }
+  }
+}
+
+.settings-menu {
+  margin: 0;
+  padding: @base-spacing-unit*2 @base-spacing-unit*2;
+  cursor: pointer;
+  color: @white;
+  background-position: center left;
+  line-height: 1;
+  opacity: .4;
+  white-space: nowrap;
+
+  .caret {
+    margin-left: @horizontal-spacing-unit;
+  }
+
+  &.active,
+  &:hover {
+    opacity: 1;
+  }
+
+  &-dropdown.popover.bottom, &-dropdown.popover.default {
+    margin: 0;
+
+    .content {
+      background-color: transparent;
+      border-radius: 0;
+      min-width: auto;
+      padding: 0;
+      left: -220%;
+      top: 9px;
+      // transform: translate(-90%, 10%);
 
       &:before, &:after {
         display: none;

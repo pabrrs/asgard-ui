@@ -211,7 +211,7 @@ export default React.createClass({
         </div>
         <div className="log-view" ref="logView">
           {this.state.loadingTop && loading === 0 ? <div className="header-loading"><i className="icon icon-large loading loading-bottom"></i></div>: ""}
-          {this.state.topLog === 1 ? <span>TOPO DO LOG<br></br></span> : ""}
+          {this.state.topLog === 1 && <span>TOPO DO LOG<br></br></span>}
           <div className="scroll-infinity">
             {this.state.logdata}
           </div>
