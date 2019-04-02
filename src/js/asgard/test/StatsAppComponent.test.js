@@ -15,7 +15,7 @@ import StatsAppStore from "../stores/StatsAppStore";
 import StatsAppActions from "../actions/StatsAppActions";
 import StatsAppEvents from "../events/StatsAppEvents";
 
-let teste;
+let nameId;
 
 describe("AppPageComponent", function () {
   before(function (done) {
@@ -90,7 +90,7 @@ describe("request applications and groups", function () {
   });
 
   before(function () {
-    this.component = shallow(<StatsAppComponent app={teste}/>);
+    this.component = shallow(<StatsAppComponent app={nameId}/>);
   });
 
   it("has the text in div", function () {
