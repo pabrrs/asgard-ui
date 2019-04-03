@@ -66,9 +66,14 @@ var ConfigsComponent = React.createClass({
     var helpMenuClassName = classNames("help-menu", {
       "active": this.state.helpMenuVisible
     });
-
+    let token;
+    try {
+      token = localStorage.getItem("auth_token");
+    } catch (e) {
+      console.log();
+    }
     return (
-      <div className={helpMenuClassName}
+      <div className={`${helpMenuClassName} ${token === "" && "hidden-config"}`}
           onClick={this.toggleHelpMenu}>
         <i className="icon icon-mini settings"></i>
         <span className="caret"></span>
