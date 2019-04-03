@@ -48,9 +48,6 @@ describe("AppPageComponent", function () {
     AppsActions.requestApp("/test-app-1");
   });
 
-  // after(function () {
-  //   this.component.instance().componentWillUnmount();
-  // });
 });
 
 var server = config.localTestserverURI;
@@ -77,15 +74,15 @@ describe("request applications and groups", function () {
     StatsAppActions.requestStats("/captura");
   });
 
-  it("if user have type", function () {
+  it("if stats have type", function () {
     expect(StatsAppStore.stats.type).to.equal('ASGARD');
   });
 
-  it("if user have type", function () {
+  it("if stats have type", function () {
     expect(StatsAppStore.stats.ram_pct).to.equal('0');
   });
 
-  it("if user have cpu pct", function () {
+  it("if stats have cpu pct", function () {
     expect(StatsAppStore.stats.cpu_pct).to.equal('0');
   });
 
@@ -98,6 +95,6 @@ describe("request applications and groups", function () {
 			.find("div")
       .at(0)
       .text()
-    ).to.equal("Resources application Refresh");
+    ).to.equal("Resource Usage Refresh");
   });
 });

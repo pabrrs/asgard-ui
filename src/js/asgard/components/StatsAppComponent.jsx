@@ -1,6 +1,5 @@
 import React from "react/addons";
 import classNames from "classnames";
-import OnClickOutsideMixin from "react-onclickoutside";
 import StatsAppStore from "../stores/StatsAppStore";
 import StatsAppAction from "../actions/StatsAppActions";
 import StatsAppEvents from "../events/StatsAppEvents";
@@ -11,10 +10,7 @@ var StatsAppComponent = React.createClass({
 
   contextTypes: {
     app: React.PropTypes.string,
-    router: React.PropTypes.func,
   },
-
-  mixins: [OnClickOutsideMixin],
 
   getInitialState: function () {
     var stats = StatsAppStore.stats;
@@ -23,13 +19,12 @@ var StatsAppComponent = React.createClass({
     : States.STATE_LOADING;
     return {
       stats: stats,
-      helpMenuVisible: false,
       fetchState: fetchState,
     };
   },
 
   componentWillMount: function () {
-    var props = this.props.app;
+    const props = this.props.app;
     StatsAppAction.requestStats(props);
     StatsAppStore.on(StatsAppEvents.CHANGE, this.onStatsChange);
   },
@@ -46,34 +41,53 @@ var StatsAppComponent = React.createClass({
     });
   },
 
-  handleClickOutside: function () {
-    this.setState({
-      helpMenuVisible: false
-    });
-  },
-
   toggleHelpMenu: function () {
     var props = this.props.app;
     StatsAppAction.requestStats(props);
     this.setState({
-      helpMenuVisible: !this.state.helpMenuVisible,
       stats: StatsAppStore.stats,
       fetchState: States.STATE_LOADING
     });
+  },
+  getRamUsage: function () {
+    const state = this.state;
+    if (state.stats) {
+      return state.stats.ram_pct;
+    }
+  },
+
+  getCpuUsage: function () {
+    const state = this.state;
+    if (state.stats) {
+      return state.stats.cpu_pct;
+    }
+  },
+
+  resourceUsage: function () {
+    const state = this.state;
+    const statsRender = state.fetchState === States.STATE_SUCCESS;
+
+    if (statsRender) {
+      return (
+        <div className="stats-resources">
+          <span className="resources-cpu"> CPU: {this.getCpuUsage()}%</span>
+          <span className="resources-ram"> RAM: {this.getRamUsage()}%</span>
+        </div>
+      );
+    }
+    else {
+      return (
+        <i className="icon icon-large loading loading-bottom"></i>
+      );
+    }
   },
 
   render: function () {
     var refreshMenuClassName = classNames("btn btn-lg btn-success");
     return (
       <div className="stats-app">
-      <h1>Resources application</h1>
-      {this.state.fetchState === States.STATE_SUCCESS && this.state.stats.ram_pct && this.state.stats.cpu_pct ?
-        <div className="stats-resources">
-          <span className="resources-cpu"> CPU Usage : {this.state.stats && this.state.stats.cpu_pct}%</span>
-          <span className="resources-ram"> RAM Usage : {this.state.stats && this.state.stats.ram_pct}%</span>
-        </div>:
-        <i className="icon icon-large loading loading-bottom"></i>
-      }
+      <h1>Resource Usage</h1>
+      {this.resourceUsage()}
       <div>
         <div className={`${refreshMenuClassName} refresh-stats`}
             onClick={this.toggleHelpMenu}>
