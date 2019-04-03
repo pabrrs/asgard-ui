@@ -103,7 +103,7 @@ var AccountComponent = React.createClass({
     return (
       <div className={helpMenuClassName} className = "accountPopover"
         onClick={() => this.toggleHelpMenu(myAccounts)}>
-        <span>
+        <span className="nameAccountCurrent">
           {current && current.name}
         </span>
         {accounts && accounts.length > 0 &&

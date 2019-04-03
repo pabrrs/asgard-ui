@@ -8,7 +8,7 @@ import States from "../../constants/States";
 var StatsAppComponent = React.createClass({
   displayName: "StatsAppComponent",
 
-  contextTypes: {
+  propTypes: {
     app: React.PropTypes.string,
   },
 
@@ -86,15 +86,15 @@ var StatsAppComponent = React.createClass({
     var refreshMenuClassName = classNames("btn btn-lg btn-success");
     return (
       <div className="stats-app">
-      <h1>Resource Usage</h1>
-      {this.resourceUsage()}
-      <div>
-        <div className={`${refreshMenuClassName} refresh-stats`}
-            onClick={this.toggleHelpMenu}>
-          <span className="refresh-stats-span"> Refresh</span>
+        <h1>Resource Usage</h1>
+        {this.resourceUsage()}
+        <div>
+          <div className={`${refreshMenuClassName} refresh-stats`}
+              onClick={this.toggleHelpMenu}>
+            <span className="refresh-stats-span">Refresh</span>
+          </div>
         </div>
       </div>
-    </div>
     );
   }
 });

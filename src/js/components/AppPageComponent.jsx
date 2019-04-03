@@ -1,8 +1,6 @@
 import React from "react/addons";
 import classNames from "classnames";
 import Mousetrap from "mousetrap";
-import PopoverComponent from "./PopoverComponent";
-
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
@@ -418,9 +416,6 @@ var AppPageComponent = React.createClass({
           </div>
       );
     }
-    var helpMenuClassName = classNames("help-menu", {
-      "active": this.state.helpMenuVisible
-    });
 
     return (
       <div>
@@ -429,7 +424,7 @@ var AppPageComponent = React.createClass({
           taskId={state.activeTaskId}
           volumeId={state.volumeId} />
         <div className="container-fluid">
-          <div className="page-header" style={{display: "flex", justifyContent: "space-between"}}>
+          <div className="page-header">
             <div>
               <h1>{name}</h1>
                 {this.getVolumeStatus()}

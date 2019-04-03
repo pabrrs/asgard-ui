@@ -75,15 +75,15 @@ describe("request applications and groups", function () {
   });
 
   it("if stats have type", function () {
-    expect(StatsAppStore.stats.type).to.equal('ASGARD');
+    expect(StatsAppStore.stats.type).to.equal("ASGARD");
   });
 
   it("if stats have type", function () {
-    expect(StatsAppStore.stats.ram_pct).to.equal('0');
+    expect(StatsAppStore.stats.ram_pct).to.equal("0");
   });
 
   it("if stats have cpu pct", function () {
-    expect(StatsAppStore.stats.cpu_pct).to.equal('0');
+    expect(StatsAppStore.stats.cpu_pct).to.equal("0");
   });
 
   before(function () {
@@ -95,6 +95,6 @@ describe("request applications and groups", function () {
 			.find("div")
       .at(0)
       .text()
-    ).to.equal("Resource Usage Refresh");
+    ).to.equal("Resource UsageRefresh");
   });
 });
