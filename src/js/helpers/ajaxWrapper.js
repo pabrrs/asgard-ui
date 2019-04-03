@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fetch from "isomorphic-fetch";
 import Util from "./Util";
 import PipelineStore from "../plugin/sdk/pipeline/PipelineStore";

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 import {expect} from "chai";
 import {shallow} from "enzyme";
