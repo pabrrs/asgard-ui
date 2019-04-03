@@ -92,6 +92,32 @@ var AccountComponent = React.createClass({
     });
   },
 
+  listAccounts: function () {
+    const accounts = this.state.listAccounts;
+    if (accounts) {
+      return (
+        <PopoverComponent visible={this.state.helpMenuVisible}
+            className="help-menu-dropdown">
+          <ul className="dropdown-menu">
+            {accounts && accounts.map(account => {
+              return (
+                <li key={account.id}>
+                  <a
+                    onClick={() =>
+                    this.handleClickToken(account, accounts, current)}
+                  >
+                    {account.name}
+                  </a>
+                </li>
+              );
+            })
+            }
+          </ul>
+        </PopoverComponent>
+    );
+    }
+  },
+
   render: function () {
     const accounts = this.state.listAccounts;
     const myAccounts = this.state.users && this.state.users.accounts;
@@ -107,28 +133,9 @@ var AccountComponent = React.createClass({
           {current && current.name}
         </span>
         {accounts && accounts.length > 0 &&
-          <span className="caret"></span>
+          <span className="caret align-icon"></span>
         }
-        {accounts && accounts.length > 0 &&
-          <PopoverComponent visible={this.state.helpMenuVisible}
-              className="help-menu-dropdown">
-            <ul className="dropdown-menu">
-              {accounts && accounts.map(account => {
-                return (
-                  <li key={account.id}>
-                    <a
-                      onClick={() =>
-                      this.handleClickToken(account, accounts, current)}
-                    >
-                      {account.name}
-                    </a>
-                  </li>
-                );
-              })
-              }
-            </ul>
-          </PopoverComponent>
-        }
+        {this.listAccounts()}
       </div>
     );
   }
