@@ -80,7 +80,7 @@ describe("request applications and groups", function () {
     expect(StatsAppStore.stats.type).to.equal("ASGARD");
   });
 
-  it("if stats have type", function () {
+  it("if stats have cpu ram", function () {
     expect(StatsAppStore.stats.ram_pct).to.equal("0");
   });
 

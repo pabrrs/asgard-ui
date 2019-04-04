@@ -85,11 +85,6 @@ var ConfigsComponent = React.createClass({
                 User: {user && user.name}
               </span>
             </li>
-            {/* <li>
-              <a>
-                Configurações
-              </a>
-            </li> */}
             <li>
               <a
                 onClick={() => this.disconnectUser()}
