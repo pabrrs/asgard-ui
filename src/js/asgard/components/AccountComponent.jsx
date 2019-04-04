@@ -26,7 +26,7 @@ var AccountComponent = React.createClass({
     var accountList = UserStore.users.accounts;
     return {
       users: users,
-      helpMenuVisible: false,
+      profileMenuVisible: false,
       collapse: false,
       currentAccount: currents,
       listAccounts : accountList,
@@ -61,13 +61,13 @@ var AccountComponent = React.createClass({
 
   handleClickOutside: function () {
     this.setState({
-      helpMenuVisible: false
+      profileMenuVisible: false
     });
   },
 
   toggleHelpMenu: function () {
     this.setState({
-      helpMenuVisible: !this.state.helpMenuVisible,
+      profileMenuVisible: !this.state.profileMenuVisible,
     });
   },
 
@@ -96,7 +96,7 @@ var AccountComponent = React.createClass({
     const accounts = this.state.listAccounts;
     if (accounts) {
       return (
-        <PopoverComponent visible={this.state.helpMenuVisible}
+        <PopoverComponent visible={this.state.profileMenuVisible}
             className="help-menu-dropdown">
           <ul className="dropdown-menu">
             {accounts && accounts.map(account => {
