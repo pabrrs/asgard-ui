@@ -77,7 +77,8 @@ var StatsAppComponent = React.createClass({
         <div className="stats-resources">
           <span className="resources-cpu"> CPU: {this.getCpuUsage()}%</span>
           <span className="resources-ram"> RAM: {this.getRamUsage()}%</span>
-          <span className="resources-cpu"> CPU THR: {this.getCpuThrUsage()}%</span>
+          <span className="resources-cpu"> CPU THR:
+            {this.getCpuThrUsage()}%</span>
         </div>
       );
     }
@@ -92,8 +93,10 @@ var StatsAppComponent = React.createClass({
     var refreshMenuClassName = classNames("btn btn-lg btn-success");
     return (
       <div className="stats-app">
-        <h1 className="title-stats">Resource Usage</h1>
-        <h2 className="subTitle-stats">AVG - 60 min</h2>
+        <div>
+          <h1 className="title-stats">Resource Usage(AVG:60 min)</h1>
+          {/* <h2 className="subTitle-stats"></h2> */}
+        </div>
         {this.resourceUsage()}
         <div>
           <div className={`${refreshMenuClassName} refresh-stats`}

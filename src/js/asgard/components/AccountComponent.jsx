@@ -122,7 +122,6 @@ var AccountComponent = React.createClass({
   },
 
   render: function () {
-    const accounts = this.state.listAccounts;
     const myAccounts = this.state.users && this.state.users.accounts;
     const current = this.state.currentAccount;
     var helpMenuClassName = classNames("help-menu", {

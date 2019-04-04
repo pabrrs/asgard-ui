@@ -63,6 +63,7 @@ describe("request applications and groups", function () {
         errors: {},
         cpu_pct: "0",
         ram_pct: "0",
+        cpu_thr_pct: "0",
       },
     };
 
@@ -85,6 +86,10 @@ describe("request applications and groups", function () {
 
   it("if stats have cpu pct", function () {
     expect(StatsAppStore.stats.cpu_pct).to.equal("0");
+  });
+
+  it("if stats have cpu thr pct", function () {
+    expect(StatsAppStore.stats.cpu_thr_pct).to.equal("0");
   });
 
   before(function () {
