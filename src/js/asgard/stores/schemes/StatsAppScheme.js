@@ -5,7 +5,8 @@ const StatsAppScheme = {
   type: null,
   errors: {},
   cpu_pct: null,
-  ram_pct: null
+  ram_pct: null,
+  cpu_thr_pct: null,
 };
 
 export default Util.deepFreeze(StatsAppScheme);

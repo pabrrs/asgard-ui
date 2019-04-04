@@ -55,11 +55,16 @@ var StatsAppComponent = React.createClass({
       return state.stats.ram_pct;
     }
   },
-
   getCpuUsage: function () {
     const state = this.state;
     if (state.stats) {
       return state.stats.cpu_pct;
+    }
+  },
+  getCpuThrUsage: function () {
+    const state = this.state;
+    if (state.stats) {
+      return state.stats.cpu_thr_pct;
     }
   },
 
@@ -72,6 +77,7 @@ var StatsAppComponent = React.createClass({
         <div className="stats-resources">
           <span className="resources-cpu"> CPU: {this.getCpuUsage()}%</span>
           <span className="resources-ram"> RAM: {this.getRamUsage()}%</span>
+          <span className="resources-cpu"> CPU THR: {this.getCpuThrUsage()}%</span>
         </div>
       );
     }
@@ -86,7 +92,8 @@ var StatsAppComponent = React.createClass({
     var refreshMenuClassName = classNames("btn btn-lg btn-success");
     return (
       <div className="stats-app">
-        <h1>Resource Usage</h1>
+        <h1 className="title-stats">Resource Usage</h1>
+        <h2 className="subTitle-stats">AVG - 60 min</h2>
         {this.resourceUsage()}
         <div>
           <div className={`${refreshMenuClassName} refresh-stats`}
