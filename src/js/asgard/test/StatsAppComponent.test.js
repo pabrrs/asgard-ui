@@ -101,6 +101,6 @@ describe("request applications and groups", function () {
 			.find("div")
       .at(0)
       .text()
-    ).to.equal("Resource UsageAVG - 60 minRefresh");
+    ).to.equal("Resource Usage(AVG:60 min)Refresh");
   });
 });
