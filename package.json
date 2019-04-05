@@ -2,7 +2,7 @@
   "name": "marathon-ui",
   "version": "1.3.0",
   "engines": {
-    "node": "5.8.0"
+    "node": "8.12.0"
   },
   "description": "The web UI for Mesosphere's Marathon.",
   "main": "dist/main.js",
@@ -68,8 +68,8 @@
     "istanbul-coveralls": "^1.0.3",
     "jsdom": "^6.5.1",
     "json-loader": "^0.5.2",
-    "mocha": "4.0.0",
-    "mocha-teamcity-reporter": "0.0.4",
+    "mocha": "^5.0.2",
+    "mocha-teamcity-reporter": ">=2.0.0",
     "nock": "^3.4.0",
     "sinon": "^1.12.2",
     "source-map-loader": "^0.1.5",
