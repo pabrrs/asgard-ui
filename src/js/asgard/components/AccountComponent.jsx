@@ -92,7 +92,7 @@ var AccountComponent = React.createClass({
     });
   },
 
-  listAccounts: function () {
+  listAccounts: function (current) {
     const accounts = this.state.listAccounts;
     if (accounts && accounts.length > 0) {
       return (
@@ -134,7 +134,7 @@ var AccountComponent = React.createClass({
         <span className="nameAccountCurrent">
           {current && current.name}
         </span>
-          {this.listAccounts()}
+          {this.listAccounts(current)}
       </div>
     );
   }
