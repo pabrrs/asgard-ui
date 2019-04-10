@@ -1,6 +1,5 @@
 version: 2.1
-#orbs:
-#  codecov: codecov/codecov@1.0.2
+
 jobs:
   test:
     docker:
@@ -9,12 +8,17 @@ jobs:
       - checkout
       - run:
           name: Install package.json
-          command: npm install --dev
+          command: npm install
       - run:
           name: Run All
-          command: npm run test
-          #      - codecov/upload:
-          #file: .coverage
+          command: ./node_modules/.bin/nyc npm test
+      - run:
+          name: Cover
+          command: ./node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov
+      - run:
+          when: on_success
+          command: ./node_modules/.bin/codecov
+
 
 workflows:
   version: 2
