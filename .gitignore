@@ -18,3 +18,9 @@ target/
 dist/
 src/js/config/config.dev.js
 *.sw[p|o]
+
+#nyc
+.nyc_output/*
+
+#cover
+coverage.lcov
