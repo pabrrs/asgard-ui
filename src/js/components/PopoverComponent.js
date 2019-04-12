@@ -13,9 +13,10 @@ var PopoverComponent = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     className: React.PropTypes.string,
+    dropdownApps: React.PropTypes.bool,
     onMouseEnter: React.PropTypes.func,
     onMouseLeave: React.PropTypes.func,
-    visible: React.PropTypes.bool
+    visible: React.PropTypes.bool,
   },
 
   getInitialState: function () {
@@ -72,7 +73,7 @@ var PopoverComponent = React.createClass({
 
     return (
       <div className={className} ref="component">
-        <div className="content"
+        <div className={`content ${props.dropdownApps && "transformDropdown" }`}
           onMouseEnter={props.onMouseEnter}
           onMouseLeave={props.onMouseLeave}
           ref="content">

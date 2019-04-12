@@ -26,7 +26,7 @@ var AccountComponent = React.createClass({
     var accountList = UserStore.users.accounts;
     return {
       users: users,
-      helpMenuVisible: false,
+      profileMenuVisible: false,
       collapse: false,
       currentAccount: currents,
       listAccounts : accountList,
@@ -61,13 +61,13 @@ var AccountComponent = React.createClass({
 
   handleClickOutside: function () {
     this.setState({
-      helpMenuVisible: false
+      profileMenuVisible: false
     });
   },
 
   toggleHelpMenu: function () {
     this.setState({
-      helpMenuVisible: !this.state.helpMenuVisible,
+      profileMenuVisible: !this.state.profileMenuVisible,
     });
   },
 
@@ -92,32 +92,21 @@ var AccountComponent = React.createClass({
     });
   },
 
-  render: function () {
+  listAccounts: function (current) {
     const accounts = this.state.listAccounts;
-    const myAccounts = this.state.users && this.state.users.accounts;
-    const current = this.state.currentAccount;
-    var helpMenuClassName = classNames("help-menu", {
-      "active": this.state.helpMenuVisible
-    });
-
-    return (
-      <div className={helpMenuClassName} className = "accountPopover"
-        onClick={() => this.toggleHelpMenu(myAccounts)}>
-        <span>
-          {current && current.name}
-        </span>
-        {accounts && accounts.length > 0 &&
-          <span className="caret"></span>
-        }
-        {accounts && accounts.length > 0 &&
-          <PopoverComponent visible={this.state.helpMenuVisible}
+    if (accounts && accounts.length > 0) {
+      return (
+        <div>
+          <span className="caret align-icon"></span>
+          <PopoverComponent visible={this.state.profileMenuVisible}
               className="help-menu-dropdown">
             <ul className="dropdown-menu">
               {accounts && accounts.map(account => {
                 return (
                   <li key={account.id}>
                     <a
-                      onClick={() => this.handleClickToken(account, accounts, current)}
+                      onClick={() =>
+                      this.handleClickToken(account, accounts, current)}
                     >
                       {account.name}
                     </a>
@@ -127,7 +116,25 @@ var AccountComponent = React.createClass({
               }
             </ul>
           </PopoverComponent>
-        }
+        </div>
+    );
+    }
+  },
+
+  render: function () {
+    const myAccounts = this.state.users && this.state.users.accounts;
+    const current = this.state.currentAccount;
+    var helpMenuClassName = classNames("help-menu", {
+      "active": this.state.helpMenuVisible
+    });
+
+    return (
+      <div className={helpMenuClassName} className = "accountPopover"
+        onClick={() => this.toggleHelpMenu(myAccounts)}>
+        <span className="nameAccountCurrent">
+          {current && current.name}
+        </span>
+          {this.listAccounts(current)}
       </div>
     );
   }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fetch from "isomorphic-fetch";
 import Util from "./Util";
 import PipelineStore from "../plugin/sdk/pipeline/PipelineStore";
@@ -49,6 +50,7 @@ var ajaxWrapper = function (opts = {}) {
           : null
       });
     }
+
     const currentHeaders = options.headers;
     try {
       var token = localStorage.getItem("auth_token");
