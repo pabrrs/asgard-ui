@@ -10,13 +10,15 @@ import InfoActions from "../../js/actions/InfoActions";
 import InfoEvents from "../../js/events/InfoEvents";
 import InfoStore from "../../js/stores/InfoStore";
 import ObjectDlComponent from "../../js/components/ObjectDlComponent";
+import AppDispatcher from "../../js/AppDispatcher";
 
 import config from "../../js/config/config";
 
 describe("About Modal", function () {
-
+  var info;
+  var component;
   before(function (done) {
-    var info = {
+    info = {
       "version": "1.2.3",
       "frameworkId": "framework1",
       "leader": "leader1.dcos.io",
@@ -33,37 +35,36 @@ describe("About Modal", function () {
     nock(config.apiURL)
       .get("/v2/info")
       .reply(200, info);
-
+    
     InfoStore.once(InfoEvents.CHANGE, () => {
-      this.component = shallow(<AboutModalComponent onDestroy={_.noop} />);
-      this.nodes = {
-        modalTitleText: this.component.find(".modal-title").text(),
-        modalBodyText: this.component.find(".modal-body").text(),
-        objectDlComponents: this.component.find(ObjectDlComponent)
-      };
+      component = shallow(<AboutModalComponent destroy={_.noop} />);
       done();
     });
-    InfoActions.requestInfo();
+
+    AppDispatcher.dispatch({
+      actionType: InfoEvents.REQUEST,
+      data: {body: info},
+    });
   });
 
   after(function () {
-    this.component.instance().componentWillUnmount();
+    component.instance().componentWillUnmount();
   });
 
   it("displays the current Marathon version", function () {
-    expect(this.nodes.modalTitleText).to.equal("Version 1.2.3");
+    expect(component.find(".modal-title").text()).to.equal("Version 1.2.3");
   });
 
   it("displays the current framework id", function () {
-    expect(this.nodes.modalBodyText).to.contain("framework1");
+    expect(component.find(".modal-body").text()).to.contain("framework1");
   });
 
   it("displays the current leader", function () {
-    expect(this.nodes.modalBodyText).to.contain("leader1.dcos.io");
+    expect(component.find(".modal-body").text()).to.contain("leader1.dcos.io");
   });
 
   it("displays the fields in the marathon config", function () {
-    var objectDlComponent = this.nodes.objectDlComponents.first();
+    var objectDlComponent = component.find(ObjectDlComponent).first();
     var props = objectDlComponent.first().props().object;
     expect(props).to.deep.equal({
       "marathon_field_1": "mf1",
@@ -72,7 +73,7 @@ describe("About Modal", function () {
   });
 
   it("displays the fields in the zookeeper config", function () {
-    var objectDlComponent = this.nodes.objectDlComponents.at(1);
+    var objectDlComponent = component.find(ObjectDlComponent).at(1);
     var props = objectDlComponent.first().props().object;
     expect(props).to.deep.equal({
       "zookeeper_field_1": "zk1",

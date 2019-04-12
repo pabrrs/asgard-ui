@@ -1,4 +1,4 @@
-FROM node:5.4.1
+FROM node:8.12.0
 
 MAINTAINER Orlando Hohmeier <orlando@mesosphere.io>
 
