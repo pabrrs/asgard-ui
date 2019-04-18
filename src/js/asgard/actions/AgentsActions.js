@@ -5,40 +5,41 @@ import config from "../../config/config";
 import AgentsStore from "../stores/AgentsStore";
 
 var AgentsActions = {
-  requestAgents: function () {
+  requestAgents: function() {
     this.request({
       url: `${config.apiURL}agents/with-attrs?${AgentsStore.filter}`
     })
-      .success(function (agents) {
+      .success(function(agents) {
+        console.log("meu agents", agents);
         AppDispatcher.dispatch({
           actionType: SlaveEvents.REQUEST,
           data: agents
         });
       })
-      .error(function (error) {
+      .error(function(error) {
         AppDispatcher.dispatch({
           actionType: SlaveEvents.REQUEST_ERROR,
           data: error
         });
       });
   },
-  setFilter: function (value) {
+  setFilter: function(value) {
     AppDispatcher.dispatch({
       actionType: SlaveEvents.FILTER,
       data: value
     });
   },
-  requestAgentsApps: function (id) {
+  requestAgentsApps: function(id) {
     this.request({
       url: `${config.apiURL}agents/${id}/apps`
     })
-      .success(function (agents) {
+      .success(function(agents) {
         AppDispatcher.dispatch({
           actionType: SlaveEvents.REQUEST,
           data: agents
         });
       })
-      .error(function (error) {
+      .error(function(error) {
         AppDispatcher.dispatch({
           actionType: SlaveEvents.REQUEST_ERROR,
           data: error

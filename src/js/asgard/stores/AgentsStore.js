@@ -1,22 +1,31 @@
-import {EventEmitter} from "events";
+import { EventEmitter } from "events";
 
 import AppDispatcher from "../../AppDispatcher";
 import AppsStore from "../../stores/AppsStore";
 import AgentsEvents from "../events/AgentsEvents";
 import AgentsScheme from "./schemes/AgentsScheme";
 import Util from "../../helpers/Util";
+import TotalStatsApp from "./schemes/TotalStatsApp";
 
 const storeData = {
   agents: [],
+  stats: [],
   filter: "",
-  total: "",
+  total: ""
 };
 
 function processAgents(agents) {
-  return agents.agents.map(function (agent) {
+  console.log("meu agents processado", agents);
+  return agents.agents.map(function(agent) {
     agent = Util.extendObject(AgentsScheme, agent);
     return agent;
   });
+}
+
+function processStats(stats) {
+  console.log("meu stats", stats);
+  const stat = Util.extendObject(TotalStatsApp, stat);
+  return stat;
 }
 
 var AgentsStore = Util.extendObject(EventEmitter.prototype, {
@@ -28,10 +37,13 @@ var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   },
   get total() {
     return Util.deepCopy(storeData.total);
+  },
+  get stats() {
+    return Util.deepCopy(storeData.stats);
   }
 });
 
-AppsStore.on(AgentsEvents.CHANGE, function () {
+AppsStore.on(AgentsEvents.CHANGE, function() {
   storeData.agents.forEach(deployment => {
     detectIsWaitingForUserAction(deployment);
   });
@@ -39,11 +51,12 @@ AppsStore.on(AgentsEvents.CHANGE, function () {
   AgentsStore.emit(AgentsEvents.CHANGE);
 });
 
-AppDispatcher.register(function (action) {
+AppDispatcher.register(function(action) {
   switch (action.actionType) {
     case AgentsEvents.REQUEST:
       storeData.agents = processAgents(action.data.body);
       storeData.total = action.data.body;
+      storeData.stats = processStats(action.data.body);
       AgentsStore.emit(AgentsEvents.CHANGE);
       break;
     case AgentsEvents.FILTER:
@@ -58,8 +71,10 @@ AppDispatcher.register(function (action) {
       );
       break;
     case AgentsEvents.REVERT:
-      storeData.agents =
-        removeDeployment(storeData.agents, action.deploymentId);
+      storeData.agents = removeDeployment(
+        storeData.agents,
+        action.deploymentId
+      );
       AgentsStore.emit(AgentsEvents.CHANGE);
       break;
     case AgentsEvents.REVERT_ERROR:
