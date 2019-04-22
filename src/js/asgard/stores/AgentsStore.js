@@ -13,7 +13,6 @@ const storeData = {
 };
 
 function processAgents(agents) {
-  console.log("meu agents processado", agents);
   return agents.agents.map(function(agent) {
     agent = Util.extendObject(AgentsScheme, agent);
     return agent;

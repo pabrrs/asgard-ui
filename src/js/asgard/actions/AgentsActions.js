@@ -10,7 +10,6 @@ var AgentsActions = {
       url: `${config.apiURL}agents/with-attrs?${AgentsStore.filter}`
     })
       .success(function(agents) {
-        console.log("meu agents", agents);
         AppDispatcher.dispatch({
           actionType: SlaveEvents.REQUEST,
           data: agents
