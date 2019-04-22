@@ -26,9 +26,12 @@ describe("Agents component", function () {
     active: "null",
     type: "MESOS",
   };
+  var total = {
+    length: 0,
+  };
 
   before(function () {
-    this.component = shallow(<AgentsComponent model={model} />);
+    this.component = shallow(<AgentsComponent total={total} model={model} />);
   });
 
   it("has the correct agents hostname", function () {

@@ -84,12 +84,13 @@ var SlaveListComponent = React.createClass({
   getAgentsNodes: function() {
     var state = this.state;
     var sortKey = state.sortKey;
+    var length = state.length;
     return lazy(state.agents)
       .sortBy(function(agents) {
         return agents[sortKey];
       }, state.sortDescending)
       .map(function(agents) {
-        return <AgentsComponent key={agents.id} model={agents} />;
+        return <AgentsComponent total={length} key={agents.id} model={agents} />;
       })
       .value();
   },

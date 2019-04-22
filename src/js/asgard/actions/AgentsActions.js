@@ -28,7 +28,6 @@ var AgentsActions = {
       url: `${config.apiURL}agents/with-attrs?`
     })
       .success(function (agents) {
-        console.log("meu agents", agents.body.agents.length);
         AppDispatcher.dispatch({
           actionType: SlaveEvents.TOTAL,
           data: agents.body.agents.length

@@ -1,33 +1,38 @@
 /* eslint-disable camelcase */
 import {expect} from "chai";
 import {shallow} from "enzyme";
-import nock from "nock";
-import config from "../../../js/config/config";
-import AgentsStore from "../../asgard/stores/AgentsStore";
-import AgentsActions from "../../asgard/actions/AgentsActions";
-import AgentsEvents from "../../asgard/events/AgentsEvents";
+import React from "react/addons";
+import AgentsComponent from "../components/AgentsComponent";
 
-var server = config.localTestserverURI;
-config.apiURL = "http://" + server.address + ":" + server.port + "/";
+describe("Agents component", function () {
+  var model = {
+    hostname: "123",
+    id: "1" ,
+    version: "1.4.1",
+    total_apps: 2,
+    application: [],
+    port: 123,
+    used_resources: {cpus: "1", mem : "1"},
+    resources: {cpus: "1", mem : "1"},
+    stats : {ram_pct: "50.00", cpu_pct: "40.00"},
+    attributes: {"workload" : "general"},
+    active: "null",
+    type: "MESOS",
+  };
+  var total = 1;
 
-describe("request total apps", function () {
-  before(function (done) {
-    var nockResponse = {
-      agents: {
-        length: 10,
-      },
-    };
-
-    nock(config.apiURL)
-      .get("/agents/with-attrs?")
-      .query(true)
-      .reply(200, nockResponse);
-
-    AgentsStore.once(AgentsEvents.CHANGE, done);
-    AgentsActions.requestAgents();
+  before(function () {
+    this.component = shallow(<AgentsComponent total={total} model={model} />);
   });
 
-  it("if have total apps", function() {
-    expect(AgentsStore.length).to.equal(10);
+  it("has the correct totalApp", function () {
+    expect(this.component
+      .find("tr")
+      .first()
+      .find("span")
+      .at(0)
+      .text()
+    ).to.equal('1');
   });
+
 });
