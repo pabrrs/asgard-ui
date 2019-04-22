@@ -10,7 +10,6 @@ const storeData = {
   agents: [],
   filter: "",
   total: "",
-  length: 0,
 };
 
 function processAgents(agents) {
@@ -31,9 +30,6 @@ var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   get total() {
     return Util.deepCopy(storeData.total);
   },
-  get length() {
-    return Util.deepCopy(storeData.length);
-  }
 });
 
 AppsStore.on(AgentsEvents.CHANGE, function() {
@@ -45,10 +41,6 @@ AppDispatcher.register(function(action) {
     case AgentsEvents.REQUEST:
       storeData.agents = processAgents(action.data.body);
       storeData.total = action.data.body;
-      storeData.length = action.data.body.agents.length;
-      AgentsStore.emit(AgentsEvents.CHANGE);
-      break;
-    case AgentsEvents.TOTAL:
       storeData.length = action.data.body.agents.length;
       AgentsStore.emit(AgentsEvents.CHANGE);
       break;
