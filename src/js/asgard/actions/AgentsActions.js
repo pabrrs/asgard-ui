@@ -23,6 +23,24 @@ var AgentsActions = {
         });
       });
   },
+  requestTotalApps: function () {
+    this.request({
+      url: `${config.apiURL}agents/with-attrs?`
+    })
+      .success(function (agents) {
+        console.log("meu agents", agents.body.agents.length);
+        AppDispatcher.dispatch({
+          actionType: SlaveEvents.TOTAL,
+          data: agents.body.agents.length
+        });
+      })
+      .error(function(error) {
+        AppDispatcher.dispatch({
+          actionType: SlaveEvents.REQUEST_ERROR,
+          data: error
+        });
+      });
+  },
   setFilter: function(value) {
     AppDispatcher.dispatch({
       actionType: SlaveEvents.FILTER,

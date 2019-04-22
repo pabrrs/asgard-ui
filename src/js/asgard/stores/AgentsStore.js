@@ -5,13 +5,12 @@ import AppsStore from "../../stores/AppsStore";
 import AgentsEvents from "../events/AgentsEvents";
 import AgentsScheme from "./schemes/AgentsScheme";
 import Util from "../../helpers/Util";
-import TotalStatsApp from "./schemes/TotalStatsApp";
 
 const storeData = {
   agents: [],
-  stats: [],
   filter: "",
-  total: ""
+  total: "",
+  length: 0,
 };
 
 function processAgents(agents) {
@@ -20,12 +19,6 @@ function processAgents(agents) {
     agent = Util.extendObject(AgentsScheme, agent);
     return agent;
   });
-}
-
-function processStats(stats) {
-  console.log("meu stats", stats);
-  const stat = Util.extendObject(TotalStatsApp, stat);
-  return stat;
 }
 
 var AgentsStore = Util.extendObject(EventEmitter.prototype, {
@@ -38,16 +31,12 @@ var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   get total() {
     return Util.deepCopy(storeData.total);
   },
-  get stats() {
-    return Util.deepCopy(storeData.stats);
+  get length() {
+    return Util.deepCopy(storeData.length);
   }
 });
 
 AppsStore.on(AgentsEvents.CHANGE, function() {
-  storeData.agents.forEach(deployment => {
-    detectIsWaitingForUserAction(deployment);
-  });
-
   AgentsStore.emit(AgentsEvents.CHANGE);
 });
 
@@ -56,7 +45,11 @@ AppDispatcher.register(function(action) {
     case AgentsEvents.REQUEST:
       storeData.agents = processAgents(action.data.body);
       storeData.total = action.data.body;
-      storeData.stats = processStats(action.data.body);
+      storeData.length = action.data.body.agents.length;
+      AgentsStore.emit(AgentsEvents.CHANGE);
+      break;
+    case AgentsEvents.TOTAL:
+      storeData.length = action.data.body.agents.length;
       AgentsStore.emit(AgentsEvents.CHANGE);
       break;
     case AgentsEvents.FILTER:

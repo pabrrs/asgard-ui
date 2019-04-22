@@ -15,6 +15,7 @@ var SlaveListComponent = React.createClass({
   getInitialState: function() {
     var agents = AgentsStore.agents;
     var total = AgentsStore.total;
+    var totalApps = AgentsStore.length;
     var fetchState =
       agents.length > 0 ? States.STATE_SUCCESS : States.STATE_LOADING;
     return {
@@ -24,7 +25,8 @@ var SlaveListComponent = React.createClass({
       filterText: "",
       activated: false,
       focused: false,
-      total: total
+      total: total,
+      length: totalApps,
     };
   },
   componentWillMount: function() {
@@ -42,7 +44,8 @@ var SlaveListComponent = React.createClass({
     this.setState({
       agents: AgentsStore.agents,
       total: AgentsStore.total,
-      fetchState: States.STATE_SUCCESS
+      fetchState: States.STATE_SUCCESS,
+      length: AgentsStore.agents.length,
     });
   },
   getInlineDialog: function() {
@@ -141,7 +144,7 @@ var SlaveListComponent = React.createClass({
   render: function() {
     var totalUsedCpu = this.state.total.stats && this.state.total.stats.cpu_pct;
     var totalUsedRam = this.state.total.stats && this.state.total.stats.ram_pct;
-    var totalAgents = this.state.agents.length;
+    var totalAgents = this.state.length;
 
     var searchIconClassSet = classNames("icon ion-search", {
       clickable: this.state.query !== ""
