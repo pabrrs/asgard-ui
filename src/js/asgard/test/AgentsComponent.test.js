@@ -26,9 +26,7 @@ describe("Agents component", function () {
     active: "null",
     type: "MESOS",
   };
-  var total = {
-    length: 0,
-  };
+  var total = 2;
 
   before(function () {
     this.component = shallow(<AgentsComponent total={total} model={model} />);
@@ -44,6 +42,17 @@ describe("Agents component", function () {
     ).to.equal("123");
   });
 
+  it("has the correct totalApp", function () {
+    expect(
+      this.component
+        .find("tr")
+        .first()
+        .find("span")
+        .at(0)
+        .text()
+    ).to.equal('2');
+  });
+  
   it("has the correct totalapps", function () {
     expect(this.component
       .find("td")
@@ -112,5 +121,7 @@ describe("Agents component", function () {
         .text()
       ).to.equal("workload:general");
     });
+
+
   });
 });
