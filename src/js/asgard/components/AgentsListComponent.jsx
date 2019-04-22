@@ -81,27 +81,27 @@ var SlaveListComponent = React.createClass({
     }
     return null;
   },
-  getAgentsNodes: function() {
+  getAgentsNodes: function () {
     var state = this.state;
     var sortKey = state.sortKey;
     var length = state.length;
     return lazy(state.agents)
-      .sortBy(function(agents) {
+      .sortBy(function (agents) {
         return agents[sortKey];
       }, state.sortDescending)
-      .map(function(agents) {
+      .map(function (agents) {
         return <AgentsComponent total={length} key={agents.id} model={agents} />;
       })
       .value();
   },
 
-  handleSubmit: function(event) {
+  handleSubmit: function (event) {
     event.preventDefault();
     var filterText = this.state.filterText;
     var changeFilter = ConcatFilter.format(filterText);
     AgentsActions.setFilter(changeFilter);
   },
-  requestAgents: function() {
+  requestAgents: function () {
     AgentsActions.requestAgents();
   },
   handleKeyDown: function(event) {
