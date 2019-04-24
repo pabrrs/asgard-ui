@@ -12,12 +12,11 @@ import ConcatFilter from "../helpers/concatFilters";
 var SlaveListComponent = React.createClass({
   displayName: "AgentsListComponent",
 
-  getInitialState: function () {
+  getInitialState: function() {
     var agents = AgentsStore.agents;
     var total = AgentsStore.total;
-    var fetchState = agents.length > 0
-    ? States.STATE_SUCCESS
-    : States.STATE_LOADING;
+    var fetchState =
+      agents.length > 0 ? States.STATE_SUCCESS : States.STATE_LOADING;
     return {
       agents: agents,
       fetchState: fetchState,
@@ -25,35 +24,37 @@ var SlaveListComponent = React.createClass({
       filterText: "",
       activated: false,
       focused: false,
-      total : total,
+      total: total,
+      sortKey: "hostname",
+      sortDescending: false
     };
   },
-  componentWillMount: function () {
+  componentWillMount: function() {
     AgentsActions.requestAgents();
     AgentsStore.on(AgentsEvents.CHANGE, this.onAgentsChange);
     AgentsStore.on(AgentsEvents.FILTER, this.requestAgents);
   },
 
-  componentWillUnmount: function () {
-    AgentsStore.removeListener(AgentsEvents.CHANGE,
-      this.onAgentsChange);
+  componentWillUnmount: function() {
+    AgentsStore.removeListener(AgentsEvents.CHANGE, this.onAgentsChange);
     AgentsStore.removeListener(AgentsEvents.FILTER, this.requestAgents);
     AgentsActions.setFilter("");
   },
-  onAgentsChange: function () {
+  onAgentsChange: function() {
     this.setState({
       agents: AgentsStore.agents,
       total: AgentsStore.total,
       fetchState: States.STATE_SUCCESS
     });
   },
-  getInlineDialog: function () {
+  getInlineDialog: function() {
     var state = this.state;
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
-    var pageHasNoAgents = !pageIsLoading &&
-        state.agents.length === 0 &&
-        state.fetchState !== States.STATE_UNAUTHORIZED &&
-        state.fetchState !== States.STATE_FORBIDDEN;
+    var pageHasNoAgents =
+      !pageIsLoading &&
+      state.agents.length === 0 &&
+      state.fetchState !== States.STATE_UNAUTHORIZED &&
+      state.fetchState !== States.STATE_FORBIDDEN;
 
     if (pageIsLoading) {
       let message = "Please wait while agents are being retrieved";
@@ -62,7 +63,7 @@ var SlaveListComponent = React.createClass({
       return (
         <Centered>
           <div>
-            <i className="icon icon-large loading"></i>
+            <i className="icon icon-large loading" />
             <h3 className="h3">{title}</h3>
             <p className="muted">{message}</p>
           </div>
@@ -71,38 +72,52 @@ var SlaveListComponent = React.createClass({
     }
     if (pageHasNoAgents) {
       return (
-        <Centered title="No Agents"
-        message="Cluster Agents will be shown here" />
+        <Centered
+          title="No Agents"
+          message="Cluster Agents will be shown here"
+        />
       );
     }
     return null;
   },
-  getAgentsNodes: function () {
+  sortBy: function(sortKey) {
+    var state = this.state;
+
+    this.setState({
+      sortKey: sortKey,
+      sortDescending: state.sortKey === sortKey && !state.sortDescending
+    });
+  },
+  getAgentsNodes: function() {
     var state = this.state;
     var sortKey = state.sortKey;
+
     return lazy(state.agents)
-      .sortBy(function (agents) {
-        return agents[sortKey];
+      .sortBy(function(agents) {
+        if (sortKey == "cpu_pct" || sortKey == "ram_pct") {
+          return agents.stats[sortKey];
+        } else {
+          return agents[sortKey];
+        }
       }, state.sortDescending)
-      .map(function (agents) {
+      .map(function(agents) {
         return (
-          <AgentsComponent key={agents.id}
-          model={agents}/>
+          <AgentsComponent key={agents.id} sortKey={sortKey} model={agents} />
         );
       })
       .value();
   },
 
-  handleSubmit: function (event) {
+  handleSubmit: function(event) {
     event.preventDefault();
     var filterText = this.state.filterText;
     var changeFilter = ConcatFilter.format(filterText);
     AgentsActions.setFilter(changeFilter);
   },
-  requestAgents: function () {
+  requestAgents: function() {
     AgentsActions.requestAgents();
   },
-  handleKeyDown: function (event) {
+  handleKeyDown: function(event) {
     switch (event.key) {
       case "Escape":
         event.target.blur();
@@ -113,117 +128,175 @@ var SlaveListComponent = React.createClass({
         break;
     }
   },
-  focusInputGroup: function () {
+  focusInputGroup: function() {
     this.setState({
       focused: true,
       activated: true
     });
   },
-  handleFilterTextChange: function (event) {
+  handleFilterTextChange: function(event) {
     var filterText = event.target.value;
-    this.setState({filterText}, () => {
+    this.setState({ filterText }, () => {
       if (filterText == null || filterText === "") {
         this.handleClearFilterText();
       }
     });
   },
 
-  handleClick: function () {
-    this.setState({filterText: ""});
+  getCaret: function(sortKey) {
+    if (sortKey === this.state.sortKey) {
+      return <span className="caret" />;
+    }
+    return null;
+  },
+
+  handleClick: function() {
+    this.setState({ filterText: "" });
     AgentsActions.setFilter("");
     this.getInlineDialog();
   },
 
-  blurInputGroup: function () {
+  blurInputGroup: function() {
     this.setState({
       focused: false,
       activated: this.state.filterText !== ""
     });
   },
-  render: function () {
+  render: function() {
+    var state = this.state;
     var totalUsedCpu = this.state.total.stats && this.state.total.stats.cpu_pct;
     var totalUsedRam = this.state.total.stats && this.state.total.stats.ram_pct;
     var searchIconClassSet = classNames("icon ion-search", {
-      "clickable": this.state.query !== ""
+      clickable: this.state.query !== ""
     });
     var filterBoxClassSet = classNames({
       "input-group": true,
       "filter-box": true,
       "filter-box-activated": !!this.state.activated,
-      "space-margin" : true,
+      "space-margin": true
     });
+
+    var headerClassSet = classNames({
+      clickable: true,
+      dropup: !state.sortDescending
+    });
+    var hostnameClassSet = classNames("text-left name-cell", {
+      "cell-highlighted": state.sortKey === "hostname"
+    });
+    var total_appsClassSet = classNames("text-left name-cell", {
+      "cell-highlighted": state.sortKey === "total_apps"
+    });
+
+    var cpuClassSet = classNames("text-left cpu-cell", {
+      "cell-highlighted": state.sortKey === "cpu_pct"
+    });
+
+    var memClassSet = classNames("text-left ram-cell", {
+      "cell-highlighted": state.sortKey === "ram_pct"
+    });
+    var typeClassSet = classNames("text-left name-cell", {
+      "cell-highlighted": state.sortKey === "type"
+    });
+    var versionClassSet = classNames("text-left name-cell", {
+      "cell-highlighted": state.sortKey === "version"
+    });
+
     return (
-        <div >
-          <div className="sub-header-total">
-            <span className="used-total">
-              CPU: {totalUsedCpu} % -RAM: {totalUsedRam} %
+      <div>
+        <div className="sub-header-total">
+          <span className="used-total">
+            CPU: {totalUsedCpu} % -RAM: {totalUsedRam} %
+          </span>
+          <div className={`${filterBoxClassSet} search-input`}>
+            <span className="input-group-addon" />
+            <input
+              className="form-control"
+              onBlur={this.blurInputGroup}
+              onChange={this.handleFilterTextChange}
+              onFocus={this.focusInputGroup}
+              onKeyDown={this.handleKeyDown}
+              placeholder="Filter your agents"
+              type="text"
+              ref="filterText"
+              value={this.state.filterText}
+            />
+            <span className="input-group-addon search-icon-container">
+              <i className={searchIconClassSet} onClick={this.handleSubmit} />
             </span>
-            <div className={`${filterBoxClassSet} search-input`}>
-              <span className="input-group-addon" />
-              <input className="form-control"
-                onBlur={this.blurInputGroup}
-                onChange={this.handleFilterTextChange}
-                onFocus={this.focusInputGroup}
-                onKeyDown={this.handleKeyDown}
-                placeholder="Filter your agents"
-                type="text"
-                ref="filterText"
-                value={this.state.filterText} />
-              <span className="input-group-addon search-icon-container">
-                <i className={searchIconClassSet} onClick={this.handleSubmit} />
-              </span>
-            </div>
-            <button className="btn btn-xs btn-danger btn-settings button-filter"
-                onClick={this.handleClick}>
-              Clear filter
-            </button>
           </div>
+          <button
+            className="btn btn-xs btn-danger btn-settings button-filter"
+            onClick={this.handleClick}
+          >
+            Clear filter
+          </button>
+        </div>
         <table className="table deployments">
           <colgroup>
-            <col style={{width: "46%"}}/>
-            <col style={{width: "8%"}}/>
-            <col style={{width: "10%"}}/>
-            <col style={{width: "20%"}}/>
-            <col style={{width: "6%"}}/>
-            <col style={{width: "10%"}}/>
+            <col style={{ width: "46%" }} />
+            <col style={{ width: "8%" }} />
+            <col style={{ width: "12%" }} />
+            <col style={{ width: "18%" }} />
+            <col style={{ width: "6%" }} />
+            <col style={{ width: "10%" }} />
           </colgroup>
           <thead>
             <tr>
-              <th>
-                <span>
+              <th className={hostnameClassSet}>
+                <span
+                  onClick={this.sortBy.bind(null, "hostname")}
+                  className={headerClassSet}
+                >
                   Hostname
+                  {this.getCaret("hostname")}
                 </span>
               </th>
-              <th>
-                <span>
-                  Apps
+              <th className={total_appsClassSet}>
+                <span
+                  onClick={this.sortBy.bind(null, "total_apps")}
+                  className={headerClassSet}
+                >
+                  Apps {this.getCaret("total_apps")}
                 </span>
               </th>
-              <th>
-                <span >
-                  CPU(ocupado/total)
+              <th className={cpuClassSet}>
+                <span
+                  onClick={this.sortBy.bind(null, "cpu_pct")}
+                  className={headerClassSet}
+                >
+                  CPU(ocupado/total) {this.getCaret("cpu_pct")}
                 </span>
               </th>
-              <th>
-                <span>
+              <th className={memClassSet}>
+                <span
+                  onClick={this.sortBy.bind(null, "ram_pct")}
+                  className={headerClassSet}
+                >
                   RAM(ocupado/total)
+                  {this.getCaret("ram_pct")}
                 </span>
               </th>
-              <th>
-                <span>
+              <th className={typeClassSet}>
+                <span
+                  onClick={this.sortBy.bind(null, "type")}
+                  className={headerClassSet}
+                >
                   Type
+                  {this.getCaret("type")}
                 </span>
               </th>
-              <th>
-                <span>
+              <th className={versionClassSet}>
+                <span
+                  onClick={this.sortBy.bind(null, "version")}
+                  className={headerClassSet}
+                >
                   Agent Version
+                  {this.getCaret("version")}
                 </span>
               </th>
             </tr>
           </thead>
-          <tbody>
-            {this.getAgentsNodes()}
-          </tbody>
+          <tbody>{this.getAgentsNodes()}</tbody>
         </table>
         {this.getInlineDialog()}
       </div>
