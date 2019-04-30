@@ -6,6 +6,7 @@ import PageNotFoundComponent from "./components/PageNotFoundComponent";
 import TabPanesComponent from "./components/TabPanesComponent";
 import Marathon from "./components/Marathon";
 import config from "../config/config.js";
+import ReactDOM from 'react-dom';
 
 var routes = (
   <Route name="home" path="/" handler={Marathon}>
@@ -26,7 +27,7 @@ var routes = (
 
 function startApp() {
   Router.run(routes, function (Handler, state) {
-    React.render(
+    ReactDOM.render(
       <Handler state={state} />,
       document.getElementById("marathon")
     );
