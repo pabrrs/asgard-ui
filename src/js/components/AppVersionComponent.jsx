@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import highlight from "highlight.js";
 import {Link} from "react-router";
-import React from "react/addons";
+import React from "react";
 import url from "url";
 
 import AppsActions from "../actions/AppsActions";

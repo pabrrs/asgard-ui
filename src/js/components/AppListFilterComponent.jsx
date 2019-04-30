@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React from "react/addons";
+import React from "react";
 import Mousetrap from "mousetrap";
 
 import FilterTypes from "../constants/FilterTypes";

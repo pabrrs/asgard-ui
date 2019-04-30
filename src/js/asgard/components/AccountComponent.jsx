@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import classNames from "classnames";
 import PopoverComponent from "./PopoverComponent";
 import UserActions from "../actions/UserActions";

@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import classNames from "classnames";
 
 import DialogSeverity from "../constants/DialogSeverity";

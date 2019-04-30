@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React from "react/addons";
+import React from "react";
 import OnClickOutsideMixin from "react-onclickoutside";
 
 import AppActionsHandlerMixin from "../mixins/AppActionsHandlerMixin";

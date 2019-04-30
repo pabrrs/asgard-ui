@@ -3,7 +3,7 @@ import {shallow} from "enzyme";
 import nock from "nock";
 import _ from "underscore";
 
-import React from "react/addons";
+import React from "react";
 import AboutModalComponent
   from "../../js/components/modals/AboutModalComponent";
 import InfoActions from "../../js/actions/InfoActions";

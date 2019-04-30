@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 import PluginComponentEvents from "../events/PluginComponentEvents";
 import PluginComponentStore from "../stores/PluginComponentStore";

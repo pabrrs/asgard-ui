@@ -1,5 +1,5 @@
 import lazy from "lazy.js";
-import React from "react/addons";
+import React from "react";
 
 import AppsStore from "../stores/AppsStore";
 import AppsEvents from "../events/AppsEvents";

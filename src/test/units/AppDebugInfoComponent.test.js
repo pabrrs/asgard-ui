@@ -4,7 +4,7 @@ import nock from "nock";
 
 import config from "../../js/config/config";
 
-import React from "../../../node_modules/react/addons";
+import React from "../../../node_modules/react";
 import appScheme from "../../js/stores/schemes/appScheme";
 import AppsActions from "../../js/actions/AppsActions";
 import AppsStore from "../../js/stores/AppsStore";

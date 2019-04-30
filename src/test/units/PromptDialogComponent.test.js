@@ -2,7 +2,7 @@ import {expect} from "chai";
 import {mount} from "enzyme";
 import expectAsync from "./../helpers/expectAsync";
 
-import React from "react/addons";
+import React from "react";
 import DialogSeverity from "../../js/constants/DialogSeverity";
 import PromptDialogComponent from "../../js/components/PromptDialogComponent";
 

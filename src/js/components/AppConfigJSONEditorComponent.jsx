@@ -1,7 +1,7 @@
 import AceEditor from "react-ace";
 import "brace/mode/json";
 import "brace/theme/monokai";
-import React from "react/addons";
+import React from "react";
 
 import TooltipComponent from "../components/TooltipComponent";
 

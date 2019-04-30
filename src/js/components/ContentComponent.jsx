@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 import PropTypeUtil from "../helpers/PropTypeUtil";
 import SectionComponent from "../components/SectionComponent";

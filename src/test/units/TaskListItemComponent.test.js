@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import TaskListItemComponent from "../../js/components/TaskListItemComponent";
 
 describe("Task List Item component", function () {

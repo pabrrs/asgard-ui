@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import TimeFieldComponent from "../components/TimeFieldComponent";
 
 var TaskHealthComponent = React.createClass({

@@ -1,5 +1,5 @@
 import "babel-polyfill";
-import React from "react/addons";
+import React from "react";
 import Router, {Redirect, Route, NotFoundRoute} from "react-router";
 import AppPageComponent from "./components/AppPageComponent";
 import PageNotFoundComponent from "./components/PageNotFoundComponent";

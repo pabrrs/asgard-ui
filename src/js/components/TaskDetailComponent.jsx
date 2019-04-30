@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {Link} from "react-router";
 import objectPath from "object-path";
-import React from "react/addons";
+import React from "react";
 
 import AppsStore from "../stores/AppsStore";
 import AppVolumesListComponent from "../components/AppVolumesListComponent";

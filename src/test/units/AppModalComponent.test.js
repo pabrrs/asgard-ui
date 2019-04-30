@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import AppModalComponent from "../../js/components/modals/AppModalComponent";
 
 describe("App Modal", function () {

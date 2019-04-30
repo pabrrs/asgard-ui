@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import * as ShallowUtils from "./../helpers/ShallowUtils";
 
-import React from "react/addons";
+import React from "react";
 import BreadcrumbComponent from "../../js/components/BreadcrumbComponent";
 
 describe("BreadcrumbComponent", function () {

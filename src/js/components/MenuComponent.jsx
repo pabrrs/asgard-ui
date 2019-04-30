@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 import Util from "../helpers/Util";
 import PropTypeUtil from "../helpers/PropTypeUtil";

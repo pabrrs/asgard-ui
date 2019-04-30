@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React from "react/addons";
+import React from "react";
 
 var TabPaneComponent = React.createClass({
   displayName: "TabPaneComponent",

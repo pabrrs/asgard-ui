@@ -1,6 +1,6 @@
 import Util from "../helpers/Util";
 import classNames from "classnames";
-import React from "react/addons";
+import React from "react";
 
 function modalSizeClassName(size) {
   return (size == null) ? "" : "modal-" + size;

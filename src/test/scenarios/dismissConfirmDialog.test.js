@@ -2,7 +2,7 @@ import {expect} from "chai";
 import {mount} from "enzyme";
 import expectAsync from "./../helpers/expectAsync";
 
-import React from "react/addons";
+import React from "react";
 import DialogActions from "../../js/actions/DialogActions";
 import DialogEvents from "../../js/events/DialogEvents";
 import DialogStore from "../../js/stores/DialogStore";

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import Bridge from "../helpers/Bridge";
-import React from "react/addons";
+import React from "react";
 import config from "../config/config";
 import MarathonService from "../plugin/sdk/services/MarathonService";
 import DialogActions from "../actions/DialogActions";

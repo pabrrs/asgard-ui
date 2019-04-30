@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 import FilterTypes from "../constants/FilterTypes";
 import SidebarHealthFilterComponent

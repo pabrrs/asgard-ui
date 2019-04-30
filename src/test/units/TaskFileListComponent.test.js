@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import AppDispatcher from "../../js/AppDispatcher";
 import MesosStore from "../../js/stores/MesosStore";
 import MesosEvents from "../../js/events/MesosEvents";

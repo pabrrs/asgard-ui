@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import React from "react/addons";
+import React from "react";
 
 import PropTypeUtil from "../../js/helpers/PropTypeUtil";
 

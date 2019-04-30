@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {shallow, mount} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import AppDispatcher from "../../js/AppDispatcher";
 import AppsEvents from "../../js/events/AppsEvents";
 import AppListComponent from "../../js/components/AppListComponent";

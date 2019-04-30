@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {render} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import AppListItemComponent from "../../js/components/AppListItemComponent";
 
 describe("AppListItemComponent", function () {

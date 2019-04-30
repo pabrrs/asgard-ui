@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {render, shallow} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import LocalVolumesComponent
   from "../../js/components/LocalVolumesComponent.jsx";
 

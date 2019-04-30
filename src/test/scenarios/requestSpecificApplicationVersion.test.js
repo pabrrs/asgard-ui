@@ -5,7 +5,7 @@ import minimalAppFullConfig from "../fixtures/minimalAppFullConfig";
 
 import config from "../../js/config/config";
 
-import React from "react/addons";
+import React from "react";
 import AppVersionsActions from "../../js/actions/AppVersionsActions";
 import AppVersionsEvents from "../../js/events/AppVersionsEvents";
 import AppVersionsStore from "../../js/stores/AppVersionsStore";

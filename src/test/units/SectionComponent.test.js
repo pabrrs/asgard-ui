@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {mount} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 
 import SectionComponent from "../../js/components/SectionComponent";
 

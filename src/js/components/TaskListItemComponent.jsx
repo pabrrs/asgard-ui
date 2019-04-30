@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import objectPath from "object-path";
-import React from "react/addons";
+import React from "react";
 import Moment from "moment";
 
 import AppsStore from "../stores/AppsStore";

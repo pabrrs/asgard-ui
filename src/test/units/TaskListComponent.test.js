@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import States from "../../js/constants/States";
 import TaskListComponent from "../../js/components/TaskListComponent";
 import TaskListItemComponent from "../../js/components/TaskListItemComponent";

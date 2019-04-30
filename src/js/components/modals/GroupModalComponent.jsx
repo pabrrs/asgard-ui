@@ -1,5 +1,5 @@
 import classNames from "classnames";
-var React = require("react/addons");
+var React = require("react");
 
 import AppFormValidators from "../../stores/validators/AppFormValidators";
 import AppsActions from "../../actions/AppsActions";

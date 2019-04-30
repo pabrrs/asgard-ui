@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 import Bridge from "../helpers/Bridge";
 import config from "../config/config";

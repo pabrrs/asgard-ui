@@ -2,7 +2,7 @@ import {expect} from "chai";
 import {shallow} from "enzyme";
 import _ from "underscore";
 
-import React from "react/addons";
+import React from "react";
 
 import DeploymentComponent from "../../js/components/DeploymentComponent";
 

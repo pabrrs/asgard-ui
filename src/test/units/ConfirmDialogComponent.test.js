@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import DialogSeverity from "../../js/constants/DialogSeverity";
 import ConfirmDialoglComponent from "../../js/components/ConfirmDialoglComponent";
 

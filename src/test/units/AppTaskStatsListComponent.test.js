@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 
-import React from "../../../node_modules/react/addons";
+import React from "../../../node_modules/react";
 import Util from "../../js/helpers/Util";
 import appScheme from "../../js/stores/schemes/appScheme";
 import AppTaskStatsListComponent

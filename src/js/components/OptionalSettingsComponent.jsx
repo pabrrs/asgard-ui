@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 import FormActions from "../actions/FormActions";
 import FormGroupComponent from "../components/FormGroupComponent";

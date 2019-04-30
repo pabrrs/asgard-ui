@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 import AppFormErrorMessages from "../constants/AppFormErrorMessages";
 import FormActions from "../actions/FormActions";
