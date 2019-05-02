@@ -37,7 +37,7 @@ var GroupModalComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    var input = React.findDOMNode(this.refs.input);
+    var input = (this.refs.input);
     var valueLength = input.value.length;
     input.focus();
     input.setSelectionRange(valueLength, valueLength);

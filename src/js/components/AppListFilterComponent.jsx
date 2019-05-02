@@ -26,7 +26,7 @@ var AppListFilterComponent = React.createClass({
       if (this.getQueryParamValue("modal") != null) {
         return null;
       }
-      React.findDOMNode(this.refs.filterText).focus();
+      (this.refs.filterText).focus();
     }.bind(this), "keyup");
   },
 

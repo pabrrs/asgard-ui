@@ -41,8 +41,8 @@ var PopoverComponent = React.createClass({
       return;
     }
 
-    let componentNode = React.findDOMNode(this.refs.component);
-    let contentNode = React.findDOMNode(this.refs.content);
+    let componentNode = (this.refs.component);
+    let contentNode = (this.refs.content);
     let componentPosition = componentNode.getBoundingClientRect();
     let contentHeight = contentNode.clientHeight;
 

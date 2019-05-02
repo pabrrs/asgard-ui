@@ -23,7 +23,7 @@ var SidebarLabelsFilterDropdownComponent = React.createClass({
 
   componentDidUpdate: function () {
     if (this.state.isVisible) {
-      React.findDOMNode(this.refs.filterText).focus();
+      (this.refs.filterText).focus();
     }
   },
 

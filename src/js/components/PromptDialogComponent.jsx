@@ -27,13 +27,13 @@ var PromptDialogComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    var input = React.findDOMNode(this.refs.input);
+    var input = (this.refs.input);
     input.focus();
     input.select();
   },
 
   handleAccept: function () {
-    this.props.onAccept(React.findDOMNode(this.refs.input).value);
+    this.props.onAccept((this.refs.input).value);
   },
 
   handleKeyUp: function (event) {

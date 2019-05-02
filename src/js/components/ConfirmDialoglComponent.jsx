@@ -31,7 +31,7 @@ var ConfirmDialogComponent = React.createClass({
 
   componentDidMount: function () {
     if (this.props.data.severity === DialogSeverity.INFO) {
-      React.findDOMNode(this.refs.acceptButton).focus();
+      (this.refs.acceptButton).focus();
     }
   },
 
