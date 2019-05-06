@@ -150,19 +150,29 @@ var SlaveListComponent = React.createClass({
     return null;
   },
 
-  handleClick: function() {
-    this.setState({ filterText: "" });
+  handleClick: function () {
+    this.setState({filterText: ""});
     AgentsActions.setFilter("");
     this.getInlineDialog();
   },
 
-  blurInputGroup: function() {
+  blurInputGroup: function () {
     this.setState({
       focused: false,
       activated: this.state.filterText !== ""
     });
   },
-  render: function() {
+
+  getTdClasses: function (key) {
+    var sortKey = this.state.sortKey;
+
+    return classNames(
+      "overflow-ellipsis",
+      {"cell-highlighted": sortKey === key}
+    );
+  },
+
+  render: function () {
     var state = this.state;
     var totalUsedCpu = this.state.total.stats && this.state.total.stats.cpu_pct;
     var totalUsedRam = this.state.total.stats && this.state.total.stats.ram_pct;
@@ -179,26 +189,6 @@ var SlaveListComponent = React.createClass({
     var headerClassSet = classNames({
       clickable: true,
       dropup: !state.sortDescending
-    });
-    var hostnameClassSet = classNames("text-left name-cell", {
-      "cell-highlighted": state.sortKey === "hostname"
-    });
-    var total_appsClassSet = classNames("text-left name-cell", {
-      "cell-highlighted": state.sortKey === "total_apps"
-    });
-
-    var cpuClassSet = classNames("text-left cpu-cell", {
-      "cell-highlighted": state.sortKey === "cpu_pct"
-    });
-
-    var memClassSet = classNames("text-left ram-cell", {
-      "cell-highlighted": state.sortKey === "ram_pct"
-    });
-    var typeClassSet = classNames("text-left name-cell", {
-      "cell-highlighted": state.sortKey === "type"
-    });
-    var versionClassSet = classNames("text-left name-cell", {
-      "cell-highlighted": state.sortKey === "version"
     });
 
     return (
@@ -233,16 +223,16 @@ var SlaveListComponent = React.createClass({
         </div>
         <table className="table deployments">
           <colgroup>
-            <col style={{ width: "46%" }} />
-            <col style={{ width: "8%" }} />
-            <col style={{ width: "12%" }} />
-            <col style={{ width: "18%" }} />
-            <col style={{ width: "6%" }} />
-            <col style={{ width: "10%" }} />
+            <col style={{width: "46%"}} />
+            <col style={{width: "8%"}} />
+            <col style={{width: "12%"}} />
+            <col style={{width: "18%"}} />
+            <col style={{width: "6%"}} />
+            <col style={{width: "10%"}} />
           </colgroup>
           <thead>
             <tr>
-              <th className={hostnameClassSet}>
+              <th className={this.getTdClasses("hostname")}>
                 <span
                   onClick={this.sortBy.bind(null, "hostname")}
                   className={headerClassSet}
@@ -251,7 +241,7 @@ var SlaveListComponent = React.createClass({
                   {this.getCaret("hostname")}
                 </span>
               </th>
-              <th className={total_appsClassSet}>
+              <th className={this.getTdClasses("total_apps")}>
                 <span
                   onClick={this.sortBy.bind(null, "total_apps")}
                   className={headerClassSet}
@@ -259,7 +249,7 @@ var SlaveListComponent = React.createClass({
                   Apps {this.getCaret("total_apps")}
                 </span>
               </th>
-              <th className={cpuClassSet}>
+              <th className={this.getTdClasses("cpu_pct")}>
                 <span
                   onClick={this.sortBy.bind(null, "cpu_pct")}
                   className={headerClassSet}
@@ -267,7 +257,7 @@ var SlaveListComponent = React.createClass({
                   CPU(ocupado/total) {this.getCaret("cpu_pct")}
                 </span>
               </th>
-              <th className={memClassSet}>
+              <th className={this.getTdClasses("ram_pct")}>
                 <span
                   onClick={this.sortBy.bind(null, "ram_pct")}
                   className={headerClassSet}
@@ -276,7 +266,7 @@ var SlaveListComponent = React.createClass({
                   {this.getCaret("ram_pct")}
                 </span>
               </th>
-              <th className={typeClassSet}>
+              <th className={this.getTdClasses("type")}>
                 <span
                   onClick={this.sortBy.bind(null, "type")}
                   className={headerClassSet}
@@ -285,7 +275,7 @@ var SlaveListComponent = React.createClass({
                   {this.getCaret("type")}
                 </span>
               </th>
-              <th className={versionClassSet}>
+              <th className={this.getTdClasses("version")}>
                 <span
                   onClick={this.sortBy.bind(null, "version")}
                   className={headerClassSet}
