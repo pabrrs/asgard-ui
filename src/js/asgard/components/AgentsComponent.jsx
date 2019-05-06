@@ -6,22 +6,32 @@ var AgentsComponent = React.createClass({
   displayName: "AgentsComponent",
 
   propTypes: {
-    model: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired,
+    sortKey: React.PropTypes.any
   },
 
-  getInitialState: function() {
+  getInitialState: function () {
     return {
       loading: false,
       collapse: false
     };
   },
 
-  handleClick: function() {
-    this.setState({ collapse: !this.state.collapse });
+  handleClick: function () {
+    this.setState({collapse: !this.state.collapse});
   },
 
-  render: function() {
+  getTdClasses: function (key, classes) {
     var sortKey = this.props.sortKey;
+
+    return classNames(
+      "overflow-ellipsis",
+      classes,
+      {"cell-highlighted": sortKey === key}
+    );
+  },
+
+  render: function () {
     var model = this.props.model;
     var labels = this.props.model.attributes;
     if (labels == null || Object.keys(labels).length === 0) {
@@ -30,45 +40,11 @@ var AgentsComponent = React.createClass({
     var moreLabelClassName = classNames("badge more", {
       visible: Object.keys(model.attributes).length > 3
     });
-    var hostnameClassSet = classNames(
-      " overflow-ellipsis color-base text-left name-cell",
-      {
-        "cell-highlighted": sortKey === "hostname"
-      }
-    );
-    var total_appsClassSet = classNames(
-      "overflow-ellipsis col-totalapps1 text-left name-cell",
-      {
-        "cell-highlighted": sortKey === "total_apps"
-      }
-    );
 
-    var cpuClassSet = classNames(
-      "overflow-ellipsis col-totalapps2 text-left cpu-cell",
-      {
-        "cell-highlighted": sortKey === "cpu_pct"
-      }
-    );
-
-    var memClassSet = classNames("overflow-ellipsis text-left ram-cell", {
-      "cell-highlighted": sortKey === "ram_pct"
-    });
-    var typeClassSet = classNames(
-      "overflow-ellipsis col-type text-left name-cell",
-      {
-        "cell-highlighted": sortKey === "type"
-      }
-    );
-    var versionClassSet = classNames(
-      "overflow-ellipsis col-version text-left name-cell",
-      {
-        "cell-highlighted": sortKey === "version"
-      }
-    );
     return (
       <tr data-toggle="collapse" className="accordion-toggle">
         <td
-          className={hostnameClassSet}
+          className={this.getTdClasses("hostname", "color-base")}
           onClick={this.handleClick}
           title={model.hostname}
         >
@@ -90,7 +66,7 @@ var AgentsComponent = React.createClass({
                   return (
                     <a
                       href={`#/apps/${encodeURIComponent("/" + app.id)}`}
-                      style={{ fontSize: "16px" }}
+                      style={{fontSize: "16px"}}
                     >
                       {app.id}
                       <br />
@@ -101,21 +77,21 @@ var AgentsComponent = React.createClass({
             </td>
           )}
         </td>
-        <td className={total_appsClassSet} title={model.total_apps}>
+        <td className={this.getTdClasses("total_apps", "col-totalapps1")} title={model.total_apps}>
           {model.total_apps}
         </td>
-        <td className={cpuClassSet} title="">
+        <td className={this.getTdClasses("cpu_pct", "col-totalapps2")} title="">
           {model.used_resources.cpus}/{model.resources.cpus} - (
           {model.stats.cpu_pct} % )
         </td>
-        <td className={memClassSet} title="">
+        <td className={this.getTdClasses("ram_pct","")} title="">
           {model.used_resources.mem}/{model.resources.mem} - (
           {model.stats.ram_pct} % )
         </td>
-        <td className={typeClassSet} title={model.type}>
+        <td className={this.getTdClasses("type","col-type")} title={model.type}>
           {model.type}
         </td>
-        <td className={versionClassSet} title={model.version}>
+        <td className={this.getTdClasses("version","col-version")} title={model.version}>
           {model.version}
         </td>
       </tr>
