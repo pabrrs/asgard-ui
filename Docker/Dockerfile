@@ -1,6 +1,6 @@
-FROM docker.sieve.com.br/infra/nodejs541:0.0.1
+FROM docker.sieve.com.br/infra/nodejs:0.2.0
 
-#Version: 0.24.0
+#Version: 0.25.1
 #Tag: sieve/infra/asgard-ui
 
 WORKDIR /opt/app

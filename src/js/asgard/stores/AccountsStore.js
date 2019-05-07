@@ -1,21 +1,11 @@
 import {EventEmitter} from "events";
-
 import AppDispatcher from "../../AppDispatcher";
-import AppsStore from "../../stores/AppsStore";
-// import AppsEvents from "../events/UserEvents";
 import AccountsEvents from "../events/UserEvents";
-// import UserEvents from "./schemes/AgentsScheme";
-import AccountsScheme from "./schemes/AccountsScheme";
 import Util from "../../helpers/Util";
 
 const storeData = {
   accounts: [],
 };
-
-function processToken(accs) {
-  var acc = Util.extendObject(AccountsScheme, accs);
-  return acc;
-}
 
 var AccountsStore = Util.extendObject(EventEmitter.prototype, {
   get accounts() {

@@ -137,7 +137,8 @@ export default React.createClass({
       if (truncate) {
         // this.bottomOffset = data.offset;
         const totalOffset = data.offset;
-        this.logData.push("-----------------------------------------------------------------");
+        this.logData.push(
+          "-----------------------------------------------------------------");
         this.bottomOffset = totalOffset;
         this.bottomOffset -= Math.min(totalOffset, BLOCK_SIZE);
         this.topOffset = totalOffset;
