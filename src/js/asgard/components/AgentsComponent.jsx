@@ -34,7 +34,7 @@ var AgentsComponent = React.createClass({
     return (
         <tr data-toggle="collapse"
         className="accordion-toggle">
-          <span>{total}</span>
+          <span style={{display: "none"}}>{total}</span>
           <td className="overflow-ellipsis color-base"
           onClick={this.handleClick}
           title={model.hostname}>
@@ -42,7 +42,7 @@ var AgentsComponent = React.createClass({
                   "button-not-collapse" : "button-collapse"}`}>
             </span>
             <span className="col-hostname">
-            {model.hostname}
+              {model.hostname}
             </span>
             <AppListItem numberOfVisibleLabels={3} labels={labels} ref="label">
               <span className={moreLabelClassName} ref="moreLabel">

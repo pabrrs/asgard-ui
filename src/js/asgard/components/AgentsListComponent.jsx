@@ -159,9 +159,8 @@ var SlaveListComponent = React.createClass({
     return (
       <div>
         <div className="sub-header-total">
-            <span className="totalAgents">Total: {totalAgents}</span>
             <span className="used-total">
-              CPU: {totalUsedCpu}% - RAM: {totalUsedRam}
+            Total: {totalAgents} / CPU: {totalUsedCpu}% - RAM: {totalUsedRam}
             </span>
           <div className={`${filterBoxClassSet} search-input`}>
             <span className="input-group-addon" />
