@@ -1,5 +1,4 @@
-import { EventEmitter } from "events";
-
+import {EventEmitter} from "events";
 import AppDispatcher from "../../AppDispatcher";
 import AppsStore from "../../stores/AppsStore";
 import AgentsEvents from "../events/AgentsEvents";
@@ -13,7 +12,7 @@ const storeData = {
 };
 
 function processAgents(agents) {
-  return agents.agents.map(function(agent) {
+  return agents.agents.map(function (agent) {
     agent = Util.extendObject(AgentsScheme, agent);
     return agent;
   });
@@ -31,11 +30,11 @@ var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   },
 });
 
-AppsStore.on(AgentsEvents.CHANGE, function() {
+AppsStore.on(AgentsEvents.CHANGE, function () {
   AgentsStore.emit(AgentsEvents.CHANGE);
 });
 
-AppDispatcher.register(function(action) {
+AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AgentsEvents.REQUEST:
       storeData.agents = processAgents(action.data.body);

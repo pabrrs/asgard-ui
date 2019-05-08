@@ -28,23 +28,6 @@ var AgentsActions = {
       data: value
     });
   },
-  requestAgentsApps: function(id) {
-    this.request({
-      url: `${config.apiURL}agents/${id}/apps`
-    })
-      .success(function(agents) {
-        AppDispatcher.dispatch({
-          actionType: SlaveEvents.REQUEST,
-          data: agents
-        });
-      })
-      .error(function(error) {
-        AppDispatcher.dispatch({
-          actionType: SlaveEvents.REQUEST_ERROR,
-          data: error
-        });
-      });
-  },
   request: ajaxWrapper
 };
 
