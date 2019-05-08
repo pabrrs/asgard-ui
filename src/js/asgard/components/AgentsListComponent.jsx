@@ -12,7 +12,7 @@ import ConcatFilter from "../helpers/concatFilters";
 var SlaveListComponent = React.createClass({
   displayName: "AgentsListComponent",
 
-  getInitialState: function() {
+  getInitialState: function () {
     var agents = AgentsStore.agents;
     var total = AgentsStore.total;
     var totalApps = AgentsStore.length;
@@ -27,20 +27,22 @@ var SlaveListComponent = React.createClass({
       focused: false,
       total: total,
       length: totalApps,
+      sortKey: "hostname",
+      sortDescending: false
     };
   },
-  componentWillMount: function() {
+  componentWillMount: function () {
     AgentsActions.requestAgents();
     AgentsStore.on(AgentsEvents.CHANGE, this.onAgentsChange);
     AgentsStore.on(AgentsEvents.FILTER, this.requestAgents);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount: function () {
     AgentsStore.removeListener(AgentsEvents.CHANGE, this.onAgentsChange);
     AgentsStore.removeListener(AgentsEvents.FILTER, this.requestAgents);
     AgentsActions.setFilter("");
   },
-  onAgentsChange: function() {
+  onAgentsChange: function () {
     this.setState({
       agents: AgentsStore.agents,
       total: AgentsStore.total,
@@ -48,7 +50,7 @@ var SlaveListComponent = React.createClass({
       length: AgentsStore.agents.length,
     });
   },
-  getInlineDialog: function() {
+  getInlineDialog: function () {
     var state = this.state;
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasNoAgents =
@@ -81,16 +83,31 @@ var SlaveListComponent = React.createClass({
     }
     return null;
   },
+  sortBy: function (sortKey) {
+    var state = this.state;
+
+    this.setState({
+      sortKey: sortKey,
+      sortDescending: state.sortKey === sortKey && !state.sortDescending
+    });
+  },
   getAgentsNodes: function () {
     var state = this.state;
     var sortKey = state.sortKey;
     var length = state.length;
+
     return lazy(state.agents)
       .sortBy(function (agents) {
-        return agents[sortKey];
+        if (sortKey === "cpu_pct" || sortKey === "ram_pct") {
+          return agents.stats[sortKey];
+        } else {
+          return agents[sortKey];
+        }
       }, state.sortDescending)
       .map(function (agents) {
-        return <AgentsComponent total={length} key={agents.id} model={agents} />;
+        return (
+          <AgentsComponent total={length} key={agents.id} sortKey={sortKey} model={agents} />
+        );
       })
       .value();
   },
@@ -104,7 +121,7 @@ var SlaveListComponent = React.createClass({
   requestAgents: function () {
     AgentsActions.requestAgents();
   },
-  handleKeyDown: function(event) {
+  handleKeyDown: function (event) {
     switch (event.key) {
       case "Escape":
         event.target.blur();
@@ -115,34 +132,52 @@ var SlaveListComponent = React.createClass({
         break;
     }
   },
-  focusInputGroup: function() {
+  focusInputGroup: function () {
     this.setState({
       focused: true,
       activated: true
     });
   },
-  handleFilterTextChange: function(event) {
+  handleFilterTextChange: function (event) {
     var filterText = event.target.value;
-    this.setState({ filterText }, () => {
+    this.setState({filterText}, () => {
       if (filterText == null || filterText === "") {
         this.handleClearFilterText();
       }
     });
   },
 
-  handleClick: function() {
-    this.setState({ filterText: "" });
+  getCaret: function (sortKey) {
+    if (sortKey === this.state.sortKey) {
+      return <span className="caret" />;
+    }
+    return null;
+  },
+
+  handleClick: function () {
+    this.setState({filterText: ""});
     AgentsActions.setFilter("");
     this.getInlineDialog();
   },
 
-  blurInputGroup: function() {
+  blurInputGroup: function () {
     this.setState({
       focused: false,
       activated: this.state.filterText !== ""
     });
   },
-  render: function() {
+
+  getTdClasses: function (key) {
+    var sortKey = this.state.sortKey;
+
+    return classNames(
+      "overflow-ellipsis",
+      {"cell-highlighted": sortKey === key}
+    );
+  },
+
+  render: function () {
+    var state = this.state;
     var totalUsedCpu = this.state.total.stats && this.state.total.stats.cpu_pct;
     var totalUsedRam = this.state.total.stats && this.state.total.stats.ram_pct;
     var totalAgents = this.state.length;
@@ -156,6 +191,12 @@ var SlaveListComponent = React.createClass({
       "filter-box-activated": !!this.state.activated,
       "space-margin": true
     });
+
+    var headerClassSet = classNames({
+      clickable: true,
+      dropup: !state.sortDescending
+    });
+
     return (
       <div>
         <div className="sub-header-total">
@@ -188,32 +229,66 @@ var SlaveListComponent = React.createClass({
         </div>
         <table className="table deployments">
           <colgroup>
-            <col style={{ width: "46%" }} />
-            <col style={{ width: "8%" }} />
-            <col style={{ width: "10%" }} />
-            <col style={{ width: "20%" }} />
-            <col style={{ width: "6%" }} />
-            <col style={{ width: "10%" }} />
+            <col style={{width: "46%"}} />
+            <col style={{width: "8%"}} />
+            <col style={{width: "12%"}} />
+            <col style={{width: "18%"}} />
+            <col style={{width: "6%"}} />
+            <col style={{width: "10%"}} />
           </colgroup>
           <thead>
             <tr>
-              <th>
-                <span>Hostname</span>
+              <th className={this.getTdClasses("hostname")}>
+                <span
+                  onClick={this.sortBy.bind(null, "hostname")}
+                  className={headerClassSet}
+                >
+                  Hostname
+                  {this.getCaret("hostname")}
+                </span>
               </th>
-              <th>
-                <span>Apps</span>
+              <th className={this.getTdClasses("total_apps")}>
+                <span
+                  onClick={this.sortBy.bind(null, "total_apps")}
+                  className={headerClassSet}
+                >
+                  Apps {this.getCaret("total_apps")}
+                </span>
               </th>
-              <th>
-                <span>CPU(ocupado/total)</span>
+              <th className={this.getTdClasses("cpu_pct")}>
+                <span
+                  onClick={this.sortBy.bind(null, "cpu_pct")}
+                  className={headerClassSet}
+                >
+                  CPU(ocupado/total) {this.getCaret("cpu_pct")}
+                </span>
               </th>
-              <th>
-                <span>RAM(ocupado/total)</span>
+              <th className={this.getTdClasses("ram_pct")}>
+                <span
+                  onClick={this.sortBy.bind(null, "ram_pct")}
+                  className={headerClassSet}
+                >
+                  RAM(ocupado/total)
+                  {this.getCaret("ram_pct")}
+                </span>
               </th>
-              <th>
-                <span>Type</span>
+              <th className={this.getTdClasses("type")}>
+                <span
+                  onClick={this.sortBy.bind(null, "type")}
+                  className={headerClassSet}
+                >
+                  Type
+                  {this.getCaret("type")}
+                </span>
               </th>
-              <th>
-                <span>Agent Version</span>
+              <th className={this.getTdClasses("version")}>
+                <span
+                  onClick={this.sortBy.bind(null, "version")}
+                  className={headerClassSet}
+                >
+                  Agent Version
+                  {this.getCaret("version")}
+                </span>
               </th>
             </tr>
           </thead>
