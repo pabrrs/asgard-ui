@@ -47,8 +47,8 @@ var TaskFileDownloadComponent = React.createClass({
 
     return (
         <button
-            className="btn btn-sm btn-default"
-            onClick={this.handleClick}>
+          className="btn btn-sm btn-default"
+          onClick={this.handleClick}>
           Download {name}
         </button>
     );

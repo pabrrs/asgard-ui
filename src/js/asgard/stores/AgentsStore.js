@@ -50,25 +50,6 @@ AppDispatcher.register(function (action) {
       storeData.filter = action.data;
       AgentsStore.emit(AgentsEvents.FILTER, action.data);
       break;
-    case AgentsEvents.REQUEST_ERROR:
-      AgentsStore.emit(
-        AgentsEvents.REQUEST_ERROR,
-        action.data.body,
-        action.data.status
-      );
-      break;
-    case AgentsEvents.REVERT:
-      storeData.agents =
-        removeDeployment(storeData.agents, action.deploymentId);
-      AgentsStore.emit(AgentsEvents.CHANGE);
-      break;
-    case AgentsEvents.REVERT_ERROR:
-      AgentsStore.emit(
-        AgentsEvents.REVERT_ERROR,
-        action.data.body,
-        action.data.status
-      );
-      break;
   }
 });
 
