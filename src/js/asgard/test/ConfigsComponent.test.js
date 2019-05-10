@@ -24,7 +24,7 @@ describe("Configs component", function () {
       .find("div")
       .at(0)
       .text()
-    ).to.equal("<Constructor />");
+    ).to.equal("<PopoverComponent />");
   });
 
 });

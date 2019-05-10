@@ -211,7 +211,7 @@ describe("AppListComponent", function () {
           "/app-exact"
         ]);
       } catch (e) {
-        expect(loadingComponent).to.equal("<Constructor />");
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
         console.log();
       }
       this.component.instance().componentWillUnmount();
@@ -237,7 +237,7 @@ describe("AppListComponent", function () {
           "/fuzzy/apps/sleepz"
         ]);
       } catch (e) {
-        expect(loadingComponent).to.equal("<Constructor />");
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
         console.log();
       }
       this.component.instance().componentWillUnmount();
@@ -267,7 +267,7 @@ describe("AppListComponent", function () {
           "/fuzzy/apps/sleepz",
         ]);
       } catch (e) {
-        expect(loadingComponent).to.equal("<Constructor />");
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
         console.log();
       }
       this.component.instance().componentWillUnmount();
@@ -293,7 +293,7 @@ describe("AppListComponent", function () {
           "/fuzzy/apps/sleepz"
         ]);
       } catch (e) {
-        expect(loadingComponent).to.equal("<Constructor />");
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
         console.log();
       }
       this.component.instance().componentWillUnmount();
@@ -318,7 +318,7 @@ describe("AppListComponent", function () {
         "group-with-long-name/group-with-long-name/group-with-long-name/" +
         "group-with-long-name/app-omega"]);
       } catch (e) {
-        expect(loadingComponent).to.equal("<Constructor />");
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
         console.log();
       }
       this.component.instance().componentWillUnmount();
@@ -338,7 +338,7 @@ describe("AppListComponent", function () {
         .find(AppListItemComponent)
         .map(app => app.props().model.id);
       var loadingComponent = this.component.text();
-      try{
+      try {
         expect(appNames).to.deep.equal([
           // group, score: 0.134
           "/apps",
@@ -367,7 +367,7 @@ describe("AppListComponent", function () {
             "group-with-long-name/group-with-long-name/app-omega"
         ]);
       } catch (e) {
-        expect(loadingComponent).to.equal("<Constructor />");
+        expect(loadingComponent).to.equal("<CenteredInlineDialogComponent />");
         console.log();
       }
       this.component.instance().componentWillUnmount();
