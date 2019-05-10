@@ -2,7 +2,6 @@ import {EventEmitter} from "events";
 import AppDispatcher from "../../AppDispatcher";
 import AppsStore from "../../stores/AppsStore";
 import AgentsEvents from "../events/AgentsEvents";
-import AgentsScheme from "./schemes/AgentsScheme";
 import Util from "../../helpers/Util";
 
 const storeData = {
@@ -10,13 +9,6 @@ const storeData = {
   filter: "",
   total: "",
 };
-
-function processAgents(agents) {
-  return agents.agents.map(function (agent) {
-    agent = Util.extendObject(AgentsScheme, agent);
-    return agent;
-  });
-}
 
 var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   get agents() {
