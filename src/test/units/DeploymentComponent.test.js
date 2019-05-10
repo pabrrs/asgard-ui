@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 import _ from "underscore";
+import ReactAddonsUtils from "react-dom/test-utils";
 
 import React from "react";
 
@@ -37,7 +38,7 @@ describe("Deployment component", function () {
     // <Link /> won't render in ReactRouter < 1.0
     // due to missing context. The "stubContextRenderer" does not
     // play nice with enzyme's rendering.
-    var renderer = React.addons.TestUtils.createRenderer();
+    var renderer = ReactAddonsUtils.createRenderer();
     renderer.render(<DeploymentComponent model={model} />);
     var component = renderer.getRenderOutput();
 
