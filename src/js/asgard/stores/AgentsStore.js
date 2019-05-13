@@ -39,7 +39,6 @@ AppDispatcher.register(function (action) {
     case AgentsEvents.REQUEST:
       storeData.agents = processAgents(action.data.body);
       storeData.total = action.data.body;
-      storeData.length = action.data.body.agents.length;
       AgentsStore.emit(AgentsEvents.CHANGE);
       break;
     case AgentsEvents.FILTER:
