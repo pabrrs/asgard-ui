@@ -3,12 +3,20 @@ import AppDispatcher from "../../AppDispatcher";
 import AppsStore from "../../stores/AppsStore";
 import AgentsEvents from "../events/AgentsEvents";
 import Util from "../../helpers/Util";
+import AgentsScheme from "./schemes/AgentsScheme";
 
 const storeData = {
   agents: [],
   filter: "",
   total: "",
 };
+
+function processAgents(agents) {
+  return agents.agents.map(function (agent) {
+    agent = Util.extendObject(AgentsScheme, agent);
+    return agent;
+  });
+}
 
 var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   get agents() {
