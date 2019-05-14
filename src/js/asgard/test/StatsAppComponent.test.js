@@ -4,7 +4,7 @@ import {expect} from "chai";
 import {shallow} from "enzyme";
 import nock from "nock";
 import config from "../../config/config";
-import React from "react/addons";
+import React from "react";
 import Util from "../../helpers/Util";
 import appScheme from "../../stores/schemes/appScheme";
 import AppsActions from "../../actions/AppsActions";

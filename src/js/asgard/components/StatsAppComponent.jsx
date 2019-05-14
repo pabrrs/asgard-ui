@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import classNames from "classnames";
 import StatsAppStore from "../stores/StatsAppStore";
 import StatsAppAction from "../actions/StatsAppActions";
