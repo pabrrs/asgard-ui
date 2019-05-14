@@ -23,10 +23,6 @@ describe("PromptDialogComponent", function () {
     this.component = mount(<PromptDialogComponent data={dialogData} />);
   });
 
-  after(function () {
-    React.unmountComponentAtNode(this.component.instance().getDOMNode());
-  });
-
   it("renders correct title", function () {
     var title = this.component
       .find(".modal-header").text();
@@ -46,7 +42,7 @@ describe("PromptDialogComponent", function () {
   });
 
   it("renders correct severity indicator", function () {
-    expect(this.component.find(".dialog").hasClass("danger")).to.equal(true);
+    expect(this.component.find(".dialog").first().hasClass("danger")).to.equal(true);
   });
 
   it("has correct input type", function () {

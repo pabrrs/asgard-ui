@@ -81,15 +81,17 @@ describe("accept alert dialog", function () {
 
   describe("AlertDialogComponent", function () {
 
-    before(function (done) {
+    before(function () {
       this.component = mount(<DialogsComponent />);
-      DialogStore.once(DialogEvents.SHOW_DIALOG, ()=>done());
-      this.dialogId = DialogActions.alert({
+      const data = {
         actionButtonLabel: "Test Button Label",
         message: "Test Message",
         severity: DialogSeverity.DANGER,
         title: "Test Title"
-      });
+      };
+      this.dialogId = DialogActions.alert(data);
+      this.component.instance().onDialogShow(data);
+      this.component.update();
     });
 
     after(function () {
@@ -102,8 +104,7 @@ describe("accept alert dialog", function () {
           expect(dialogData.id).to.equal(this.dialogId);
         }, done);
       });
-
-      this.component.find(AlertDialogComponent)
+      this.component
         .find(".btn-success").simulate("click");
     });
 

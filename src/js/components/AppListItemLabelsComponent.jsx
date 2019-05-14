@@ -3,13 +3,10 @@ import React from "react";
 
 import PopoverComponent from "./PopoverComponent";
 
-import OnClickOutsideMixin from "react-onclickoutside";
 import Util from "../helpers/Util";
 
 var AppListItemLabelsComponent = React.createClass({
   displayName: "AppListItemLabelsComponent",
-
-  mixins: [OnClickOutsideMixin],
 
   propTypes: {
     children: React.PropTypes.node,

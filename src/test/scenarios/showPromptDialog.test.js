@@ -239,10 +239,9 @@ describe("show prompt dialog", function () {
 
   describe("DialogsComponent", function () {
 
-    before(function (done) {
+    before(function () {
       this.component = mount(<DialogsComponent />);
-      DialogStore.once(DialogEvents.SHOW_DIALOG,()=>done());
-      this.dialogId = DialogActions.prompt({
+      const data = {
         actionButtonLabel: "Test Button Label",
         inputProperties: {
           defaultValue:10,
@@ -251,7 +250,10 @@ describe("show prompt dialog", function () {
         message: "Test Message",
         severity: DialogSeverity.DANGER,
         title: "Test Title"
-      });
+      };
+      this.dialogId = DialogActions.prompt(data);
+      this.component.instance().onDialogShow(data);
+      this.component.update();
     });
 
     after(function () {
@@ -267,10 +269,9 @@ describe("show prompt dialog", function () {
 
   describe("PromptDialogComponent", function () {
 
-    before(function (done) {
+    before(function () {
       this.component = mount(<DialogsComponent />);
-      DialogStore.once(DialogEvents.SHOW_DIALOG,()=>done());
-      this.dialogId = DialogActions.prompt({
+      const data = {
         actionButtonLabel: "Test Button Label",
         inputProperties: {
           defaultValue:10,
@@ -279,7 +280,10 @@ describe("show prompt dialog", function () {
         message: "Test Message",
         severity: DialogSeverity.DANGER,
         title: "Test Title"
-      });
+      };
+      this.dialogId = DialogActions.prompt(data);
+      this.component.instance().onDialogShow(data);
+      this.component.update();
     });
 
     after(function () {
@@ -306,7 +310,7 @@ describe("show prompt dialog", function () {
 
     it("renders correct severity indicator", function () {
       expect(this.component.find(PromptDialogComponent)
-        .find(".dialog").hasClass("danger")).to.equal(true);
+        .find(".dialog").first().hasClass("danger")).to.equal(true);
     });
 
     it("has correct input type", function () {
