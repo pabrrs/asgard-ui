@@ -164,7 +164,6 @@ describe("AppListComponent", function () {
         ]);
       } catch (e) {
         expect(loadingComponent).to.equal("Loading Applications...Please wait while applications are being retrieved");
-        console.log();
       }
       this.component.instance().componentWillUnmount();
     }
@@ -183,7 +182,6 @@ describe("AppListComponent", function () {
       ]);
     } catch (e) {
       expect(loadingComponent).to.equal("Loading Applications...Please wait while applications are being retrieved");
-      console.log();
     }
     this.component.instance().componentWillUnmount();
   });

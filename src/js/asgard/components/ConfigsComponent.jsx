@@ -70,7 +70,7 @@ var ConfigsComponent = React.createClass({
     try {
       token = localStorage.getItem("auth_token");
     } catch (e) {
-      console.log();
+      console.log(e);
     }
     return (
       <div className={`${helpMenuClassName} ${token === "" && "hidden-config"}`}

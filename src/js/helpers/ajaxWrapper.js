@@ -55,7 +55,7 @@ var ajaxWrapper = function (opts = {}) {
     try {
       var token = localStorage.getItem("auth_token");
     } catch (exception) {
-      console.log();
+      console.log(exception);
     }
     currentHeaders["Authorization"] = "JWT " + token;
     Object.assign({headers: currentHeaders});

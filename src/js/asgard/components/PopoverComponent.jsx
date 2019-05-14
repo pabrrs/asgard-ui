@@ -18,25 +18,32 @@ var PopoverComponent = React.createClass({
     visible: React.PropTypes.bool
   },
 
-  getInitialState: function () {
+  getInitialState: function() {
     return {
       alignment: DEFAULT_ALIGNED
     };
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.state.alignment !== nextState.alignment ||
-      !Util.compareProperties(this.props,
-        nextProps,  "children", "className", "visible");
+    return (
+      this.state.alignment !== nextState.alignment ||
+      !Util.compareProperties(
+        this.props,
+        nextProps,
+        "children",
+        "className",
+        "visible"
+      )
+    );
   },
 
-  componentDidUpdate: function () {
+  componentDidUpdate: function() {
     if (this.props.visible === true) {
       this.recalculatePosition();
     }
   },
 
-  recalculatePosition: function () {
+  recalculatePosition: function() {
     if (global.window == null) {
       return;
     }
@@ -47,35 +54,41 @@ var PopoverComponent = React.createClass({
     let contentHeight = contentNode.clientHeight;
 
     if (componentPosition.top <= contentHeight) {
-      this.setState({alignment: BOTTOM_ALIGNED});
+      this.setState({ alignment: BOTTOM_ALIGNED });
       return;
     }
 
-    if (componentPosition.bottom + contentHeight >=
-        document.documentElement.clientHeight) {
-      this.setState({alignment: TOP_ALIGNED});
+    if (
+      componentPosition.bottom + contentHeight >=
+      document.documentElement.clientHeight
+    ) {
+      this.setState({ alignment: TOP_ALIGNED });
       return;
     }
 
-    this.setState({alignment: DEFAULT_ALIGNED});
+    this.setState({ alignment: DEFAULT_ALIGNED });
   },
 
-  render: function () {
+  render: function() {
     var props = this.props;
-
     if (!props.visible) {
       return null;
     }
 
-    let className = classNames("popover", props.className,
-      this.state.alignment);
+    let className = classNames(
+      "popover",
+      props.className,
+      this.state.alignment
+    );
 
     return (
       <div className={className} ref="component">
-        <div className="content"
+        <div
+          className="content"
           onMouseEnter={props.onMouseEnter}
           onMouseLeave={props.onMouseLeave}
-          ref="content">
+          ref="content"
+        >
           {props.children}
         </div>
       </div>

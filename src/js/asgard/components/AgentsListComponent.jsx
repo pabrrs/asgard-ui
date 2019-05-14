@@ -12,9 +12,10 @@ import ConcatFilter from "../helpers/concatFilters";
 var SlaveListComponent = React.createClass({
   displayName: "AgentsListComponent",
 
-  getInitialState: function() {
+  getInitialState: function () {
     var agents = AgentsStore.agents;
     var total = AgentsStore.total;
+    var totalApps = AgentsStore.length;
     var fetchState =
       agents.length > 0 ? States.STATE_SUCCESS : States.STATE_LOADING;
     return {
@@ -25,29 +26,31 @@ var SlaveListComponent = React.createClass({
       activated: false,
       focused: false,
       total: total,
+      length: totalApps,
       sortKey: "hostname",
       sortDescending: false
     };
   },
-  componentWillMount: function() {
+  componentWillMount: function () {
     AgentsActions.requestAgents();
     AgentsStore.on(AgentsEvents.CHANGE, this.onAgentsChange);
     AgentsStore.on(AgentsEvents.FILTER, this.requestAgents);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount: function () {
     AgentsStore.removeListener(AgentsEvents.CHANGE, this.onAgentsChange);
     AgentsStore.removeListener(AgentsEvents.FILTER, this.requestAgents);
     AgentsActions.setFilter("");
   },
-  onAgentsChange: function() {
+  onAgentsChange: function () {
     this.setState({
       agents: AgentsStore.agents,
       total: AgentsStore.total,
-      fetchState: States.STATE_SUCCESS
+      fetchState: States.STATE_SUCCESS,
+      length: AgentsStore.agents.length,
     });
   },
-  getInlineDialog: function() {
+  getInlineDialog: function () {
     var state = this.state;
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasNoAgents =
@@ -80,7 +83,7 @@ var SlaveListComponent = React.createClass({
     }
     return null;
   },
-  sortBy: function(sortKey) {
+  sortBy: function (sortKey) {
     var state = this.state;
 
     this.setState({
@@ -88,36 +91,37 @@ var SlaveListComponent = React.createClass({
       sortDescending: state.sortKey === sortKey && !state.sortDescending
     });
   },
-  getAgentsNodes: function() {
+  getAgentsNodes: function () {
     var state = this.state;
     var sortKey = state.sortKey;
+    var length = state.length;
 
     return lazy(state.agents)
-      .sortBy(function(agents) {
-        if (sortKey == "cpu_pct" || sortKey == "ram_pct") {
+      .sortBy(function (agents) {
+        if (sortKey === "cpu_pct" || sortKey === "ram_pct") {
           return agents.stats[sortKey];
         } else {
           return agents[sortKey];
         }
       }, state.sortDescending)
-      .map(function(agents) {
+      .map(function (agents) {
         return (
-          <AgentsComponent key={agents.id} sortKey={sortKey} model={agents} />
+          <AgentsComponent total={length} key={agents.id} sortKey={sortKey} model={agents} />
         );
       })
       .value();
   },
 
-  handleSubmit: function(event) {
+  handleSubmit: function (event) {
     event.preventDefault();
     var filterText = this.state.filterText;
     var changeFilter = ConcatFilter.format(filterText);
     AgentsActions.setFilter(changeFilter);
   },
-  requestAgents: function() {
+  requestAgents: function () {
     AgentsActions.requestAgents();
   },
-  handleKeyDown: function(event) {
+  handleKeyDown: function (event) {
     switch (event.key) {
       case "Escape":
         event.target.blur();
@@ -128,22 +132,22 @@ var SlaveListComponent = React.createClass({
         break;
     }
   },
-  focusInputGroup: function() {
+  focusInputGroup: function () {
     this.setState({
       focused: true,
       activated: true
     });
   },
-  handleFilterTextChange: function(event) {
+  handleFilterTextChange: function (event) {
     var filterText = event.target.value;
-    this.setState({ filterText }, () => {
+    this.setState({filterText}, () => {
       if (filterText == null || filterText === "") {
         this.handleClearFilterText();
       }
     });
   },
 
-  getCaret: function(sortKey) {
+  getCaret: function (sortKey) {
     if (sortKey === this.state.sortKey) {
       return <span className="caret" />;
     }
@@ -176,6 +180,8 @@ var SlaveListComponent = React.createClass({
     var state = this.state;
     var totalUsedCpu = this.state.total.stats && this.state.total.stats.cpu_pct;
     var totalUsedRam = this.state.total.stats && this.state.total.stats.ram_pct;
+    var totalAgents = this.state.length;
+
     var searchIconClassSet = classNames("icon ion-search", {
       clickable: this.state.query !== ""
     });
@@ -194,9 +200,9 @@ var SlaveListComponent = React.createClass({
     return (
       <div>
         <div className="sub-header-total">
-          <span className="used-total">
-            CPU: {totalUsedCpu} % -RAM: {totalUsedRam} %
-          </span>
+            <span className="used-total">
+            Total: {totalAgents} / CPU: {totalUsedCpu}% - RAM: {totalUsedRam}%
+            </span>
           <div className={`${filterBoxClassSet} search-input`}>
             <span className="input-group-addon" />
             <input
