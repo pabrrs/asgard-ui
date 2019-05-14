@@ -4,7 +4,7 @@ import {mount} from "enzyme";
 import React from "react";
 
 import ConfigsComponent from "../components/ConfigsComponent";
-import PopoverComponent from "../components/PopoverComponent";
+import PopoverComponent from "../../asgard/components/PopoverComponent";
 
 describe("Configs component", function () {
   before(function () {

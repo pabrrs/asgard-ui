@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 
-import PopoverComponent from "./PopoverComponent";
+import PopoverComponent from "../asgard/components/PopoverComponent";
 
 import Util from "../helpers/Util";
 

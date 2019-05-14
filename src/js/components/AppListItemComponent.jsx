@@ -14,7 +14,7 @@ import AppStatusComponent from "../components/AppStatusComponent";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
 import Util from "../helpers/Util";
 import PathUtil from "../helpers/PathUtil";
-import PopoverComponent from "./PopoverComponent";
+import PopoverComponent from "../asgard/components/PopoverComponent";
 import DOMUtil from "../helpers/DOMUtil";
 
 var AppListItemComponent = React.createClass({
