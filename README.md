@@ -10,6 +10,10 @@ que implementa o que é necessário para termos:
 
 ## Changelog
 
+
+### 0.25.2
+ * Atualizando componente que implementa o modo JSON
+
 ### 0.24.0
  * Implementação da lógica de troca de conta, com dropdown listando as contas alternativas (https://github.com/B2W-BIT/asgard-ui/pull/4)
 

@@ -7,17 +7,28 @@ var AgentsComponent = React.createClass({
 
   propTypes: {
     model: React.PropTypes.object.isRequired,
+    sortKey: React.PropTypes.any
   },
 
   getInitialState: function () {
     return {
       loading: false,
-      collapse: false,
+      collapse: false
     };
   },
 
   handleClick: function () {
     this.setState({collapse: !this.state.collapse});
+  },
+
+  getTdClasses: function (key, classes) {
+    var sortKey = this.props.sortKey;
+
+    return classNames(
+      "overflow-ellipsis",
+      classes,
+      {"cell-highlighted": sortKey === key}
+    );
   },
 
   render: function () {
@@ -27,63 +38,63 @@ var AgentsComponent = React.createClass({
       return null;
     }
     var moreLabelClassName = classNames("badge more", {
-      "visible": Object.keys(model.attributes).length > 3
+      visible: Object.keys(model.attributes).length > 3
     });
+
     return (
-        <tr data-toggle="collapse"
-        className="accordion-toggle">
-          <td className="overflow-ellipsis color-base"
+      <tr data-toggle="collapse" className="accordion-toggle">
+        <td
+          className={this.getTdClasses("hostname", "color-base")}
           onClick={this.handleClick}
-          title={model.hostname}>
-            <span className={`triangle-length ${this.state.collapse ?
-                  "button-not-collapse" : "button-collapse"}`}>
+          title={model.hostname}
+        >
+          <span
+            className={`triangle-length  ${
+              this.state.collapse ? "button-not-collapse" : "button-collapse"
+            }`}
+          />
+          <span className="col-hostname">{model.hostname}</span>
+          <AppListItem numberOfVisibleLabels={3} labels={labels} ref="label">
+            <span className={moreLabelClassName} ref="moreLabel">
+              &hellip;
             </span>
-            <span className="col-hostname">
-            {model.hostname}
-            </span>
-            <AppListItem numberOfVisibleLabels={3} labels={labels} ref="label">
-              <span className={moreLabelClassName} ref="moreLabel">
-                &hellip;
-              </span>
-            </AppListItem>
-            {this.state.collapse &&
+          </AppListItem>
+          {this.state.collapse && (
             <td className="overflow-ellipsis accordion-app">
               <span>
                 {model.applications.map(app => {
                   return (
-                    <a href={`#/apps/${encodeURIComponent("/"+app.id)}`}
-                      style={{fontSize: "16px"}}>
+                    <a
+                      href={`#/apps/${encodeURIComponent("/" + app.id)}`}
+                      style={{fontSize: "16px"}}
+                    >
                       {app.id}
-                      <br></br>
+                      <br />
                     </a>
                   );
                 })}
               </span>
             </td>
-            }
-          </td>
-          <td className="overflow-ellipsis col-totalapps1"
-            title={model.total_apps}>
-            {model.total_apps}
-          </td>
-          <td className="overflow-ellipsis col-totalapps2"
-            title="">
-            {model.used_resources.cpus}/{model.resources.cpus} -
-            ({model.stats.cpu_pct} % )
-          </td>
-          <td className="overflow-ellipsis" title="">
-            {model.used_resources.mem}/{model.resources.mem} -
-            ({model.stats.ram_pct} % )
-          </td>
-          <td className="overflow-ellipsis col-type"
-              title={model.type}>
-            {model.type}
-          </td>
-          <td className="overflow-ellipsis col-version"
-              title={model.version}>
-            {model.version}
-          </td>
-        </tr>
+          )}
+        </td>
+        <td className={this.getTdClasses("total_apps", "col-totalapps1")} title={model.total_apps}>
+          {model.total_apps}
+        </td>
+        <td className={this.getTdClasses("cpu_pct", "col-totalapps2")} title="">
+          {model.used_resources.cpus}/{model.resources.cpus} - (
+          {model.stats.cpu_pct} % )
+        </td>
+        <td className={this.getTdClasses("ram_pct","")} title="">
+          {model.used_resources.mem}/{model.resources.mem} - (
+          {model.stats.ram_pct} % )
+        </td>
+        <td className={this.getTdClasses("type","col-type")} title={model.type}>
+          {model.type}
+        </td>
+        <td className={this.getTdClasses("version","col-version")} title={model.version}>
+          {model.version}
+        </td>
+      </tr>
     );
   }
 });

@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
 import Mousetrap from "mousetrap";
-
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
@@ -29,6 +28,7 @@ import Util from "../helpers/Util";
 import PathUtil from "../helpers/PathUtil";
 import TasksActions from "../actions/TasksActions";
 import TasksEvents from "../events/TasksEvents";
+import StatsAppComponent from "../../js/asgard/components/StatsAppComponent";
 
 var tabsTemplate = [
   {id: "apps/:appId", text: "Instances"},
@@ -102,8 +102,13 @@ var AppPageComponent = React.createClass({
       volumeId: volumeId,
       appId: appId,
       view: decodeURIComponent(params.view),
-      tabs: tabs
+      tabs: tabs,
+      helpMenuVisible: false,
     };
+  },
+
+  componentDidMount: function () {
+    Mousetrap.bind(["g e"], this.openEditModal);
   },
 
   componentWillMount: function () {
@@ -123,10 +128,7 @@ var AppPageComponent = React.createClass({
     AppsStore.removeListener(TasksEvents.DELETE_ERROR,
       this.onDeleteTaskError);
     Mousetrap.unbind(["g e"]);
-  },
 
-  componentDidMount: function () {
-    Mousetrap.bind(["g e"], this.openEditModal);
   },
 
   openEditModal: function () {
@@ -168,6 +170,12 @@ var AppPageComponent = React.createClass({
       AppVersionsActions.requestAppVersions(state.appId);
       AppVersionsActions.requestAppVersion(state.appId, app.version);
     }
+  },
+
+  toggleHelpMenu: function () {
+    this.setState({
+      helpMenuVisible: !this.state.helpMenuVisible
+    });
   },
 
   onAppRequestError: function (message, statusCode) {
@@ -417,11 +425,16 @@ var AppPageComponent = React.createClass({
           volumeId={state.volumeId} />
         <div className="container-fluid">
           <div className="page-header">
-            <h1>{name}</h1>
-            {this.getVolumeStatus()}
-            {appHealthStatus}
-            {appHealthBar}
-            {this.getControls()}
+            <div>
+              <h1>{name}</h1>
+                {this.getVolumeStatus()}
+                {appHealthStatus}
+                {appHealthBar}
+                {this.getControls()}
+            </div>
+            <div className="space-stats-app">
+              <StatsAppComponent app={state.appId}/>
+            </div>
           </div>
           {content}
         </div>

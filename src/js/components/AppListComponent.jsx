@@ -378,7 +378,6 @@ var AppListComponent = React.createClass({
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
     var pageHasFilters = this.pageHasFilters();
-    
     var pageHasNoRunningApps = !pageIsLoading &&
       !pageHasApps &&
       state.fetchState !== States.STATE_UNAUTHORIZED &&
@@ -413,7 +412,6 @@ var AppListComponent = React.createClass({
         </CenteredInlineDialogComponent>
       );
     }
-    
     if (pageHasNoRunningApps) {
       let message = "Do more with Marathon by creating and organizing " +
         "your applications.";
