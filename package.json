@@ -94,7 +94,7 @@
     "build": "gulp",
     "clean": "rm -rf dist release",
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
-    "test": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/setup src/test/environment/jsdom src/test/scenarios/**/*.test.* src/test/units/**/*.test.* src/js/asgard/test/**/*.test.*",
+    "test": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/setup src/test/scenarios/**/*.test.* src/test/units/**/*.test.* src/js/asgard/test/**/*.test.*",
     "test:units": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/environment/jsdom  src/test/units/**/*.test.*",
     "test:new": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/environment/jsdom  src/js/asgard/test/**/*.test.*",
     "test:scenarios": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/environment/jsdom  src/test/scenarios/**/*.test.*",

@@ -1,4 +1,5 @@
 import React from "react";
+import OnClickOutsideMixin from "react-onclickoutside";
 import classNames from "classnames";
 import PopoverComponent from "./PopoverComponent";
 import UserStore from "../stores/UsersStore";
@@ -12,6 +13,8 @@ var ConfigsComponent = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
+
+  mixins: [OnClickOutsideMixin],
 
   getInitialState: function () {
     var users = UserStore.users;
