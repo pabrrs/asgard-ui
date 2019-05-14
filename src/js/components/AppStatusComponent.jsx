@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import moment from "moment";
-import React from "react/addons";
+import React from "react";
 
 import AppStatus from "../constants/AppStatus";
 import QueueStore from "../stores/QueueStore";

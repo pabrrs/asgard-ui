@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 import AppHealthDetailComponent
   from "../../js/components/AppHealthDetailComponent";
 import HealthStatus from "../../js/constants/HealthStatus";

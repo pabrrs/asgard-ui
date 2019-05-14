@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import Centered from "../../components/CenteredInlineDialogComponent";
 import classNames from "classnames";
 import AgentsComponent from "../components/AgentsComponent";

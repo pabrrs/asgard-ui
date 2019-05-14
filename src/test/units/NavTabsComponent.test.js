@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
-import React from "react/addons";
+import React from "react";
 
 import AppDispatcher from "../../js/AppDispatcher";
 import NavTabsComponent from "../../js/components/NavTabsComponent";

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-var React = require("react/addons");
+var React = require("react");
 
 import AppFormValidators from "../../stores/validators/AppFormValidators";
 import AppsActions from "../../actions/AppsActions";
@@ -37,7 +37,7 @@ var GroupModalComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    var input = React.findDOMNode(this.refs.input);
+    var input = (this.refs.input);
     var valueLength = input.value.length;
     input.focus();
     input.setSelectionRange(valueLength, valueLength);

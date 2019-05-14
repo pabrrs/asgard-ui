@@ -5,7 +5,7 @@ import expectAsync from "./../helpers/expectAsync";
 
 import config from "../../js/config/config";
 
-import React from "../../../node_modules/react/addons";
+import React from "../../../node_modules/react";
 import States from "../../js/constants/States";
 import AppsStore from "../../js/stores/AppsStore";
 import AppsEvents from "../../js/events/AppsEvents";
@@ -48,9 +48,8 @@ describe("TaskDetailComponent", function () {
 
   it("has the correct status", function () {
     expect(this.component
-      .find(".task-details")
-      .children()
-      .at(10)
+      .find(".task-details dd")
+      .at(4)
       .text()
     ).to.equal("status-0");
   });
@@ -68,9 +67,8 @@ describe("TaskDetailComponent", function () {
 
   it("has the correct version", function () {
     var version = this.component
-      .find(".task-details")
-      .children()
-      .at(14)
+      .find(".task-details dd")
+      .at(5)
       .find("time")
       .props()
       .dateTime;
@@ -115,9 +113,8 @@ describe("TaskDetailComponent", function () {
 
     it("has the correct ports", function () {
       expect(this.component
-        .find(".task-details")
-        .children()
-        .at(4)
+        .find(".task-details dd")
+        .at(1)
         .text()
       ).to.equal("[1,2,3]");
     });
@@ -126,9 +123,9 @@ describe("TaskDetailComponent", function () {
       var list = this.component.find(".task-details");
 
       var endpoints = [
+        list.children().at(5).text(),
         list.children().at(6).text(),
-        list.children().at(7).text(),
-        list.children().at(8).text()
+        list.children().at(7).text()
       ];
       expect(endpoints).to.deep.equal(["host-1:1", "host-1:2", "host-1:3"]);
     });

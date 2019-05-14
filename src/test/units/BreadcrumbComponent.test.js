@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import * as ShallowUtils from "./../helpers/ShallowUtils";
-
-import React from "react/addons";
+import ReactAddonsUtils from "react-dom/test-utils";
+import React from "react";
 import BreadcrumbComponent from "../../js/components/BreadcrumbComponent";
 
 describe("BreadcrumbComponent", function () {
@@ -18,7 +18,7 @@ describe("BreadcrumbComponent", function () {
 
   before(function () {
     this.renderComponent = (group, app, task) => {
-      var renderer = React.addons.TestUtils.createRenderer();
+      var renderer = ReactAddonsUtils.createRenderer();
       renderer.render(
         <BreadcrumbComponent groupId={group} appId={app} taskId={task} />
       );

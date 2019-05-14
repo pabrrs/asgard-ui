@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import nock from "nock";
 import {shallow} from "enzyme";
-import React from "react/addons";
+import React from "react";
 
 import AppStatus from "../../js/constants/AppStatus";
 import AppStatusComponent from "../../js/components/AppStatusComponent";

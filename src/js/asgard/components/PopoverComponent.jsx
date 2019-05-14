@@ -1,6 +1,6 @@
-import React from "react/addons";
+import React from "react";
 import classNames from "classnames";
-
+import ReactDOM from 'react-dom';
 import Util from "../../helpers/Util";
 
 const DEFAULT_ALIGNED = "default";
@@ -48,8 +48,8 @@ var PopoverComponent = React.createClass({
       return;
     }
 
-    let componentNode = React.findDOMNode(this.refs.component);
-    let contentNode = React.findDOMNode(this.refs.content);
+    let componentNode = ReactDOM.findDOMNode(this).refs.component;
+    let contentNode = ReactDOM.findDOMNode(this).refs.content;
     let componentPosition = componentNode.getBoundingClientRect();
     let contentHeight = contentNode.clientHeight;
 

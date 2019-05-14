@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {mount} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 
 import SectionComponent from "../../js/components/SectionComponent";
 
@@ -13,7 +13,6 @@ describe("SectionComponent", function () {
     var component = mount(
         <SectionComponent id="a" active={true}>Test Section</SectionComponent>
     );
-
     expect(component.text()).to.equal("Test Section");
   });
 
@@ -22,7 +21,7 @@ describe("SectionComponent", function () {
       <SectionComponent id="a" active={false}>Test Section</SectionComponent>
     );
 
-    expect(component.children().component).to.equal(null);
+    expect(component.html()).to.equal(null);
   });
 
   it("should trigger on active callback", function () {

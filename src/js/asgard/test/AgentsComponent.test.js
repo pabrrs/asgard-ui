@@ -1,12 +1,8 @@
 /* eslint-disable camelcase */
 import {expect} from "chai";
 import {shallow} from "enzyme";
-import React from "react/addons";
-import nock from "nock";
-import config from "../../../js/config/config";
-import AgentsStore from "../../asgard/stores/AgentsStore";
-import AgentsActions from "../../asgard/actions/AgentsActions";
-import AgentsEvents from "../../asgard/events/AgentsEvents";
+import React from "react";
+
 import AgentsComponent from "../components/AgentsComponent";
 import AppListItemLabelsComponent from
 "../../components/AppListItemLabelsComponent";

@@ -1,8 +1,8 @@
-import React from "react/addons";
+import React from "react";
 
 import AppHealthBarComponent from "./AppHealthBarComponent";
 import AppHealthDetailComponent from "./AppHealthDetailComponent";
-import PopoverComponent from "./PopoverComponent";
+import PopoverComponent from "../asgard/components/PopoverComponent";
 import Util from "../helpers/Util";
 import HealthStatus from "../constants/HealthStatus";
 

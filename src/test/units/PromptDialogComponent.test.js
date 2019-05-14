@@ -2,7 +2,7 @@ import {expect} from "chai";
 import {mount} from "enzyme";
 import expectAsync from "./../helpers/expectAsync";
 
-import React from "react/addons";
+import React from "react";
 import DialogSeverity from "../../js/constants/DialogSeverity";
 import PromptDialogComponent from "../../js/components/PromptDialogComponent";
 
@@ -21,10 +21,6 @@ describe("PromptDialogComponent", function () {
 
   before(function () {
     this.component = mount(<PromptDialogComponent data={dialogData} />);
-  });
-
-  after(function () {
-    React.unmountComponentAtNode(this.component.instance().getDOMNode());
   });
 
   it("renders correct title", function () {
@@ -46,7 +42,7 @@ describe("PromptDialogComponent", function () {
   });
 
   it("renders correct severity indicator", function () {
-    expect(this.component.find(".dialog").hasClass("danger")).to.equal(true);
+    expect(this.component.find(".dialog").first().hasClass("danger")).to.equal(true);
   });
 
   it("has correct input type", function () {

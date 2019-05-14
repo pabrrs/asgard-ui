@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import classNames from "classnames";
 import Util from "../helpers/Util";
 
@@ -73,7 +73,7 @@ var AppConfigEditFormComponent = React.createClass({
   },
 
   setCursorToEndOfAppIdInput: function () {
-    var appIdInput = React.findDOMNode(this.refs.appId);
+    var appIdInput = (this.refs.appId);
     appIdInput.focus();
     var valueLength = appIdInput.value.length;
     appIdInput.setSelectionRange(valueLength, valueLength);

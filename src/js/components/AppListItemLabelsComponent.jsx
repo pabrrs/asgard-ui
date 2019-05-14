@@ -1,15 +1,12 @@
 import classNames from "classnames";
-import React from "react/addons";
+import React from "react";
 
-import PopoverComponent from "./PopoverComponent";
+import PopoverComponent from "../asgard/components/PopoverComponent";
 
-import OnClickOutsideMixin from "react-onclickoutside";
 import Util from "../helpers/Util";
 
 var AppListItemLabelsComponent = React.createClass({
   displayName: "AppListItemLabelsComponent",
-
-  mixins: [OnClickOutsideMixin],
 
   propTypes: {
     children: React.PropTypes.node,

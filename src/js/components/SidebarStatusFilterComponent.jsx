@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import React from "react/addons";
-
+import React from "react";
+import Update from 'react-addons-update'
 import AppsStore from "../stores/AppsStore";
 import AppsEvents from "../events/AppsEvents";
 import FilterTypes from "../constants/FilterTypes";
@@ -52,13 +52,13 @@ var SidebarStatusFilterComponent = React.createClass({
     var status = statusKey.toString();
 
     if (event.target.checked === true) {
-      selectedStatus = React.addons.update(state.selectedStatus, {
+      selectedStatus = Update(state.selectedStatus, {
         $push: [status]
       });
     } else {
       let index = state.selectedStatus.indexOf(status);
       if (index !== -1) {
-        selectedStatus = React.addons.update(state.selectedStatus, {
+        selectedStatus = Update(state.selectedStatus, {
           $splice: [[index, 1]]
         });
       }

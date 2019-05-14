@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import lazy from "lazy.js";
 import {Link} from "react-router";
-import React from "react/addons";
+import React from "react";
 import {score} from "fuzzaldrin";
 
 import AppListViewTypes from "../constants/AppListViewTypes";

@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import classNames from "classnames";
 
 import DialogSeverity from "../constants/DialogSeverity";
@@ -28,7 +28,7 @@ var AlertDialogComponent = React.createClass({
 
   componentDidMount: function () {
     if (this.props.data.severity === DialogSeverity.INFO) {
-      React.findDOMNode(this.refs.button).focus();
+      (this.refs.button).focus();
     }
   },
 

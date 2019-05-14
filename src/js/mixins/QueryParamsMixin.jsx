@@ -1,5 +1,5 @@
 import {Link} from "react-router";
-import React from "react/addons";
+import React from "react";
 
 import Util from "../helpers/Util";
 

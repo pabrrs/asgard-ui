@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import React from "react/addons";
+import React from "react";
+import ReactDOM from "react-dom";
 import OnClickOutsideMixin from "react-onclickoutside";
 
 import AppActionsHandlerMixin from "../mixins/AppActionsHandlerMixin";
@@ -13,7 +14,7 @@ import AppStatusComponent from "../components/AppStatusComponent";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
 import Util from "../helpers/Util";
 import PathUtil from "../helpers/PathUtil";
-import PopoverComponent from "./PopoverComponent";
+import PopoverComponent from "../asgard/components/PopoverComponent";
 import DOMUtil from "../helpers/DOMUtil";
 
 var AppListItemComponent = React.createClass({
@@ -149,9 +150,9 @@ var AppListItemComponent = React.createClass({
 
     let refs = this.refs;
 
-    let cellNode = React.findDOMNode(refs.nameCell);
-    let nameNode = React.findDOMNode(refs.nameNode);
-    let moreNode = React.findDOMNode(refs.moreLabel);
+    let cellNode = ReactDOM.findDOMNode(refs.nameCell);
+    let nameNode = ReactDOM.findDOMNode(refs.nameNode);
+    let moreNode = ReactDOM.findDOMNode(refs.moreLabel);
 
     let availableWidth = DOMUtil.getInnerWidth(cellNode) -
       DOMUtil.getOuterWidth(nameNode) -
@@ -159,7 +160,7 @@ var AppListItemComponent = React.createClass({
 
     let labelsWidth = 0;
     let numberOfVisibleLabels = 0;
-    let labelNodes = React.findDOMNode(refs.labels).querySelectorAll(".badge");
+    let labelNodes = ReactDOM.findDOMNode(refs.labels).querySelectorAll(".badge");
 
     // labelNodes is not an Array, but a NodeList
     [...labelNodes].forEach(label => {

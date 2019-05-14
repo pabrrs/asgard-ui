@@ -1,9 +1,9 @@
-import React from "react/addons";
+import React from "react";
 import {Link} from "react-router";
 
 import classNames from "classnames";
 
-import PopoverComponent from "./PopoverComponent";
+import PopoverComponent from "./../asgard/components/PopoverComponent";
 
 import OnClickOutsideMixin from "react-onclickoutside";
 

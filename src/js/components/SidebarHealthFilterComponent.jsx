@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import React from "react/addons";
+import React from "react";
+import Update from "react-addons-update";
 
 import AppsStore from "../stores/AppsStore";
 import AppsEvents from "../events/AppsEvents";
@@ -59,13 +60,13 @@ var SidebarHealthFilterComponent = React.createClass({
     var health = healthKey.toString();
 
     if (event.target.checked === true) {
-      selectedHealth = React.addons.update(state.selectedHealth, {
+      selectedHealth = Update(state.selectedHealth, {
         $push: [health]
       });
     } else {
       let index = state.selectedHealth.indexOf(health);
       if (index !== -1) {
-        selectedHealth = React.addons.update(state.selectedHealth, {
+        selectedHealth = Update(state.selectedHealth, {
           $splice: [[index, 1]]
         });
       }

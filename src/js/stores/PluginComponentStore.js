@@ -1,5 +1,5 @@
 import {EventEmitter} from "events";
-import React from "react/addons";
+import React from "react";
 
 import PluginDispatcher from "../plugin/shared/PluginDispatcher";
 import PluginEvents from "../plugin/shared/PluginEvents";

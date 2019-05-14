@@ -5,7 +5,7 @@ import expectAsync from "./../helpers/expectAsync";
 
 import config from "../../js/config/config";
 
-import React from "react/addons";
+import React from "react";
 import AppsActions from "../../js/actions/AppsActions";
 import AppsEvents from "../../js/events/AppsEvents";
 import AppsStore from "../../js/stores/AppsStore";

@@ -1,8 +1,9 @@
 import classNames from "classnames";
-import React from "react/addons";
+import React from "react";
 import {Link} from "react-router";
 
 import PathUtil from "../helpers/PathUtil";
+import ReactDOM from 'react-dom';
 
 const COLLAPSE_BUFFER = 12;
 const PADDED_ICON_WIDTH = 24; // 16px icon + 8px padding
@@ -71,7 +72,8 @@ var BreadcrumbComponent = React.createClass({
       return;
     }
     var mutationObserver = new MutationObserver(this.handleMutation);
-    mutationObserver.observe(this.getDOMNode(), {
+    // document.body
+    mutationObserver.observe(ReactDOM.findDOMNode(this), {
       attributes: true, childList: true
     });
     this.setState({mutationObserver: mutationObserver});
@@ -112,7 +114,7 @@ var BreadcrumbComponent = React.createClass({
   },
 
   getAvailableWidth: function () {
-    return this.getDOMNode().offsetWidth;
+    return ReactDOM.findDOMNode(this).offsetWidth;
   },
 
   getWidthFromExpandedItem: function (item) {
@@ -126,7 +128,7 @@ var BreadcrumbComponent = React.createClass({
   },
 
   getExpandedWidth: function () {
-    var listItems = this.getDOMNode().children;
+    var listItems = ReactDOM.findDOMNode(this).children;
     var collapsed = this.state.collapsed;
 
     // array/splat casts NodeList to array
@@ -144,7 +146,7 @@ var BreadcrumbComponent = React.createClass({
   },
 
   getLastItemWidth: function () {
-    var lastItem = this.getDOMNode().lastChild;
+    var lastItem = ReactDOM.findDOMNode(this).lastChild;
     var lastItemLink = lastItem.firstChild;
     return lastItemLink.scrollWidth + LAST_ITEM_OFFSET;
   },

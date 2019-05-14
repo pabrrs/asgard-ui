@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
-import React from "react/addons";
+import React from "react";
 
 import PluginComponentStore from "../../js/stores/PluginComponentStore";
 import PluginComponentEvents from "../../js/events/PluginComponentEvents";

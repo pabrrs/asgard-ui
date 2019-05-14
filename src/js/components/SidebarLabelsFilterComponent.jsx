@@ -1,9 +1,10 @@
 import lazy from "lazy.js";
-import React from "react/addons";
+import React from "react";
 
 import AppsStore from "../stores/AppsStore";
 import AppsEvents from "../events/AppsEvents";
 import FilterTypes from "../constants/FilterTypes";
+import Update from "react-addons-update";
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
@@ -89,7 +90,7 @@ var SidebarLabelsFilterComponent = React.createClass({
   handleChange: function (label, isSelected) {
     var state = this.state;
     var selectedLabels = [];
-    var update = React.addons.update;
+    var update = Update;
 
     var labelIndex = state.selectedLabels.findIndex(currentLabel => {
       return currentLabel[0] === label[0] && currentLabel[1] === label[1];

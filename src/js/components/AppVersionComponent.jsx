@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import highlight from "highlight.js";
 import {Link} from "react-router";
-import React from "react/addons";
+import React from "react";
 import url from "url";
 
 import AppsActions from "../actions/AppsActions";
@@ -112,7 +112,7 @@ var AppVersionComponent = React.createClass({
 
   highlightNodes: function () {
     var highlightNodes =
-      React.findDOMNode(this).getElementsByClassName("highlight");
+      document.getElementsByClassName("highlight");
 
     [...highlightNodes].forEach(node => {
       highlight.highlightBlock(node);

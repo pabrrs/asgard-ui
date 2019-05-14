@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 var UnspecifiedNodeComponent = React.createClass({
   displayName: "UnspecifiedNodeComponent",

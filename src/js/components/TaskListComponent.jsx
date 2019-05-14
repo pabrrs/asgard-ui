@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import lazy from "lazy.js";
-import React from "react/addons";
+import React from "react";
 
 import Messages from "../constants/Messages";
 import States from "../constants/States";

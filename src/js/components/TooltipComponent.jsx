@@ -1,10 +1,10 @@
-import React from "react/addons";
+import React from "react";
 import classNames from "classnames";
 import TimerMixin from "react-timer-mixin";
 
 import Util from "../helpers/Util";
 
-import PopoverComponent from "../components/PopoverComponent";
+import PopoverComponent from "../asgard/components/PopoverComponent";
 
 var popOverDisplayTimer = null;
 

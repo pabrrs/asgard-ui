@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import {expect} from "chai";
 import {shallow} from "enzyme";
-import React from "react/addons";
+import React from "react";
 import PopoverComponent from "../components/PopoverComponent";
 
 describe("Popover component", function () {

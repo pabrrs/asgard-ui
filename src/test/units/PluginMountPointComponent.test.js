@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {mount} from "enzyme";
-import React from "react/addons";
+import React from "react";
 
 import PluginComponentStore from "../../js/stores/PluginComponentStore";
 import PluginComponentEvents from "../../js/events/PluginComponentEvents";
@@ -11,7 +11,7 @@ import PluginMoundPointComponent
 
 describe("PluginMountPointComponent", function () {
 
-  before(function (done) {
+  before(function () {
     this.pluginMountPointComponentA =
       mount(<PluginMoundPointComponent placeId="testMountPointPlaceId" />);
 
@@ -21,19 +21,18 @@ describe("PluginMountPointComponent", function () {
     this.pluginMountPointComponentC =
       mount(<PluginMoundPointComponent placeId="differentPlaceId" />);
 
-    var component = React.createClass({
-      render: function () {
-        return (<span>Test Mount Point Component</span>);
-      }
-    });
-
-    PluginComponentStore.once(PluginComponentEvents.CHANGE, () => done());
-
-    PluginDispatcher.dispatch({
+    const data = {
       eventType: PluginEvents.INJECT_COMPONENT,
       placeId: "testMountPointPlaceId",
-      component: component
-    });
+      component: <span>Test Mount Point Component</span>
+    };
+    this.pluginMountPointComponentA.instance().handleComponentStoreChange(data);
+    this.pluginMountPointComponentB.instance().handleComponentStoreChange(data);
+    this.pluginMountPointComponentC.instance().handleComponentStoreChange(data);
+
+    this.pluginMountPointComponentA.update();
+    this.pluginMountPointComponentB.update();
+    this.pluginMountPointComponentC.update();
   });
 
   it("renders component with given place id", function () {

@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {Link} from "react-router";
-import React from "react/addons";
+import React from "react";
 
 import AppsStore from "../stores/AppsStore";
 import DeploymentStore from "../stores/DeploymentStore";

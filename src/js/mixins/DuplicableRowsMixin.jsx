@@ -1,5 +1,5 @@
-import React from "react/addons";
-
+import React from "react";
+import ReactDOM from 'react-dom';
 import AppFormErrorMessages from "../constants/AppFormErrorMessages";
 import FormActions from "../actions/FormActions";
 
@@ -79,9 +79,8 @@ var DuplicableRowsMixin = {
   },
 
   getDuplicableRowValues: function (fieldId, i) {
-    const findDOMNode = React.findDOMNode;
     const refs = this.refs;
-
+    const findDOMNode = ReactDOM.findDOMNode;
     const row = Util.deepCopy(this.state.rows[fieldId][i]);
 
     return Object.keys(this.duplicableRowsScheme[fieldId])

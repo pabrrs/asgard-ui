@@ -6,7 +6,7 @@ import sinon from "sinon";
 
 import config from "../../js/config/config";
 
-import React from "react/addons";
+import React from "react";
 import Util from "../../js/helpers/Util";
 import appScheme from "../../js/stores/schemes/appScheme";
 import AppsActions from "../../js/actions/AppsActions";

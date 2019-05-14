@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {mount} from "enzyme";
 
-import React from "../../../node_modules/react/addons";
+import React from "../../../node_modules/react";
 import AppVersionComponent
   from "../../js/components/AppVersionComponent.jsx";
 

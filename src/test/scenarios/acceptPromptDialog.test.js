@@ -2,7 +2,7 @@ import {expect} from "chai";
 import {mount} from "enzyme";
 import expectAsync from "./../helpers/expectAsync";
 
-import React from "react/addons";
+import React from "react";
 import DialogActions from "../../js/actions/DialogActions";
 import DialogEvents from "../../js/events/DialogEvents";
 import DialogStore from "../../js/stores/DialogStore";
@@ -109,12 +109,7 @@ describe("accept prompt dialog", function () {
 
     before(function () {
       this.component = mount(<DialogsComponent />);
-
-    });
-
-    beforeEach(function (done) {
-      DialogStore.once(DialogEvents.SHOW_DIALOG, ()=>done());
-      this.dialogId = DialogActions.prompt({
+      const data = {
         actionButtonLabel: "Test Button Label",
         inputProperties: {
           defaultValue:10,
@@ -123,7 +118,10 @@ describe("accept prompt dialog", function () {
         message: "Test Message",
         severity: DialogSeverity.DANGER,
         title: "Test Title"
-      });
+      };
+      this.dialogId = DialogActions.prompt(data);
+      this.component.instance().onDialogShow(data);
+      this.component.update();
     });
 
     after(function () {
@@ -131,24 +129,14 @@ describe("accept prompt dialog", function () {
     });
 
     it("handles action button clicks", function (done) {
-      DialogStore.once(DialogEvents.ACCEPT_DIALOG, (dialogData) => {
-        expectAsync(()=> {
-          expect(dialogData.id).to.equal(this.dialogId);
-        }, done);
-      });
-
-      this.component.find(PromptDialogComponent)
-        .find(".btn-success").simulate("click");
-    });
-
-    it("passes correct input value along", function (done) {
       DialogStore.once(DialogEvents.ACCEPT_DIALOG, (dialogData, value) => {
         expectAsync(()=> {
+          expect(dialogData.id).to.equal(this.dialogId);
           expect(value).to.equal("10");
         }, done);
       });
 
-      this.component.find(PromptDialogComponent)
+      this.component
         .find(".btn-success").simulate("click");
     });
 

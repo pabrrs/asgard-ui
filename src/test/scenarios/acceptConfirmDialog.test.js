@@ -2,7 +2,7 @@ import {expect} from "chai";
 import {mount} from "enzyme";
 import expectAsync from "./../helpers/expectAsync";
 
-import React from "react/addons";
+import React from "react";
 import DialogActions from "../../js/actions/DialogActions";
 import DialogEvents from "../../js/events/DialogEvents";
 import DialogStore from "../../js/stores/DialogStore";
@@ -83,15 +83,18 @@ describe("accept confirm dialog", function () {
 
   describe("ConfirmDialogComponent", function () {
 
-    before(function (done) {
+    before(function () {
       this.component = mount(<DialogsComponent />);
-      DialogStore.once(DialogEvents.SHOW_DIALOG, ()=>done());
-      this.dialogId = DialogActions.confirm({
+      const data = {
         actionButtonLabel: "Test Button Label",
         message: "Test Message",
         severity: DialogSeverity.DANGER,
         title: "Test Title"
-      });
+      };
+      this.dialogId = DialogActions.confirm(data);
+
+      this.component.instance().onDialogShow(data);
+      this.component.update();
     });
 
     after(function () {

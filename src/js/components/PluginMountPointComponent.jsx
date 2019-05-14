@@ -1,5 +1,5 @@
-import React from "react/addons";
-
+import React from "react";
+import Update from "react-addons-update";
 import PluginComponentEvents from "../events/PluginComponentEvents";
 import PluginComponentStore from "../stores/PluginComponentStore";
 
@@ -32,7 +32,7 @@ var PluginMountPointComponent = React.createClass({
 
     if (components.length > 0) {
       this.setState({
-        mountPoint: React.addons.update(this.state.mountPoint, {
+        mountPoint: Update(this.state.mountPoint, {
           $push: components.map(component => component.component)
         })
       });
@@ -53,7 +53,7 @@ var PluginMountPointComponent = React.createClass({
     }
 
     this.setState({
-      mountPoint: React.addons.update(this.state.mountPoint, {
+      mountPoint: Update(this.state.mountPoint, {
         $push: [component.component]
       })
     });

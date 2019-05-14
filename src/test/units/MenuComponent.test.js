@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {mount, shallow} from "enzyme";
 
-import React from "react/addons";
+import React from "react";
 
 import MenuComponent from "../../js/components/MenuComponent";
 import MenuItemComponent from "../../js/components/MenuItemComponent";

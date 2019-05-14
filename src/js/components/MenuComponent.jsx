@@ -1,8 +1,7 @@
-import React from "react/addons";
+import React from "react";
 
 import Util from "../helpers/Util";
 import PropTypeUtil from "../helpers/PropTypeUtil";
-
 import MenuItemComponent from "../components/MenuItemComponent";
 
 var MenuComponent = React.createClass({
@@ -32,7 +31,7 @@ var MenuComponent = React.createClass({
     var {name} = this.state;
 
     return React.Children.map(children,  (child) =>
-      React.addons.cloneWithProps(child, {
+      React.cloneElement(child, {
         name: name,
         selected: child.props.value === selected
       })

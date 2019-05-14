@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 
 import AlertDialogComponent from "../components/AlertDialogComponent";
 import ConfirmDialogComponent from "../components/ConfirmDialoglComponent";
