@@ -7,7 +7,8 @@ var AgentsComponent = React.createClass({
 
   propTypes: {
     model: React.PropTypes.object.isRequired,
-    sortKey: React.PropTypes.any
+    sortKey: React.PropTypes.any,
+    total: React.PropTypes.number,
   },
 
   getInitialState: function () {
@@ -33,6 +34,7 @@ var AgentsComponent = React.createClass({
 
   render: function () {
     var model = this.props.model;
+    var total = this.props.total;
     var labels = this.props.model.attributes;
     if (labels == null || Object.keys(labels).length === 0) {
       return null;
@@ -43,6 +45,7 @@ var AgentsComponent = React.createClass({
 
     return (
       <tr data-toggle="collapse" className="accordion-toggle">
+        <span style={{display: "none"}}>{total}</span>
         <td
           className={this.getTdClasses("hostname", "color-base")}
           onClick={this.handleClick}

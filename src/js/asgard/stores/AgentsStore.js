@@ -1,10 +1,9 @@
 import {EventEmitter} from "events";
-
 import AppDispatcher from "../../AppDispatcher";
 import AppsStore from "../../stores/AppsStore";
 import AgentsEvents from "../events/AgentsEvents";
-import AgentsScheme from "./schemes/AgentsScheme";
 import Util from "../../helpers/Util";
+import AgentsScheme from "./schemes/AgentsScheme";
 
 const storeData = {
   agents: [],
@@ -28,14 +27,10 @@ var AgentsStore = Util.extendObject(EventEmitter.prototype, {
   },
   get total() {
     return Util.deepCopy(storeData.total);
-  }
+  },
 });
 
 AppsStore.on(AgentsEvents.CHANGE, function () {
-  storeData.agents.forEach(deployment => {
-    detectIsWaitingForUserAction(deployment);
-  });
-
   AgentsStore.emit(AgentsEvents.CHANGE);
 });
 

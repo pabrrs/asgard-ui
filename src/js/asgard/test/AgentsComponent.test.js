@@ -2,7 +2,11 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
 import React from "react/addons";
-
+import nock from "nock";
+import config from "../../../js/config/config";
+import AgentsStore from "../../asgard/stores/AgentsStore";
+import AgentsActions from "../../asgard/actions/AgentsActions";
+import AgentsEvents from "../../asgard/events/AgentsEvents";
 import AgentsComponent from "../components/AgentsComponent";
 import AppListItemLabelsComponent from
 "../../components/AppListItemLabelsComponent";
@@ -22,9 +26,10 @@ describe("Agents component", function () {
     active: "null",
     type: "MESOS",
   };
+  var total = 2;
 
   before(function () {
-    this.component = shallow(<AgentsComponent model={model} />);
+    this.component = shallow(<AgentsComponent total={total} model={model} />);
   });
 
   it("has the correct agents hostname", function () {
@@ -37,6 +42,17 @@ describe("Agents component", function () {
     ).to.equal("123");
   });
 
+  it("has the correct totalApp", function () {
+    expect(
+      this.component
+        .find("tr")
+        .first()
+        .find("span")
+        .at(0)
+        .text()
+    ).to.equal('2');
+  });
+  
   it("has the correct totalapps", function () {
     expect(this.component
       .find("td")
@@ -105,5 +121,7 @@ describe("Agents component", function () {
         .text()
       ).to.equal("workload:general");
     });
+
+
   });
 });
