@@ -153,15 +153,17 @@ describe("show alert dialog", function () {
 
   describe("DialogsComponent", function () {
 
-    before(function (done) {
+    before(function () {
       this.component = mount(<DialogsComponent />);
-      DialogStore.once(DialogEvents.SHOW_DIALOG,()=>done());
-      DialogActions.alert({
+      const data = {
         actionButtonLabel: "Test Button Label",
         message: "Test Message",
         severity: DialogSeverity.DANGER,
         title: "Test Title"
-      });
+      };
+      DialogActions.alert(data);
+      this.component.instance().onDialogShow(data);
+      this.component.update();
     });
 
     after(function () {
@@ -177,15 +179,17 @@ describe("show alert dialog", function () {
 
   describe("AlertDialogComponent", function () {
 
-    before(function (done) {
+    before(function () {
       this.component = mount(<DialogsComponent />);
-      DialogStore.once(DialogEvents.SHOW_DIALOG,()=>done());
-      DialogActions.alert({
+      const data = {
         actionButtonLabel: "Test Button Label",
         message: "Test Message",
         severity: DialogSeverity.DANGER,
         title: "Test Title"
-      });
+      };
+      DialogActions.alert(data);
+      this.component.instance().onDialogShow(data);
+      this.component.update();
     });
 
     after(function () {
@@ -212,7 +216,7 @@ describe("show alert dialog", function () {
 
     it("renders correct severity indicator", function () {
       expect(this.component.find(AlertDialogComponent)
-        .find(".dialog").hasClass("danger")).to.equal(true);
+        .find(".dialog").first().hasClass("danger")).to.equal(true);
     });
 
   });

@@ -90,10 +90,9 @@ describe("dismiss confirm dialog", function () {
 
   describe("ConfirmDialogComponent", function () {
 
-    before(function (done) {
+    before(function () {
       this.component = mount(<DialogsComponent />);
-      DialogStore.once(DialogEvents.SHOW_DIALOG, ()=>done());
-      this.dialogId = DialogActions.prompt({
+      const data = {
         actionButtonLabel: "Test Button Label",
         inputProperties: {
           defaultValue:10,
@@ -102,7 +101,10 @@ describe("dismiss confirm dialog", function () {
         message: "Test Message",
         severity: DialogSeverity.DANGER,
         title: "Test Title"
-      });
+      };
+      this.dialogId = DialogActions.prompt(data);
+      this.component.instance().onDialogShow(data);
+      this.component.update();
     });
 
     after(function () {

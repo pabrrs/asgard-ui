@@ -112,7 +112,7 @@ var AppVersionComponent = React.createClass({
 
   highlightNodes: function () {
     var highlightNodes =
-      (this).getElementsByClassName("highlight");
+      document.getElementsByClassName("highlight");
 
     [...highlightNodes].forEach(node => {
       highlight.highlightBlock(node);
