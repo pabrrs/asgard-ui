@@ -11,6 +11,9 @@ que implementa o que é necessário para termos:
 ## Changelog
 
 
+### 0.26.0
+ * Atualização do React para 15.4.0
+
 ### 0.25.2
  * Atualizando componente que implementa o modo JSON
 
