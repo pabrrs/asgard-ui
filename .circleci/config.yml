@@ -11,7 +11,7 @@ jobs:
           command: npm install
       - run:
           name: Run All
-          command: ./node_modules/.bin/nyc npm test
+          command: ./node_modules/.bin/nyc -e .jsx npm test
       - run:
           name: Cover
           command: ./node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov
