@@ -14,7 +14,7 @@ jobs:
           command: ./node_modules/.bin/nyc -e .jsx npm test
       - run:
           name: Cover
-          command: ./node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov
+          command: ./node_modules/.bin/nyc -e .jsx report --reporter=text-lcov > coverage.lcov
       - run:
           when: on_success
           command: ./node_modules/.bin/codecov
