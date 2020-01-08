@@ -146,20 +146,18 @@ var TaskListItemComponent = React.createClass({
     }
   },
 
+  /**
+   * @param {String} state
+   * @param {Array} stateList
+   *
+   * @returns {Boolean}
+   */
+  isStateOf: function (state, stateList) {
+    return stateList.includes(state);
+  },
+
   handleCheckboxClick: function (event) {
     this.props.onToggle(this.props.task, event.target.checked);
-  },
-
-  stateIsTerminal: function (state) {
-    return TaskState.TERMINAL_STATES.includes(state);
-  },
-
-  stateIsOk: function (state) {
-    return TaskState.TERMINAL_STATES.includes(state);
-  },
-
-  stateIsStaged: function (state) {
-    return TaskState.TERMINAL_STATES.includes(state);
   },
 
   getStateName: function (state) {
@@ -200,12 +198,12 @@ var TaskListItemComponent = React.createClass({
 
     var taskHealth = task.healthStatus;
 
-    var state = this.getStateName(task.state);
+    var stateIsTerminal = this.isStateOf(task.state, TaskState.TERMINAL_STATES);
+    var stateIsRunning = this.isStateOf(task.state, TaskState.RUNNING_STATES);
+    var stateIsUnknown = this.isStateOf(task.state, TaskState.UNKNOWN_STATES);
+    var stateIsStaged = this.isStateOf(task.state, TaskState.STAGED_STATES);
 
-    var stateIsTerminal = TaskState.TERMINAL_STATES.includes(task.state);
-    var stateIsRunning = TaskState.RUNNING_STATES.includes(task.state);
-    var stateIsUnknown = TaskState.UNKNOWN_STATES.includes(task.state);
-    var stateIsStaged = TaskState.STAGED_STATES.includes(task.state);
+    var state = this.getStateName(task.state);
 
     var listItemClassSet = classNames({
       "active": this.props.isActive
