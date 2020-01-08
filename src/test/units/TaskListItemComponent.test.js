@@ -13,6 +13,7 @@ describe("Task List Item component", function () {
       host: "host-1",
       ports: [1, 2, 3],
       status: "status-0",
+      state: "TASK_RUNNING",
       updatedAt: "2015-06-29T14:11:58.709Z",
       version: "2015-06-29T13:54:24.171Z"
     };
@@ -41,8 +42,8 @@ describe("Task List Item component", function () {
     expect(this.component.find("td").at(2).text()).to.equal("Healthy");
   });
 
-  it("has the correct status", function () {
-    expect(this.component.find("td").at(3).text()).to.equal("status-0");
+  it("has the correct State", function () {
+    expect(this.component.find("td").at(3).text()).to.equal("Running");
   });
 
   it("has the correct version", function () {
