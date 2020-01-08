@@ -6,6 +6,7 @@ import Moment from "moment";
 import AppsStore from "../stores/AppsStore";
 import HealthStatus from "../constants/HealthStatus";
 import TaskStatus from "../constants/TaskStatus";
+import TaskState from "../constants/TaskState";
 
 function joinNodes(nodes, separator = ", ") {
   var lastIndex = nodes.length - 1;
@@ -38,15 +39,15 @@ var TaskListItemComponent = React.createClass({
     var task = this.props.task;
     var ports = task.ports;
 
-    if (ports == null || ports.length === 0 ) {
+    if (ports == null || ports.length === 0) {
       return (<span className="text-muted">{task.host}</span>);
     }
 
     if (ports != null && ports.length === 1) {
       return (
         <a className="text-muted"
-            href={`//${task.host}:${ports[0]}`}
-            target="_blank">
+          href={`//${task.host}:${ports[0]}`}
+          target="_blank">
           {`${task.host}:${ports[0]}`}
         </a>
       );
@@ -56,9 +57,9 @@ var TaskListItemComponent = React.createClass({
       let portNodes = ports.map(function (port) {
         return (
           <a key={`${task.host}:${port}`}
-              className="text-muted"
-              href={`//${task.host}:${port}`}
-              target="_blank">
+            className="text-muted"
+            href={`//${task.host}:${port}`}
+            target="_blank">
             {port}
           </a>
         );
@@ -88,8 +89,8 @@ var TaskListItemComponent = React.createClass({
     var app = AppsStore.getCurrentApp(props.appId);
 
     if (objectPath.get(app, "ipAddress.discovery.ports") != null &&
-        task.ipAddresses != null &&
-        task.ipAddresses.length > 0) {
+      task.ipAddresses != null &&
+      task.ipAddresses.length > 0) {
 
       let serviceDiscoveryPorts = app.ipAddress.discovery.ports;
 
@@ -99,7 +100,7 @@ var TaskListItemComponent = React.createClass({
           let port = serviceDiscoveryPorts[0].number;
           return (
             <a key={`${ipAddress}:${port}`}
-                className="text-muted" href={`//${ipAddress}:${port}`}>
+              className="text-muted" href={`//${ipAddress}:${port}`}>
               {`${ipAddress}:${port}`}
             </a>
           );
@@ -108,7 +109,7 @@ var TaskListItemComponent = React.createClass({
         let portNodes = serviceDiscoveryPorts.map((port) => {
           return (
             <a key={`${ipAddress}:${port.number}`}
-                className="text-muted" href={`//${ipAddress}:${port.number}`}>
+              className="text-muted" href={`//${ipAddress}:${port.number}`}>
               {port.number}
             </a>
           );
@@ -149,13 +150,43 @@ var TaskListItemComponent = React.createClass({
     this.props.onToggle(this.props.task, event.target.checked);
   },
 
+  stateIsTerminal: function (state) {
+    return TaskState.TERMINAL_STATES.includes(state);
+  },
+
+  stateIsOk: function (state) {
+    return TaskState.TERMINAL_STATES.includes(state);
+  },
+
+  stateIsStaged: function (state) {
+    return TaskState.TERMINAL_STATES.includes(state);
+  },
+
+  getStateName: function (state) {
+    const stateTranslated = {
+      [TaskState.GONE]: "Gone",
+      [TaskState.LOST]: "Lost",
+      [TaskState.ERROR]: "Error",
+      [TaskState.FAILED]: "Failed",
+      [TaskState.KILLED]: "Killed",
+      [TaskState.DROPPED]: "Dropped",
+      [TaskState.KILLING]: "Killing",
+      [TaskState.RUNNING]: "Running",
+      [TaskState.STAGING]: "Staging",
+      [TaskState.UNKNOWN]: "Unknown",
+      [TaskState.FINISHED]: "Finished",
+      [TaskState.UNREACHABLE]: "Unreachable",
+      [TaskState.GONE_BY_OPERATOR]: "Gone by OP",
+    };
+
+    return stateTranslated[state];
+  },
+
   render: function () {
     var task = this.props.task;
     var sortKey = this.props.sortKey;
-    var hasHealth = !!this.props.hasHealth;
     var version;
     var endpoints;
-    var status = "Waiting";
 
     if (task.status != null) {
       if (task.status !== TaskStatus.SUSPENDED) {
@@ -172,20 +203,30 @@ var TaskListItemComponent = React.createClass({
 
     var taskHealth = task.healthStatus;
 
+    var state = this.getStateName(task.state);
+
+    var stateIsTerminal = TaskState.TERMINAL_STATES.includes(task.state);
+    var stateIsRunning = TaskState.RUNNING_STATES.includes(task.state);
+    var stateIsUnknown = TaskState.UNKNOWN_STATES.includes(task.state);
+    var stateIsStaged = TaskState.STAGED_STATES.includes(task.state);
+
     var listItemClassSet = classNames({
       "active": this.props.isActive
     });
 
     var healthClassSet = classNames({
-      "hidden": !hasHealth,
       "unhealthy": taskHealth === HealthStatus.UNHEALTHY,
       "healthy": taskHealth === HealthStatus.HEALTHY,
       "unknown": taskHealth === HealthStatus.UNKNOWN,
       "cell-highlighted": sortKey === "healthStatus"
     });
 
-    var statusClassSet = classNames({
-      "text-warning": task.status === TaskStatus.STAGED
+    var stateClassSet = classNames({
+      "unhealthy": stateIsTerminal,
+      "healthy": stateIsRunning,
+      "unknown": stateIsUnknown,
+      "text-warning": stateIsStaged,
+      "cell-highlighted": sortKey === "state"
     });
 
     var updatedAtNodeClassSet = classNames({
@@ -212,8 +253,8 @@ var TaskListItemComponent = React.createClass({
       "cell-highlighted": sortKey === "updatedAt"
     });
 
-    var statusCellClassSet = classNames("text-center", {
-      "cell-highlighted": sortKey === "status"
+    var stateCellClassSet = classNames({
+      "cell-highlighted": sortKey === "state"
     });
 
     return (
@@ -231,9 +272,9 @@ var TaskListItemComponent = React.createClass({
         <td className={healthClassSet} title={this.props.taskHealthMessage}>
           {this.props.taskHealthMessage}
         </td>
-        <td className={statusCellClassSet}>
-          <span className={statusClassSet}>
-            {status}
+        <td className={stateCellClassSet}>
+          <span className={stateClassSet}>
+            {state}
           </span>
         </td>
         <td className={versionClassSet}>
@@ -243,8 +284,8 @@ var TaskListItemComponent = React.createClass({
         </td>
         <td className={updatedAtClassSet}>
           <time className={updatedAtNodeClassSet}
-              dateTime={updatedAtISO}
-              title={updatedAtISO}>
+            dateTime={updatedAtISO}
+            title={updatedAtISO}>
             {updatedAtLocal}
           </time>
         </td>
