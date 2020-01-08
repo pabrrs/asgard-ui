@@ -42,7 +42,7 @@ describe("Task List Item component", function () {
     expect(this.component.find("td").at(2).text()).to.equal("Healthy");
   });
 
-  it("has the correct State", function () {
+  it("has the correct state", function () {
     expect(this.component.find("td").at(3).text()).to.equal("Running");
   });
 
