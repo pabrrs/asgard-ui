@@ -188,12 +188,9 @@ var TaskListItemComponent = React.createClass({
     var version;
     var endpoints;
 
-    if (task.status != null) {
-      if (task.status !== TaskStatus.SUSPENDED) {
-        version = new Date(task.version).toISOString();
-        endpoints = this.getEndpoints();
-      }
-      status = task.status;
+    if (task.status !== TaskStatus.SUSPENDED) {
+      version = new Date(task.version).toISOString();
+      endpoints = this.getEndpoints();
     }
 
     var taskId = task.id;
