@@ -14,18 +14,11 @@ const TaskState = {
   GONE_BY_OPERATOR: "TASK_GONE_BY_OPERATOR",
 
   get TERMINAL_STATES() {
-    return [
-      this.GONE,
-      this.ERROR,
-      this.FAILED,
-      this.KILLED,
-      this.DROPPED,
-      this.FINISHED
-    ];
+    return [this.GONE, this.ERROR, this.FAILED, this.KILLED, this.DROPPED];
   },
 
-  get RUNNING_STATES() {
-    return [this.RUNNING];
+  get OK_STATES() {
+    return [this.RUNNING, this.FINISHED];
   },
 
   get STAGED_STATES() {

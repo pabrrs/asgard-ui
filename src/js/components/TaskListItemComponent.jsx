@@ -198,8 +198,8 @@ var TaskListItemComponent = React.createClass({
 
     var taskHealth = task.healthStatus;
 
+    var stateIsOk = this.isStateOf(task.state, TaskState.OK_STATES);
     var stateIsTerminal = this.isStateOf(task.state, TaskState.TERMINAL_STATES);
-    var stateIsRunning = this.isStateOf(task.state, TaskState.RUNNING_STATES);
     var stateIsUnknown = this.isStateOf(task.state, TaskState.UNKNOWN_STATES);
     var stateIsStaged = this.isStateOf(task.state, TaskState.STAGED_STATES);
 
@@ -218,7 +218,7 @@ var TaskListItemComponent = React.createClass({
 
     var stateClassSet = classNames({
       "unhealthy": stateIsTerminal,
-      "healthy": stateIsRunning,
+      "healthy": stateIsOk,
       "unknown": stateIsUnknown,
       "text-warning": stateIsStaged,
       "cell-highlighted": sortKey === "state"
