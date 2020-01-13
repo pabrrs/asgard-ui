@@ -178,8 +178,17 @@ var SlaveListComponent = React.createClass({
 
   render: function () {
     var state = this.state;
-    var totalUsedCpu = this.state.total.stats && this.state.total.stats.cpu_pct;
-    var totalUsedRam = this.state.total.stats && this.state.total.stats.ram_pct;
+
+    var totalUsedCpuPct = this.state.total.stats && this.state.total.stats.cpu_pct;
+    var totalUsedRamPct = this.state.total.stats && this.state.total.stats.ram_pct;
+
+    var agents = this.state.agents;
+
+    var totalCpu = agents.reduce((acc, agent) => acc + parseFloat(agent.resources.cpus), 0).toFixed(1);
+    var totalRam = agents.reduce((acc, agent) => acc + parseFloat(agent.resources.mem), 0).toFixed(1);
+    var totalUsedCpu = agents.reduce((acc, agent) => acc + parseFloat(agent.used_resources.cpus), 0).toFixed(1);
+    var totalUsedRam = agents.reduce((acc, agent) => acc + parseFloat(agent.used_resources.mem), 0).toFixed(1);
+
     var totalAgents = this.state.length;
 
     var searchIconClassSet = classNames("icon ion-search", {
@@ -200,9 +209,11 @@ var SlaveListComponent = React.createClass({
     return (
       <div>
         <div className="sub-header-total">
-            <span className="used-total">
-            Total: {totalAgents} / CPU: {totalUsedCpu}% - RAM: {totalUsedRam}%
-            </span>
+          <span className="used-total">
+            Total: {totalAgents} |
+            CPU: {totalUsedCpu}/{totalCpu} <span className="used-detail">({totalUsedCpuPct}%)</span> -
+            RAM: {totalUsedRam}/{totalRam} <span className="used-detail">({totalUsedRamPct}%)</span>
+          </span>
           <div className={`${filterBoxClassSet} search-input`}>
             <span className="input-group-addon" />
             <input
