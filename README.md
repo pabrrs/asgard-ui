@@ -11,6 +11,11 @@ que implementa o que é necessário para termos:
 ## Changelog
 
 
+### 0.27.0
+ * Task State na lista de Tasks. PR [#34](https://github.com/b2wdigital/asgard-ui/pull/34)
+ * Agents :: Exibir quantidade de recursos utilizados e total. [PR #35](https://github.com/b2wdigital/asgard-ui/pull/35)
+ * Bump eslint from 1.10.3 to 4.18.2. [PR #36](https://github.com/b2wdigital/asgard-ui/pull/36)
+
 ### 0.26.0
  * Atualização do React para 15.4.0
 
