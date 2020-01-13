@@ -131,10 +131,8 @@ var TaskListComponent = React.createClass({
     var props = this.props;
     var state = this.state;
     var tasksLength = props.tasks.length;
-    var hasHealth = !!props.hasHealth;
     var hasError = props.fetchState === States.STATE_ERROR;
-    var isUnauthorized =
-      props.fetchState === States.STATE_UNAUTHORIZED;
+    var isUnauthorized = props.fetchState === States.STATE_UNAUTHORIZED;
     var isForbidden = props.fetchState === States.STATE_FORBIDDEN;
 
     var headerClassSet = classNames({
@@ -158,7 +156,6 @@ var TaskListComponent = React.createClass({
     });
 
     var hasHealthClassSet = classNames({
-      "hidden": !hasHealth,
       "cell-highlighted": state.sortKey === "healthStatus"
     });
 
@@ -166,8 +163,8 @@ var TaskListComponent = React.createClass({
       "cell-highlighted": state.sortKey === "id"
     });
 
-    var statusClassSet = classNames("text-center", {
-      "cell-highlighted": state.sortKey === "status"
+    var stateClassSet = classNames({
+      "cell-highlighted": state.sortKey === "state"
     });
 
     var versionClassSet = classNames("text-right", {
@@ -199,8 +196,8 @@ var TaskListComponent = React.createClass({
           <thead>
             <tr>
               <th className={headerClassSet}
-                  width="1"
-                  onClick={this.handleThToggleClick}>
+                width="1"
+                onClick={this.handleThToggleClick}>
                 <input type="checkbox"
                   checked={this.allTasksSelected(tasksLength)}
                   disabled={tasksLength === 0}
@@ -208,31 +205,31 @@ var TaskListComponent = React.createClass({
               </th>
               <th className={idClassSet}>
                 <span onClick={this.sortBy.bind(null, "id")}
-                    className={headerClassSet}>
+                  className={headerClassSet}>
                   ID {this.getCaret("id")}
                 </span>
               </th>
               <th className={hasHealthClassSet}>
                 <span onClick={this.sortBy.bind(null, "healthStatus")}
-                    className={headerClassSet}>
+                  className={headerClassSet}>
                   Health {this.getCaret("healthStatus")}
                 </span>
               </th>
-              <th className={statusClassSet}>
-                <span onClick={this.sortBy.bind(null, "status")}
-                    className={headerClassSet}>
-                  Status {this.getCaret("status")}
+              <th className={stateClassSet}>
+                <span onClick={this.sortBy.bind(null, "state")}
+                  className={headerClassSet}>
+                  State {this.getCaret("state")}
                 </span>
               </th>
               <th className={versionClassSet}>
                 <span onClick={this.sortBy.bind(null, "version")}
-                    className={headerClassSet}>
+                  className={headerClassSet}>
                   {this.getCaret("version")} Version
                 </span>
               </th>
               <th className={updatedAtClassSet}>
                 <span onClick={this.sortBy.bind(null, "updatedAt")}
-                    className={headerClassSet}>
+                  className={headerClassSet}>
                   {this.getCaret("updatedAt")} Updated
                 </span>
               </th>
