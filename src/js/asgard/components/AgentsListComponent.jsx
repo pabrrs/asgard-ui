@@ -182,10 +182,12 @@ var SlaveListComponent = React.createClass({
     var totalUsedCpuPct = this.state.total.stats && this.state.total.stats.cpu_pct;
     var totalUsedRamPct = this.state.total.stats && this.state.total.stats.ram_pct;
 
-    var totalCpu = this.state.agents.reduce((acc, agent) => acc + parseFloat(agent.resources.cpus), 0);
-    var totalRam = this.state.agents.reduce((acc, agent) => acc + parseFloat(agent.resources.mem), 0);
-    var totalUsedCpu = this.state.agents.reduce((acc, agent) => acc + parseFloat(agent.used_resources.cpus), 0);
-    var totalUsedRam = this.state.agents.reduce((acc, agent) => acc + parseFloat(agent.used_resources.mem), 0);
+    var agents = this.state.agents;
+
+    var totalCpu = agents.reduce((acc, agent) => acc + parseFloat(agent.resources.cpus), 0).toFixed(1);
+    var totalRam = agents.reduce((acc, agent) => acc + parseFloat(agent.resources.mem), 0).toFixed(1);
+    var totalUsedCpu = agents.reduce((acc, agent) => acc + parseFloat(agent.used_resources.cpus), 0).toFixed(1);
+    var totalUsedRam = agents.reduce((acc, agent) => acc + parseFloat(agent.used_resources.mem), 0).toFixed(1);
 
     var totalAgents = this.state.length;
 
